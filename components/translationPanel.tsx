@@ -20,7 +20,7 @@ const TranslationPanel = (
 
     if (props.loading) {
         return (
-            <div className="w-1/2 h-96 p-2 rounded-r-lg">
+            <div className="sm:w-1/2 sm:h-96 p-2 rounded-r-lg w-full h-1/2 p-4">
                 <div className="flex flex-col items-center justify-center h-full">
                     <div className="w-5 h-5 border-t-2 border-b-2 border-gray-500 rounded-full animate-spin" />
                 </div>

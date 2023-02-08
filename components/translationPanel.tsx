@@ -20,7 +20,7 @@ const TranslationPanel = (
 
     if (props.loading) {
         return (
-            <div className="sm:w-1/2 sm:h-96 p-2 rounded-r-lg w-full h-1/2 p-4">
+            <div className="md:h-96 p-2 rounded-r-lg w-full h-1/2 p-4">
                 <div className="flex flex-col items-center justify-center h-full">
                     <div className="w-5 h-5 border-t-2 border-b-2 border-gray-500 rounded-full animate-spin" />
                 </div>
@@ -29,7 +29,7 @@ const TranslationPanel = (
     }
 
     return (
-        <div className="sm:w-1/2 sm:h-96 p-4 rounded-r-lg p-0
+        <div className="md:h-96 p-4 rounded-r-lg p-0
                         w-full h-1/2">
             <div className={`flex flex-col pt-4 items-center justify-center h-full ${props.translations.length == 0 ? "hidden" : ""}`}>
                 <div className="w-full h-full p-4 overflow-y-auto">
@@ -73,16 +73,16 @@ const TranslatorPanel = () => {
     const [duration, setDuration] = useState(0)
     const [loading, setLoading] = useState(false)
 
-    // useEffect(() => {
-    //     const textarea = document.querySelector("textarea")
-    //     textarea?.focus()
-    // }, [])
+    useEffect(() => {
+        const textarea = document.querySelector("textarea")
+        textarea?.focus()
+    }, [])
 
     return (
         <div>
-            <div className="flex max-w-[980px] sm:flex-row items-start gap-0 border border-gray-800 rounded-lg shadow-lg
+            <div className="flex max-w-[980px] md:flex-row items-start gap-0 border border-gray-800 rounded-lg shadow-lg
             flex-col">
-                <div className="sm:w-1/2 sm:h-96 p-2 pt-4 rounded-l-lg sm:border-r border-gray-800 w-full sm:border-b h-1/2 border-b">
+                <div className="md:h-96 p-2 pt-4 rounded-l-lg border-gray-800 w-full h-1/2">
                     <textarea
                         className="w-full h-full p-4 text-xl resize-none bg-transparent focus:ring-0 focus:outline-none"
                         placeholder="Type to translate..."
@@ -91,6 +91,7 @@ const TranslatorPanel = () => {
                         onKeyDown={onKeyDown}
                     />
                 </div>
+                <div className="w-full h-px bg-gray-800 md:h-full md:w-px" />
                 <TranslationPanel
                     loading={loading}
                     translations={translations}

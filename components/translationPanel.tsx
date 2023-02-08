@@ -22,7 +22,7 @@ const TranslationPanel = (
         return (
             <div className="w-1/2 h-96 p-2 rounded-r-lg">
                 <div className="flex flex-col items-center justify-center h-full">
-                    <div className="w-5 h-5 border-t-2 border-b-2 border-gray-500 rounded-full animate-spin"></div>
+                    <div className="w-5 h-5 border-t-2 border-b-2 border-gray-500 rounded-full animate-spin"/>
                 </div>
             </div>
         )
@@ -79,8 +79,8 @@ const TranslatorPanel = () => {
 
     return (
         <div>
-            <div className="flex max-w-[980px] flex-row items-start gap-0 border border-white/40 rounded-lg shadow-lg">
-                <div className="w-1/2 h-96 p-2 pt-4 rounded-l-lg border-r border-white/40">
+            <div className="flex max-w-[980px] flex-row items-start gap-0 border border-gray-800 rounded-lg shadow-lg">
+                <div className="w-1/2 h-96 p-2 pt-4 rounded-l-lg border-r border-gray-800">
                     <textarea
                         className="w-full h-full p-4 text-xl resize-none bg-transparent focus:ring-0 focus:outline-none"
                         placeholder="Type to translate..."

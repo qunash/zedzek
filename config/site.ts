@@ -12,9 +12,9 @@ interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: "Next.js",
+  name: "Zedzek",
   description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+    "Zedzek is a demo translator into Circassian language.",
   mainNav: [
     {
       title: "Home",

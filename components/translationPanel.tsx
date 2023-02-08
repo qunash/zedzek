@@ -16,9 +16,6 @@ const TranslationPanel = (
         navigator.clipboard.writeText(props.translations[0])
     }
 
-    if (props.translations.length === 0) {
-        return (<div />)
-    }
 
     if (props.loading) {
         return (
@@ -32,7 +29,7 @@ const TranslationPanel = (
 
     return (
         <div className="w-1/2 h-96 p-4 border rounded-r-lg p-0">
-            <div className="flex flex-col pt-4 items-center justify-center h-full">
+            <div className={`flex flex-col pt-4 items-center justify-center h-full ${props.translations.length == 0 ? "hidden" : ""}`}>
                 <div className="w-full h-full p-4 overflow-y-auto">
                     <div className="text-xl">
                         {props.translations[0]}

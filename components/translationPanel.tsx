@@ -22,14 +22,15 @@ const TranslationPanel = (
         return (
             <div className="w-1/2 h-96 p-2 rounded-r-lg">
                 <div className="flex flex-col items-center justify-center h-full">
-                    <div className="w-5 h-5 border-t-2 border-b-2 border-gray-500 rounded-full animate-spin"/>
+                    <div className="w-5 h-5 border-t-2 border-b-2 border-gray-500 rounded-full animate-spin" />
                 </div>
             </div>
         )
     }
 
     return (
-        <div className="w-1/2 h-96 p-4 rounded-r-lg p-0">
+        <div className="sm:w-1/2 sm:h-96 p-4 rounded-r-lg p-0
+                        w-full h-1/2">
             <div className={`flex flex-col pt-4 items-center justify-center h-full ${props.translations.length == 0 ? "hidden" : ""}`}>
                 <div className="w-full h-full p-4 overflow-y-auto">
                     <div className="text-xl">
@@ -72,15 +73,16 @@ const TranslatorPanel = () => {
     const [duration, setDuration] = useState(0)
     const [loading, setLoading] = useState(false)
 
-    useEffect(() => {
-        const textarea = document.querySelector("textarea")
-        textarea?.focus()
-    }, [])
+    // useEffect(() => {
+    //     const textarea = document.querySelector("textarea")
+    //     textarea?.focus()
+    // }, [])
 
     return (
         <div>
-            <div className="flex max-w-[980px] flex-row items-start gap-0 border border-gray-800 rounded-lg shadow-lg">
-                <div className="w-1/2 h-96 p-2 pt-4 rounded-l-lg border-r border-gray-800">
+            <div className="flex max-w-[980px] sm:flex-row items-start gap-0 border border-gray-800 rounded-lg shadow-lg
+            flex-col">
+                <div className="sm:w-1/2 sm:h-96 p-2 pt-4 rounded-l-lg sm:border-r border-gray-800 w-full sm:border-b h-1/2 border-b">
                     <textarea
                         className="w-full h-full p-4 text-xl resize-none bg-transparent focus:ring-0 focus:outline-none"
                         placeholder="Type to translate..."

@@ -1,5 +1,4 @@
 import translate from "@/api/api"
-import { Separator } from "@radix-ui/react-dropdown-menu"
 import { useEffect, useState } from "react"
 import { Button } from "./ui/button"
 

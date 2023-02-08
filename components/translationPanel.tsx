@@ -33,7 +33,7 @@ const TranslationPanel = (
 
     return (
         <div className="w-1/2 h-96 p-4 border rounded-r-lg p-0">
-            <div className="flex flex-col items-center justify-center h-full">
+            <div className="flex flex-col pt-4 items-center justify-center h-full">
                 <div className="w-full h-full p-4 overflow-y-auto">
                     <div className="text-xl">
                         {props.translations[0]}
@@ -83,9 +83,9 @@ const TranslatorPanel = () => {
     return (
         <div>
             <div className="flex max-w-[980px] flex-row items-start gap-0 border rounded-lg shadow-lg">
-                <div className="w-1/2 h-96 p-2 border rounded-l-lg p-0">
+                <div className="w-1/2 h-96 p-2 pt-4 border rounded-l-lg p-0">
                     <textarea
-                        className="w-full h-full p-4 resize-none bg-transparent focus:ring-0 focus:outline-none"
+                        className="w-full h-full p-4 text-xl resize-none bg-transparent focus:ring-0 focus:outline-none"
                         placeholder="Type to translate..."
                         value={text}
                         onInput={onTextInput}

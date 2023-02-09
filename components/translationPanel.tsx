@@ -86,10 +86,10 @@ const TranslatorPanel = () => {
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>()
 
 
-    // useEffect(() => {
-    //     const textarea = document.querySelector("textarea")
-    //     textarea?.focus()
-    // }, [])
+    useEffect(() => {
+        const textarea = document.querySelector("textarea")
+        textarea?.focus()
+    }, [])
 
     return (
         <div>

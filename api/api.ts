@@ -1,5 +1,6 @@
 const translate = async (text: string) => {
     try {
+        text = text.charAt(0).toLowerCase() + text.slice(1) // TODO: remove this hack
         const response = await fetch('https://anzorq-zedzek.hf.space/api/predict', {
             method: 'POST',
             headers: {

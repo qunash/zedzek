@@ -1,11 +1,11 @@
-const translate = async (input: string) => {
+const translate = async (text: string) => {
     try {
         const response = await fetch('https://anzorq-zedzek.hf.space/api/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ data: [input, 4, 4] })
+            body: JSON.stringify({ data: [text.trim(), 4, 4] })
         })
         const json = await response.json()
         console.debug("API response: ", json)

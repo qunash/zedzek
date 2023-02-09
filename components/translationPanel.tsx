@@ -1,5 +1,6 @@
 import translate from "@/api/api"
 import { useEffect, useState } from "react"
+import { Icons } from "./icons"
 import { Button } from "./ui/button"
 
 
@@ -65,9 +66,9 @@ const TranslationPanel = (
                         onClick={onCopyClick}>
 
                         {copyClicked ?
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="h-4 w-4"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <Icons.done className="h-4 w-4" />
                             :
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="h-4 w-4"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            <Icons.copy className="h-4 w-4" />
                         }
                     </Button>
                 </div>
@@ -85,10 +86,10 @@ const TranslatorPanel = () => {
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>()
 
 
-    useEffect(() => {
-        const textarea = document.querySelector("textarea")
-        textarea?.focus()
-    }, [])
+    // useEffect(() => {
+    //     const textarea = document.querySelector("textarea")
+    //     textarea?.focus()
+    // }, [])
 
     return (
         <div>
@@ -118,7 +119,7 @@ const TranslatorPanel = () => {
         clearTimeout(timeoutId)
         setTimeoutId(setTimeout(() => {
             api_translate(currentText)
-        }, 1000))
+        }, 500))
     }
 
     function onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -128,7 +129,10 @@ const TranslatorPanel = () => {
     }
 
     function api_translate(text: string) {
-        if (text === "") return
+        if (text === "") {
+            setTranslations([])
+            return
+        }
 
         setLoading(true)
         translate(text).then((translation) => {

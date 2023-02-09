@@ -2,7 +2,6 @@ import Head from "next/head"
 
 import { Layout } from "@/components/layout"
 import TranslatorPanel from "@/components/translationPanel"
-import { Label } from "@/components/ui/label"
 
 export default function IndexPage() {
   return (

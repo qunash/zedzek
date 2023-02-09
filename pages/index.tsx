@@ -2,15 +2,16 @@ import Head from "next/head"
 
 import { Layout } from "@/components/layout"
 import TranslatorPanel from "@/components/translationPanel"
+import { siteConfig } from "@/config/site"
 
 export default function IndexPage() {
   return (
     <Layout>
       <Head>
-        <title>Zedzek</title>
+        <title>{siteConfig.name}</title>
         <meta
           name="description"
-          content="Zedzek is a demo translator into Circassian language."
+          content={siteConfig.description}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

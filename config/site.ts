@@ -11,9 +11,9 @@ interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: "Zedzek",
+  name: "Zədzək",
   description:
-    "Zedzek is a demo translator into Circassian language.",
+    "Zədzək is a demo translator into Circassian language.",
   mainNav: [
     {
       title: "Home",

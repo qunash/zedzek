@@ -19,8 +19,8 @@ const TranslationPanel = (
     function onCopyClick(event: React.MouseEvent<HTMLButtonElement>) {
         event.currentTarget.blur()
         setCopyClicked(true)
+        navigator.clipboard.writeText(props.translations[0])
         setTimeout(() => {
-            navigator.clipboard.writeText(props.translations[0])
             setCopyClicked(false)
         }, 1500)
     }
@@ -66,7 +66,7 @@ const TranslationPanel = (
                         onClick={onCopyClick}>
 
                         {copyClicked ?
-                            <Icons.done className="h-4 w-4" />
+                            <Icons.check className="h-4 w-4" />
                             :
                             <Icons.copy className="h-4 w-4" />
                         }

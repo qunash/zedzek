@@ -18,7 +18,7 @@ export default function IndexPage() {
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
         <h1 className="text-xl font-bold lg:text-2xl">
-          Circasian translator demo
+          Circassian translator demo
         </h1>
         <TranslatorPanel />
       </section>

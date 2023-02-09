@@ -1,7 +1,7 @@
 import translate from "@/api/api"
-import { Separator } from "@/components/ui/separator"
 import { useEffect, useState } from "react"
 import { Button } from "./ui/button"
+
 
 const TranslationPanel = (
     props: {
@@ -11,16 +11,23 @@ const TranslationPanel = (
     }
 ) => {
 
-    console.log(props)
+    const [copyClicked, setCopyClicked] = useState(false)
 
-    function onCopyClick() {
-        navigator.clipboard.writeText(props.translations[0])
+    // console.log(props) // this component is being re-rendered many times, find out why
+
+    function onCopyClick(event: React.MouseEvent<HTMLButtonElement>) {
+        event.currentTarget.blur()
+        setCopyClicked(true)
+        setTimeout(() => {
+            navigator.clipboard.writeText(props.translations[0])
+            setCopyClicked(false)
+        }, 1500)
     }
 
 
     if (props.loading) {
         return (
-            <div className="md:h-96 p-2 rounded-r-lg w-full h-1/2 p-4">
+            <div className="w-full h-80 p-4 md:h-96 p-2 rounded-r-lg">
                 <div className="flex flex-col items-center justify-center h-full">
                     <div className="w-5 h-5 border-t-2 border-b-2 border-gray-500 rounded-full animate-spin" />
                 </div>
@@ -29,8 +36,7 @@ const TranslationPanel = (
     }
 
     return (
-        <div className="md:h-96 p-4 rounded-r-lg p-0
-                        w-full h-1/2">
+        <div className="w-full h-80 md:h-96 p-4 rounded-r-lg p-0">
             <div className={`flex flex-col pt-4 items-center justify-center h-full ${props.translations.length == 0 ? "hidden" : ""}`}>
                 <div className="w-full h-full p-4 overflow-y-auto">
                     <div className="text-xl">
@@ -56,9 +62,13 @@ const TranslationPanel = (
                         {Math.round(props.duration * 100) / 100}s
                     </div>
                     <Button
-                        className="w-24"
                         onClick={onCopyClick}>
-                        Copy
+
+                        {copyClicked ?
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="h-4 w-4"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            :
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="h-4 w-4"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        }
                     </Button>
                 </div>
             </div>
@@ -72,6 +82,8 @@ const TranslatorPanel = () => {
     const [translations, setTranslations] = useState([])
     const [duration, setDuration] = useState(0)
     const [loading, setLoading] = useState(false)
+    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>()
+
 
     useEffect(() => {
         const textarea = document.querySelector("textarea")
@@ -80,9 +92,8 @@ const TranslatorPanel = () => {
 
     return (
         <div>
-            <div className="flex max-w-[980px] md:flex-row items-start gap-0 border border-gray-800 rounded-lg shadow-lg
-            flex-col">
-                <div className="md:h-96 p-2 pt-4 rounded-l-lg border-gray-800 w-full h-1/2">
+            <div className="flex flex-col md:flex-row max-w-[980px] items-start border border-gray-800 rounded-lg shadow-lg">
+                <div className="w-full h-1/2 md:h-96 p-2 pt-4 rounded-l-lg border-gray-800">
                     <textarea
                         className="w-full h-full p-4 text-xl resize-none bg-transparent focus:ring-0 focus:outline-none"
                         placeholder="Type to translate..."
@@ -98,20 +109,16 @@ const TranslatorPanel = () => {
                     duration={duration}
                 />
             </div>
-            <Button
-                className="mt-3"
-                onClick={onTranslateClick}>
-                Translate
-            </Button>
         </div>
     )
 
-    function onTranslateClick() {
-        api_translate(text)
-    }
-
     function onTextInput(event: React.FormEvent<HTMLTextAreaElement>) {
-        setText(event.currentTarget.value)
+        const currentText = event.currentTarget.value
+        setText(currentText)
+        clearTimeout(timeoutId)
+        setTimeoutId(setTimeout(() => {
+            api_translate(currentText)
+        }, 1000))
     }
 
     function onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -121,16 +128,14 @@ const TranslatorPanel = () => {
     }
 
     function api_translate(text: string) {
-        if (text === "" || loading) return
+        if (text === "") return
 
         setLoading(true)
-        // translate(text) is async function
         translate(text).then((translation) => {
             setTranslations(translation.data)
             setDuration(translation.duration)
             setLoading(false)
-        }
-        )
+        })
     }
 }
 

@@ -2,6 +2,7 @@ import Head from "next/head"
 
 import { Layout } from "@/components/layout"
 import TranslatorPanel from "@/components/translationPanel"
+import { Label } from "@/components/ui/label"
 
 export default function IndexPage() {
   return (
@@ -16,6 +17,9 @@ export default function IndexPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+        <h1 className="text-2xl font-extrabold lg:text-5xl">
+          Circasian translator demo
+        </h1>
         <TranslatorPanel />
       </section>
     </Layout>

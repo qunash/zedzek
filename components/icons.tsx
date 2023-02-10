@@ -4,7 +4,7 @@ import {
   Moon,
   SunMedium,
   Twitter,
-  Discrod,
+  Discord,
   Github,
   Check,
   Copy,

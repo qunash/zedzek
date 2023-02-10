@@ -44,6 +44,7 @@ specifiers:
   lucide-react: 0.105.0-alpha.4
   next: ^13.1.6
   next-themes: ^0.2.1
+  nextjs-google-analytics: ^2.3.0
   postcss: ^8.4.14
   prettier: ^2.7.1
   react: ^18.2.0
@@ -87,6 +88,7 @@ dependencies:
   lucide-react: 0.105.0-alpha.4_react@18.2.0
   next: 13.1.6_biqbaboplfbrettd7655fr4n2y
   next-themes: 0.2.1_3vryta7zmbcsw4rrqf4axjqggm
+  nextjs-google-analytics: 2.3.0_next@13.1.6+react@18.2.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   sharp: 0.31.3
@@ -3099,6 +3101,18 @@ packages:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+    dev: false
+
+  /nextjs-google-analytics/2.3.0_next@13.1.6+react@18.2.0:
+    resolution: {integrity: sha512-MRL2/M01qxZtq+6m+J3ZBjNIQWGQnudsrH6VberIzPftrLR0jqV4Abvhr50v9xAVhloIdZpYxZbFYO3VXH1FMg==}
+    peerDependencies:
+      next: '>=11.0.0'
+      react: '>=17.0.0'
+    dependencies:
+      next: 13.1.6_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+    optionalDependencies:
+      fsevents: 2.3.2
     dev: false
 
   /node-abi/3.31.0:

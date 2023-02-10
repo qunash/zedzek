@@ -5,7 +5,8 @@ interface SiteConfig {
   description: string
   mainNav: NavItem[]
   links: {
-    twitter: string
+    // twitter: string
+    discord: string
     github: string
   }
 }
@@ -21,7 +22,8 @@ export const siteConfig: SiteConfig = {
     },
   ],
   links: {
-    twitter: "",
-    github: ""
+    // twitter: "",
+    discord: "https://discord.gg/ppmwTNUZQb",
+    github: "https://github.com/qunash/zedzek"
   },
 }

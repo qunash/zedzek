@@ -35,9 +35,8 @@ const TranslationPanel = (props: {
   return (
     <div className="h-80 w-full rounded-r-lg p-4 md:h-96">
       <div
-        className={`flex h-full flex-col items-center justify-center pt-4 ${
-          props.translations.length == 0 ? "hidden" : ""
-        }`}
+        className={`flex h-full flex-col items-center justify-center pt-4 ${props.translations.length == 0 ? "hidden" : ""
+          }`}
       >
         <div className="h-full w-full overflow-y-auto p-4">
           <div className="text-xl">{props.translations[0]}</div>
@@ -82,13 +81,12 @@ const TranslatorPanel = () => {
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>()
 
   useEffect(() => {
-    const textarea = document.querySelector("textarea")
-    textarea?.focus()
+    focusOnTextArea()
   }, [])
 
   return (
     <div className="flex max-w-[980px] flex-col items-start rounded-lg border border-gray-800 shadow-lg md:flex-row">
-      <div className="flex h-1/2 w-full rounded-l-lg border-gray-800 p-4 md:h-96">
+      <div className="flex w-full rounded-l-lg border-gray-800 p-4 md:h-96">
         <textarea
           className="h-full w-full resize-none bg-transparent p-2 text-xl focus:outline-none focus:ring-0"
           placeholder="Type to translate..."
@@ -100,9 +98,8 @@ const TranslatorPanel = () => {
           className={buttonVariants({
             size: "sm",
             variant: "ghost",
-            className: `items-center justify-end self-start p-4 text-slate-700 dark:text-slate-400 cursor-pointer ${
-              text.length == 0 ? "hidden" : ""
-            }`,
+            className: `items-center justify-end self-start p-4 text-slate-700 dark:text-slate-400 cursor-pointer ${text.length == 0 ? "hidden" : ""
+              }`,
           })}
           onClick={onClearClick}
         >
@@ -138,6 +135,7 @@ const TranslatorPanel = () => {
   function onClearClick(event: React.MouseEvent<HTMLDivElement>) {
     setText("")
     setTranslations([])
+    focusOnTextArea()
   }
 
   function api_translate(text: string) {
@@ -152,6 +150,11 @@ const TranslatorPanel = () => {
       setDuration(translation.duration)
       setLoading(false)
     })
+  }
+
+  function focusOnTextArea() {
+    const textarea = document.querySelector("textarea")
+    textarea?.focus()
   }
 }
 

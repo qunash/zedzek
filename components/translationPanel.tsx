@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import translate from "@/api/api"
 
 import { Icons } from "./icons"
-import { Button } from "./ui/button"
+import { Button, buttonVariants } from "./ui/button"
 
 const TranslationPanel = (props: {
   loading: boolean
@@ -13,7 +13,7 @@ const TranslationPanel = (props: {
 
   // console.log(props) // this component is being re-rendered many times, find out why
 
-  function onCopyClick(event: React.MouseEvent<HTMLButtonElement>) {
+  function onCopyClick(event: React.MouseEvent<HTMLDivElement>) {
     event.currentTarget.blur()
     setCopyClicked(true)
     navigator.clipboard.writeText(props.translations[0])
@@ -53,13 +53,21 @@ const TranslationPanel = (props: {
           <div className="text-xs text-gray-500">
             {Math.round(props.duration * 100) / 100}s
           </div>
-          <Button onClick={onCopyClick}>
+          <div
+            className={buttonVariants({
+              size: "sm",
+              variant: "ghost",
+              className:
+                "items-center justify-end self-start p-4 text-slate-700 dark:text-slate-400 cursor-pointer",
+            })}
+            onClick={onCopyClick}
+          >
             {copyClicked ? (
               <Icons.check className="h-4 w-4" />
             ) : (
               <Icons.copy className="h-4 w-4" />
             )}
-          </Button>
+          </div>
         </div>
       </div>
     </div>
@@ -79,24 +87,33 @@ const TranslatorPanel = () => {
   }, [])
 
   return (
-    <div>
-      <div className="flex max-w-[980px] flex-col items-start rounded-lg border border-gray-800 shadow-lg md:flex-row">
-        <div className="h-1/2 w-full rounded-l-lg border-gray-800 p-2 pt-4 md:h-96">
-          <textarea
-            className="h-full w-full resize-none bg-transparent p-4 text-xl focus:outline-none focus:ring-0"
-            placeholder="Type to translate..."
-            value={text}
-            onInput={onTextInput}
-            onKeyDown={onKeyDown}
-          />
-        </div>
-        <div className="h-px w-full bg-gray-800 md:h-full md:w-px" />
-        <TranslationPanel
-          loading={loading}
-          translations={translations}
-          duration={duration}
+    <div className="flex max-w-[980px] flex-col items-start rounded-lg border border-gray-800 shadow-lg md:flex-row">
+      <div className="flex h-1/2 w-full rounded-l-lg border-gray-800 p-4 md:h-96">
+        <textarea
+          className="h-full w-full resize-none bg-transparent p-2 text-xl focus:outline-none focus:ring-0"
+          placeholder="Type to translate..."
+          value={text}
+          onInput={onTextInput}
+          onKeyDown={onKeyDown}
         />
+        <div
+          className={buttonVariants({
+            size: "sm",
+            variant: "ghost",
+            className:
+              "items-center justify-end self-start p-4 text-slate-700 dark:text-slate-400 cursor-pointer",
+          })}
+          onClick={onClearClick}
+        >
+          <Icons.close className="h-5 w-5 fill-current" />
+        </div>
       </div>
+      <div className="h-px w-full bg-gray-800 md:h-full md:w-px" />
+      <TranslationPanel
+        loading={loading}
+        translations={translations}
+        duration={duration}
+      />
     </div>
   )
 
@@ -117,6 +134,12 @@ const TranslatorPanel = () => {
     }
   }
 
+  function onClearClick(event: React.MouseEvent<HTMLDivElement>) {
+    event.currentTarget.blur()
+    setText("")
+    setTranslations([])
+  }
+
   function api_translate(text: string) {
     if (text === "") {
       setTranslations([])
@@ -133,5 +156,3 @@ const TranslatorPanel = () => {
 }
 
 export default TranslatorPanel
-
-// `pnpm not recognized` error. To fix it on windows run `npm install -g pnpm` in cmd

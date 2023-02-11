@@ -13,8 +13,7 @@ interface SiteConfig {
 
 export const siteConfig: SiteConfig = {
   name: "Zədzək",
-  description:
-    "Zədzək is a demo translator into Circassian language.",
+  description: "Zədzək is a demo translator into Circassian language.",
   mainNav: [
     {
       title: "Home",
@@ -24,6 +23,6 @@ export const siteConfig: SiteConfig = {
   links: {
     // twitter: "",
     discord: "https://discord.gg/ppmwTNUZQb",
-    github: "https://github.com/qunash/zedzek"
+    github: "https://github.com/qunash/zedzek",
   },
 }

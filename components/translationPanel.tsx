@@ -100,8 +100,9 @@ const TranslatorPanel = () => {
           className={buttonVariants({
             size: "sm",
             variant: "ghost",
-            className:
-              "items-center justify-end self-start p-4 text-slate-700 dark:text-slate-400 cursor-pointer",
+            className: `items-center justify-end self-start p-4 text-slate-700 dark:text-slate-400 cursor-pointer ${
+              text.length == 0 ? "hidden" : ""
+            }`,
           })}
           onClick={onClearClick}
         >
@@ -135,7 +136,6 @@ const TranslatorPanel = () => {
   }
 
   function onClearClick(event: React.MouseEvent<HTMLDivElement>) {
-    event.currentTarget.blur()
     setText("")
     setTranslations([])
   }

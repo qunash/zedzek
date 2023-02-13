@@ -1,7 +1,6 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@angular-eslint/template-parser': ^15.2.0
   '@ianvs/prettier-plugin-sort-imports': ^3.7.1
   '@next/font': ^13.1.6
   '@radix-ui/react-accessible-icon': ^1.0.1
@@ -42,9 +41,9 @@ specifiers:
   eslint-config-prettier: ^8.3.0
   eslint-plugin-react: ^7.31.11
   eslint-plugin-tailwindcss: ^3.8.0
-  lodash: ^4.17.21
   lucide-react: 0.105.0-alpha.4
   next: ^13.1.6
+  next-query-params: ^4.1.0
   next-themes: ^0.2.1
   nextjs-google-analytics: ^2.3.0
   postcss: ^8.4.14
@@ -56,9 +55,9 @@ specifiers:
   tailwindcss: ^3.1.7
   tailwindcss-animate: ^1.0.5
   typescript: ^4.5.3
+  use-query-params: ^2.2.0
 
 dependencies:
-  '@angular-eslint/template-parser': 15.2.1_7uibuqfxkfaozanbtbziikiqje
   '@next/font': 13.1.6
   '@radix-ui/react-accessible-icon': 1.0.1_biqbaboplfbrettd7655fr4n2y
   '@radix-ui/react-accordion': 1.1.0_biqbaboplfbrettd7655fr4n2y
@@ -89,7 +88,9 @@ dependencies:
   '@typescript-eslint/parser': 5.49.0_7uibuqfxkfaozanbtbziikiqje
   class-variance-authority: 0.4.0_typescript@4.9.4
   clsx: 1.2.1
+  lucide-react: 0.105.0-alpha.4_react@18.2.0
   next: 13.1.6_biqbaboplfbrettd7655fr4n2y
+  next-query-params: 4.1.0_kxwbbzh4agphvfcz5jwanvdjty
   next-themes: 0.2.1_3vryta7zmbcsw4rrqf4axjqggm
   nextjs-google-analytics: 2.3.0_next@13.1.6+react@18.2.0
   react: 18.2.0
@@ -97,6 +98,7 @@ dependencies:
   sharp: 0.31.3
   tailwind-merge: 1.8.1
   tailwindcss-animate: 1.0.5_tailwindcss@3.2.4
+  use-query-params: 2.2.0_biqbaboplfbrettd7655fr4n2y
 
 devDependencies:
   '@ianvs/prettier-plugin-sort-imports': 3.7.1_prettier@2.8.3
@@ -108,9 +110,7 @@ devDependencies:
   eslint-config-next: 13.0.0_7uibuqfxkfaozanbtbziikiqje
   eslint-config-prettier: 8.6.0_eslint@8.32.0
   eslint-plugin-react: 7.32.1_eslint@8.32.0
-  eslint-plugin-tailwindcss: 3.8.1_ynrqy7cvt6f4cdrrl5mclx2feu
-  lodash: 4.17.21
-  lucide-react: 0.105.0-alpha.4_react@18.2.0
+  eslint-plugin-tailwindcss: 3.8.1_lusw24l4jy5eontuetwsj4iima
   postcss: 8.4.21
   prettier: 2.8.3
   tailwindcss: 3.2.4_postcss@8.4.21
@@ -125,20 +125,6 @@ packages:
       '@jridgewell/gen-mapping': 0.1.1
       '@jridgewell/trace-mapping': 0.3.17
     dev: true
-
-  /@angular-eslint/bundled-angular-compiler/15.2.1:
-    resolution: {integrity: sha512-LO7Am8eVCr7oh6a0VmKSL7K03CnQEQhFO7Wt/YtbfYOxVjrbwmYLwJn+wZPOT7A02t/BttOD/WXuDrOWtSMQ/Q==}
-
-  /@angular-eslint/template-parser/15.2.1_7uibuqfxkfaozanbtbziikiqje:
-    resolution: {integrity: sha512-ViCi79gC2aKJecmYLkOT+QlT5WMRNXeYz0Dr9Pr8qXzIbY0oAWE7nOT5jkXwQ9oUk+ybtGCWHma5JVJWVJsIog==}
-    peerDependencies:
-      eslint: ^7.20.0 || ^8.0.0
-      typescript: '*'
-    dependencies:
-      '@angular-eslint/bundled-angular-compiler': 15.2.1
-      eslint: 8.32.0
-      eslint-scope: 7.1.1
-      typescript: 4.9.4
 
   /@babel/code-frame/7.18.6:
     resolution: {integrity: sha512-TDCmlK5eOvH+eH7cdAFlNXeVJqWIQ7gW9tY1GJIpUtFb6CmjVyq2VM3u71bOyR8CRihcCgMUYoDNyLXao3+70Q==}
@@ -2280,7 +2266,7 @@ packages:
       string.prototype.matchall: 4.0.8
     dev: true
 
-  /eslint-plugin-tailwindcss/3.8.1_ynrqy7cvt6f4cdrrl5mclx2feu:
+  /eslint-plugin-tailwindcss/3.8.1_lusw24l4jy5eontuetwsj4iima:
     resolution: {integrity: sha512-b01CBIT6TrK5IhrwmjDkuLzl2di5yXUmL8RyEZV710sGtw2zesr2csyGOc7e/IuV6tb8MfuHeksgMvaBEl9qvA==}
     engines: {node: '>=12.13.0'}
     peerDependencies:
@@ -2288,7 +2274,6 @@ packages:
       '@typescript-eslint/parser': ^5.48.2
       tailwindcss: ^3.2.2
     dependencies:
-      '@angular-eslint/template-parser': 15.2.1_7uibuqfxkfaozanbtbziikiqje
       '@typescript-eslint/parser': 5.49.0_7uibuqfxkfaozanbtbziikiqje
       fast-glob: 3.2.12
       postcss: 8.4.21
@@ -2928,10 +2913,6 @@ packages:
   /lodash.merge/4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
-  /lodash/4.17.21:
-    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
-
   /loose-envify/1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
@@ -2956,7 +2937,7 @@ packages:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.2.0
-    dev: true
+    dev: false
 
   /merge2/1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
@@ -3000,6 +2981,19 @@ packages:
 
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
+
+  /next-query-params/4.1.0_kxwbbzh4agphvfcz5jwanvdjty:
+    resolution: {integrity: sha512-jjoQByM9s2d4wCUBUazhgHNVztm18meCtVoDj6v45+LZIQfxAF5QYVFKCbDYarI3iXD4xcZprztqLtALiiV8nQ==}
+    peerDependencies:
+      next: ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      use-query-params: ^2.0.0
+    dependencies:
+      next: 13.1.6_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      tslib: 2.4.1
+      use-query-params: 2.2.0_biqbaboplfbrettd7655fr4n2y
+    dev: false
 
   /next-themes/0.2.1_3vryta7zmbcsw4rrqf4axjqggm:
     resolution: {integrity: sha512-B+AKNfYNIzh0vqQQKqQItTS8evEouKD7H5Hj3kmuPERwddR2TxvDSFZuTj6T7Jfn1oyeUyJMydPl1Bkxkh0W7A==}
@@ -3435,6 +3429,7 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
+    dev: false
 
   /read-cache/1.0.0:
     resolution: {integrity: sha512-Owdv/Ft7IjOgm/i0xvNDZ1LrRANRfew4b2prF3OWMQLxLfu3bS8FVhCsrSCMK4lR56Y9ya+AThoTpDCTxCmpRA==}
@@ -3537,6 +3532,10 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
+
+  /serialize-query-params/2.0.2:
+    resolution: {integrity: sha512-1chMo1dST4pFA9RDXAtF0Rbjaut4is7bzFbI1Z26IuMub68pNCILku85aYmeFhvnY//BXUPUhoRMjYcsT93J/Q==}
+    dev: false
 
   /sharp/0.31.3:
     resolution: {integrity: sha512-XcR4+FCLBFKw1bdB+GEhnUNXNXvnt0tDo4WsBsraKymuo/IAuPuCBVAL2wIkUw2r/dwFW5Q5+g66Kwl2dgDFVg==}
@@ -3877,6 +3876,17 @@ packages:
     dependencies:
       '@types/react': 18.0.27
       react: 18.2.0
+    dev: false
+
+  /use-query-params/2.2.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-MPBwXVZYzFeJEdjv0YgPNFsafUOM8WTpwBEZfNEMlyzbTsf2c+ZpOBkdM95/w4rxzk4eVO3E4DW7v33+VDbiQw==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      serialize-query-params: 2.0.2
     dev: false
 
   /use-sidecar/1.1.2_3stiutgnnbnfnf3uowm5cip22i:

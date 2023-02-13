@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import translate from "@/api/api"
+import { StringParam, useQueryParam, withDefault } from "use-query-params"
 
 import { Icons } from "./icons"
-import { Button, buttonVariants } from "./ui/button"
+import { buttonVariants } from "./ui/button"
 
 const TranslationPanel = (props: {
   loading: boolean
@@ -33,7 +34,7 @@ const TranslationPanel = (props: {
   }
 
   return (
-    <div className="h-80 w-full rounded-r-lg p-4 md:h-96">
+    <div className="h-fit w-full rounded-r-lg p-4">
       <div
         className={`flex h-full flex-col items-center justify-center pt-4 ${props.translations.length == 0 ? "hidden" : ""
           }`}
@@ -74,7 +75,8 @@ const TranslationPanel = (props: {
 }
 
 const TranslatorPanel = () => {
-  const [text, setText] = useState("")
+  const [text, setText] = useQueryParam("text", withDefault(StringParam, ""))
+
   const [translations, setTranslations] = useState([])
   const [duration, setDuration] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -84,6 +86,18 @@ const TranslatorPanel = () => {
     focusOnTextArea()
   }, [])
 
+  useEffect(() => {
+    if (text.length > 0) {
+      clearTimeout(timeoutId)
+      setTimeoutId(
+        setTimeout(() => {
+          api_translate(text)
+        }, 500)
+      )
+    }
+  }, [text])
+
+
   return (
     <div className="flex max-w-[980px] flex-col items-start rounded-lg border border-gray-800 shadow-lg md:flex-row">
       <div className="flex w-full rounded-l-lg border-gray-800 p-4 md:h-96">
@@ -92,7 +106,6 @@ const TranslatorPanel = () => {
           placeholder="Type to translate..."
           value={text}
           onInput={onTextInput}
-          onKeyDown={onKeyDown}
         />
         <div
           className={buttonVariants({
@@ -117,35 +130,30 @@ const TranslatorPanel = () => {
 
   function onTextInput(event: React.FormEvent<HTMLTextAreaElement>) {
     const currentText = event.currentTarget.value
-    setText(currentText)
-    clearTimeout(timeoutId)
-    setTimeoutId(
-      setTimeout(() => {
-        api_translate(currentText)
-      }, 500)
-    )
-  }
-
-  function onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (event.ctrlKey && event.key === "Enter") {
-      api_translate(text)
-    }
+    setText(currentText, 'replaceIn')
+    // clearTimeout(timeoutId)
+    // setTimeoutId(
+    //   setTimeout(() => {
+    //     api_translate(currentText)
+    //   }, 500)
+    // )
   }
 
   function onClearClick(event: React.MouseEvent<HTMLDivElement>) {
-    setText("")
+    setText(null)
     setTranslations([])
     focusOnTextArea()
   }
 
   function api_translate(text: string) {
-    if (text === "") {
+    if (text.length == 0) {
       setTranslations([])
       return
     }
 
     setLoading(true)
     translate(text).then((translation) => {
+      // setText(text)
       setTranslations(translation.data)
       setDuration(translation.duration)
       setLoading(false)

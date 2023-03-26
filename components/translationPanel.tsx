@@ -160,6 +160,7 @@ const TranslatorPanel = () => {
     setLoading(true)
     translate(text)
       .then((response) => {
+        console.log(response)
         if (text === response.data[0]) {
           setTextParam(text, 'replaceIn')
           setTranslations(response.data[1])

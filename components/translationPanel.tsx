@@ -89,7 +89,7 @@ const TranslatorPanel = () => {
 
   useEffect(() => {
     setText(textParam)
-  }, [textParam])  
+  }, [textParam])
 
   useEffect(() => {
     if (text.length > 0) {
@@ -157,13 +157,21 @@ const TranslatorPanel = () => {
       return
     }
 
+    const inputText = text
+
     setLoading(true)
-    translate(text).then((translation) => {
-      // setTextParam(text, 'replaceIn')
-      setTranslations(translation.data)
-      setDuration(translation.duration)
-      setLoading(false)
-    })
+    translate(text)
+      .then((translation) => {
+        if (text === inputText) {
+          setTextParam(text, 'replaceIn')
+          setTranslations(translation.data)
+          setDuration(translation.duration)
+          setLoading(false)
+        }
+      })
+      .catch((error) => {
+        // Handle errors if necessary
+      })
   }
 
   function focusOnTextArea() {

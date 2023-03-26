@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import translate from "@/api/api"
 import { StringParam, useQueryParam, withDefault } from "use-query-params"
 
@@ -83,13 +83,15 @@ const TranslatorPanel = () => {
   const [loading, setLoading] = useState(false)
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>()
 
+  const abortControllerRef = useRef<AbortController | null>(null)
+
   useEffect(() => {
     focusOnTextArea()
   }, [])
 
   useEffect(() => {
     setText(textParam)
-  }, [textParam])  
+  }, [textParam])
 
   useEffect(() => {
     if (text.length > 0) {
@@ -157,12 +159,26 @@ const TranslatorPanel = () => {
       return
     }
 
+    // Cancel the previous translation request if it's still in progress
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
+
+    abortControllerRef.current = new AbortController()
+
     setLoading(true)
     translate(text).then((translation) => {
       // setTextParam(text, 'replaceIn')
       setTranslations(translation.data)
       setDuration(translation.duration)
       setLoading(false)
+    })
+    .catch((error) => {
+      if (error.name === 'AbortError') {
+        console.log('Previous translation request aborted')
+      } else {
+        // Handle other errors if necessary
+      }
     })
   }
 

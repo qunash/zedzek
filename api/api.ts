@@ -1,4 +1,4 @@
-const translate = async (text: string) => {
+const translate = async (text: string, options?: { signal?: AbortSignal }) => {
   try {
     text = text.charAt(0).toLowerCase() + text.slice(1) // TODO: remove this hack
     const response = await fetch("https://anzorq-zedzek.hf.space/api/predict", {
@@ -7,6 +7,7 @@ const translate = async (text: string) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ data: [text.trim(), 4, 4] }),
+      signal: options?.signal
     })
     const json = await response.json()
     console.debug("API response: ", json)

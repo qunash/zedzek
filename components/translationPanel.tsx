@@ -157,15 +157,13 @@ const TranslatorPanel = () => {
       return
     }
 
-    const inputText = text
-
     setLoading(true)
     translate(text)
-      .then((translation) => {
-        if (text === inputText) {
+      .then((response) => {
+        if (text === response.data[0]) {
           setTextParam(text, 'replaceIn')
-          setTranslations(translation.data)
-          setDuration(translation.duration)
+          setTranslations(response.data[1])
+          setDuration(response.duration)
           setLoading(false)
         }
       })

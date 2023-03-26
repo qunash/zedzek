@@ -136,7 +136,7 @@ const TranslatorPanel = () => {
   function onTextInput(event: React.FormEvent<HTMLTextAreaElement>) {
     const currentText = event.currentTarget.value
     setText(currentText)
-    // setTextParam(currentText, 'replaceIn')
+    setTextParam(currentText, 'replaceIn')
     // clearTimeout(timeoutId)
     // setTimeoutId(
     //   setTimeout(() => {
@@ -159,7 +159,7 @@ const TranslatorPanel = () => {
 
     setLoading(true)
     translate(text).then((translation) => {
-      setTextParam(text, 'replaceIn')
+      // setTextParam(text, 'replaceIn')
       setTranslations(translation.data)
       setDuration(translation.duration)
       setLoading(false)

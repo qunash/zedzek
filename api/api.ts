@@ -11,7 +11,7 @@ const translate = async (text: string) => {
     const json = await response.json()
     console.debug("API response: ", json)
     return {
-      data: json.data[0],
+      data: json.data,
       duration: json.duration,
     }
   } catch (error) {

@@ -75,7 +75,8 @@ const TranslationPanel = (props: {
 }
 
 const TranslatorPanel = () => {
-  const [text, setText] = useQueryParam("text", withDefault(StringParam, ""))
+  const [textParam, setTextParam] = useQueryParam("text", withDefault(StringParam, ""))
+  const [text, setText] = useState(textParam)
 
   const [translations, setTranslations] = useState([])
   const [duration, setDuration] = useState(0)
@@ -85,6 +86,10 @@ const TranslatorPanel = () => {
   useEffect(() => {
     focusOnTextArea()
   }, [])
+
+  useEffect(() => {
+    setText(textParam)
+  }, [textParam])  
 
   useEffect(() => {
     if (text.length > 0) {
@@ -130,7 +135,8 @@ const TranslatorPanel = () => {
 
   function onTextInput(event: React.FormEvent<HTMLTextAreaElement>) {
     const currentText = event.currentTarget.value
-    setText(currentText, 'replaceIn')
+    setText(currentText)
+    // setTextParam(currentText, 'replaceIn')
     // clearTimeout(timeoutId)
     // setTimeoutId(
     //   setTimeout(() => {
@@ -140,7 +146,7 @@ const TranslatorPanel = () => {
   }
 
   function onClearClick(event: React.MouseEvent<HTMLDivElement>) {
-    setText(null)
+    setTextParam(null)
     setTranslations([])
     focusOnTextArea()
   }
@@ -153,7 +159,7 @@ const TranslatorPanel = () => {
 
     setLoading(true)
     translate(text).then((translation) => {
-      // setText(text)
+      setTextParam(text, 'replaceIn')
       setTranslations(translation.data)
       setDuration(translation.duration)
       setLoading(false)

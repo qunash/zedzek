@@ -17,7 +17,7 @@ const translate = async (text: string): Promise<TranslationResponse> => {
     })
     const json = await response.json()
     console.debug("API response: ", json)
-    const translations = JSON.parse(json.data[1])
+    const translations = JSON.parse(json.data[1].replace(/'/g, '"'))
     return {
       input: json.data[0],
       translations,

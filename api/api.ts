@@ -16,7 +16,10 @@ const translate = async (text: string): Promise<TranslationResponse> => {
     })
     const json = await response.json()
     console.debug("API response: ", json)
-    const parsedData = JSON.parse(json.data); // Parse the "data" field
+
+    const jsonString = json.data[0].replace(/'/g, '"')
+    const parsedData = JSON.parse(jsonString)
+
     return {
       input: parsedData.input,
       translations: parsedData.translations,

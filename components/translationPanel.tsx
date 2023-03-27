@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import translate, { TranslationResponse } from "@/api/api"
 import { StringParam, useQueryParam, withDefault } from "use-query-params"
 
@@ -84,6 +84,7 @@ const TranslatorPanel = () => {
   const [duration, setDuration] = useState(0)
   const [loading, setLoading] = useState(false)
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>()
+  const ignoreResponse = useRef(false)
 
   useEffect(() => {
     focusOnTextArea()
@@ -96,6 +97,7 @@ const TranslatorPanel = () => {
   useEffect(() => {
     if (text.length > 0) {
       clearTimeout(timeoutId)
+      ignoreResponse.current = false
       setTimeoutId(
         setTimeout(() => {
           api_translate(text)
@@ -103,6 +105,12 @@ const TranslatorPanel = () => {
       )
     }
   }, [text])
+  
+  useEffect(() => {
+    return () => {
+      ignoreResponse.current = true
+    }
+  }, [])  
 
 
   return (
@@ -158,15 +166,13 @@ const TranslatorPanel = () => {
       setTranslations([])
       return
     }
-
-    const currentInput = input
-    
+  
     setLoading(true)
     translate(input)
       .then((response: TranslationResponse) => {
         console.log("text: ", input)
         console.log(response)
-        if (currentInput.toLowerCase() === response.input.toLowerCase()) {
+        if (!ignoreResponse.current && input.toLowerCase() === response.input.toLowerCase()) {
           setTextParam(input, 'replaceIn')
           setTranslations(response.translations)
           setDuration(response.duration)
@@ -177,7 +183,6 @@ const TranslatorPanel = () => {
         // Handle errors if necessary
       })
   }
-
 
   function focusOnTextArea() {
     const textarea = document.querySelector("textarea")

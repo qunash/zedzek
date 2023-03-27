@@ -4,7 +4,6 @@ export type TranslationResponse = {
   duration: number
 }
 
-
 const translate = async (text: string): Promise<TranslationResponse> => {
   try {
     text = text.charAt(0).toLowerCase() + text.slice(1) // TODO: remove this hack
@@ -23,7 +22,6 @@ const translate = async (text: string): Promise<TranslationResponse> => {
       translations,
       duration: json.duration,
     }
-
   } catch (error) {
     console.error(error)
     throw error

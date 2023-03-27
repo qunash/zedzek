@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import translate, { TranslationResponse } from "@/api/api"
 import { StringParam, useQueryParam, withDefault } from "use-query-params"
 
@@ -36,19 +36,18 @@ const TranslationPanel = (props: {
   return (
     <div className="h-fit w-full rounded-r-lg p-4">
       <div
-        className={`flex h-full flex-col items-center justify-center pt-4 ${props.translations.length == 0 ? "hidden" : ""
-          }`}
+        className={`flex h-full flex-col items-center justify-center pt-4 ${
+          props.translations.length == 0 ? "hidden" : ""
+        }`}
       >
         <div className="h-full w-full overflow-y-auto p-4">
           <div className="text-xl">{props.translations[0]}</div>
           <div className="my-4 h-px w-full bg-gray-500" />
           <div className="pb-2 text-xl text-gray-500">Alternatives:</div>
           <div className="flex flex-col gap-2">
-            {
-              props.translations.slice(1).map((translation, index) => {
-                return <div key={index}>{translation}</div>
-              })
-            }
+            {props.translations.slice(1).map((translation, index) => {
+              return <div key={index}>{translation}</div>
+            })}
           </div>
         </div>
         <div className="flex w-full flex-row items-center justify-between p-4">

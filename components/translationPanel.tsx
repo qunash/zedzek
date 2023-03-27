@@ -162,7 +162,7 @@ const TranslatorPanel = () => {
       .then((response: TranslationResponse) => {
         console.log("text: ", text)
         console.log(response)
-        if (text === response.input) {
+        if (text.toLowerCase() === response.input.toLowerCase()) {
           setTextParam(text, 'replaceIn')
           setTranslations(response.translations)
           setDuration(response.duration)

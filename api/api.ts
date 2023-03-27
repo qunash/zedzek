@@ -4,9 +4,10 @@ export type TranslationResponse = {
   duration: number
 }
 
+
 const translate = async (text: string): Promise<TranslationResponse> => {
   try {
-    text = text.charAt(0).toLowerCase() + text.slice(1); // TODO: remove this hack
+    text = text.charAt(0).toLowerCase() + text.slice(1) // TODO: remove this hack
     const response = await fetch("https://anzorq-zedzek.hf.space/api/predict", {
       method: "POST",
       headers: {
@@ -16,15 +17,10 @@ const translate = async (text: string): Promise<TranslationResponse> => {
     })
     const json = await response.json()
     console.debug("API response: ", json)
+    const [input, translations] = json.data
+    const duration = json.duration
+    return { input, translations, duration }
 
-    const jsonString = json.data[0].replace(/'/g, '"')
-    const parsedData = JSON.parse(jsonString)
-
-    return {
-      input: parsedData.input,
-      translations: parsedData.translations,
-      duration: json.duration,
-    }
   } catch (error) {
     console.error(error)
     throw error

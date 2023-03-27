@@ -1,44 +1,74 @@
-import translate, { TranslationResponse } from "@/api/api"
-import { useState, useEffect } from "react"
-import { useQueryParam, withDefault, StringParam } from "use-query-params"
-import { Icons } from "./icons"
-import TranslationPanel from "./translationPanel"
-import { buttonVariants } from "./ui/button"
+import translate from '@/api/api'
+import { useState, useEffect, useRef } from 'react'
+import { useQueryParam, StringParam, withDefault } from 'use-query-params'
+import { Icons } from './icons'
+import TranslationPanel from './translationPanel'
+import { buttonVariants } from './ui/button'
 
 const TranslatorPanel = () => {
-    const [textParam, setTextParam] = useQueryParam("text", withDefault(StringParam, ""))
+    const [textParam, setTextParam] = useQueryParam('text', withDefault(StringParam, ""))
     const [text, setText] = useState(textParam)
-
     const [translations, setTranslations] = useState([])
     const [duration, setDuration] = useState(0)
     const [loading, setLoading] = useState(false)
-    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>()
+    const [timeoutId, setTimeoutId] = useState(null)
+    const textareaRef = useRef<HTMLTextAreaElement>()
+    const latestInputTextRef = useRef<string>()
 
+        
     useEffect(() => {
-        focusOnTextArea()
+        textareaRef.current.focus()
     }, [])
 
     useEffect(() => {
         setText(textParam)
-    }, [textParam])
+    }, [textParam]) 
 
     useEffect(() => {
         if (text.length > 0) {
-            const id = setTimeout(() => {
-                api_translate(text)
-            }, 500)
-            setTimeoutId(id)
-
-            return () => clearTimeout(id)
+            setTimeoutId(setTimeout(() => api_translate(text), 500))
+        } else {
+            setTextParam(undefined, 'replaceIn')
+            setTranslations([])
+            setDuration(0)
+            setLoading(false)
         }
-    }, [text])
 
+    }, [text, setTextParam])
 
+    const onTextInput = (event: React.FormEvent<HTMLTextAreaElement>) => {
+        const currentText = event.currentTarget.value
+        setText(currentText)
+        setTextParam(currentText, 'replaceIn')
+        clearTimeout(timeoutId)
+    }
+
+    const onClearClick = () => {
+        setText('')
+    }
+
+    const api_translate = async (inputText: string) => {
+        setLoading(true)
+        latestInputTextRef.current = inputText
+        translate(inputText)
+            .then((response) => {
+                if (latestInputTextRef.current === inputText) {
+                    setTranslations(response.translations)
+                    setDuration(response.duration)
+                    setLoading(false)
+                }
+            })
+            .catch((error) => {
+                setLoading(false)
+                console.log(error)
+            })
+    }
 
     return (
         <div className="flex max-w-[980px] flex-col items-start rounded-lg border border-gray-800 shadow-lg md:flex-row">
             <div className="flex w-full rounded-l-lg border-gray-800 p-4 md:h-96">
                 <textarea
+                    ref={textareaRef}
                     className="h-full w-full resize-none bg-transparent p-2 text-xl focus:outline-none focus:ring-0"
                     placeholder="Type to translate..."
                     value={text}
@@ -64,45 +94,6 @@ const TranslatorPanel = () => {
             />
         </div>
     )
-
-    function onTextInput(event: React.FormEvent<HTMLTextAreaElement>) {
-        const currentText = event.currentTarget.value
-        setText(currentText)
-        setTextParam(currentText, 'replaceIn')
-    }
-
-    function onClearClick(event: React.MouseEvent<HTMLDivElement>) {
-        setTextParam(null)
-        setTranslations([])
-        focusOnTextArea()
-    }
-
-    function api_translate(input: string) {
-        if (input.length == 0) {
-            setTranslations([])
-            return
-        }
-
-        setLoading(true)
-        translate(input)
-            .then((response: TranslationResponse) => {
-                console.log("text: ", input)
-                console.log(response)
-                if (input.toLowerCase() === response.input.toLowerCase()) {
-                    setTextParam(input, 'replaceIn')
-                    setTranslations(response.translations)
-                    setDuration(response.duration)
-                    setLoading(false)
-                }
-            })
-            .catch((error) => {
-            })
-    }
-
-    function focusOnTextArea() {
-        const textarea = document.querySelector("textarea")
-        textarea?.focus()
-    }
 }
 
 export default TranslatorPanel

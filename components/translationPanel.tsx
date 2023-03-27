@@ -98,7 +98,7 @@ const TranslatorPanel = () => {
       clearTimeout(timeoutId)
       setTimeoutId(
         setTimeout(() => {
-          api_translate()
+          api_translate(text)
         }, 500)
       )
     }
@@ -153,19 +153,19 @@ const TranslatorPanel = () => {
     focusOnTextArea()
   }
 
-  function api_translate() {
-    if (text.length == 0) {
+  function api_translate(input: string) {
+    if (input.length == 0) {
       setTranslations([])
       return
     }
 
     setLoading(true)
-    translate(text)
+    translate(input)
       .then((response: TranslationResponse) => {
-        console.log("text: ", text)
+        console.log("text: ", input)
         console.log(response)
         if (text.toLowerCase() === response.input.toLowerCase()) {
-          setTextParam(text, 'replaceIn')
+          setTextParam(input, 'replaceIn')
           setTranslations(response.translations)
           setDuration(response.duration)
           setLoading(false)

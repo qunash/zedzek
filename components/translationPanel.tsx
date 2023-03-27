@@ -160,14 +160,15 @@ const TranslatorPanel = () => {
     setLoading(true)
     translate(text)
       .then((response) => {
+        console.log("text: ", text)
         console.log(response)
         const { input, translations } = response.data
-        if (text === input) {
-          setTextParam(text, 'replaceIn')
-          setTranslations(translations)
-          setDuration(response.duration)
-          setLoading(false)
-        }
+        // if (text === input) {
+        setTextParam(text, 'replaceIn')
+        setTranslations(translations)
+        setDuration(response.duration)
+        setLoading(false)
+        // }
       })
       .catch((error) => {
         // Handle errors if necessary

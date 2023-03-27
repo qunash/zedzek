@@ -59,6 +59,7 @@ const TranslatorPanel = () => {
     const onClearClick = () => setText('')
 
     const handleExampleClick = (example: string) => {
+        window.scrollTo(0, 0)
         setText(example)
         setTextParam(example, 'replaceIn')
     }

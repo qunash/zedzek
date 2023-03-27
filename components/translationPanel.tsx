@@ -33,13 +33,13 @@ const TranslationPanel = (props: {
     )
   }
 
+  if (props.translations.length == 0) {
+    return (<div className="h-80 w-full rounded-r-lg p-4 md:h-96" />)
+  }
+
   return (
-    <div className="h-fit w-full rounded-r-lg p-4">
-      <div
-        className={`flex h-full flex-col items-center justify-center pt-4 ${
-          props.translations.length == 0 ? "hidden" : ""
-        }`}
-      >
+    <div className="min-h-80 md:min-h-96 h-fit w-full rounded-r-lg p-4">
+      <div className="flex h-full flex-col items-center justify-center pt-4">
         <div className="h-full w-full overflow-y-auto p-4">
           <div className="text-xl">{props.translations[0]}</div>
           <div className="my-4 h-px w-full bg-gray-500" />

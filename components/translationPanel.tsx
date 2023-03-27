@@ -44,9 +44,11 @@ const TranslationPanel = (props: {
           <div className="my-4 h-px w-full bg-gray-500" />
           <div className="pb-2 text-xl text-gray-500">Alternatives:</div>
           <div className="flex flex-col gap-2">
-            {props.translations.slice(1).map((translation, index) => {
-              return <div key={index}>{translation}</div>
-            })}
+            {
+              props.translations.slice(1).map((translation, index) => {
+                return <div key={index}>{translation}</div>
+              })
+            }
           </div>
         </div>
         <div className="flex w-full flex-row items-center justify-between p-4">

@@ -17,9 +17,12 @@ const translate = async (text: string): Promise<TranslationResponse> => {
     })
     const json = await response.json()
     console.debug("API response: ", json)
-    const [input, translations] = json.data
-    const duration = json.duration
-    return { input, translations, duration }
+    const translations = JSON.parse(json.data[1])
+    return {
+      input: json.data[0],
+      translations,
+      duration: json.duration,
+    }
 
   } catch (error) {
     console.error(error)

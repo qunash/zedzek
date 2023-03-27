@@ -159,12 +159,14 @@ const TranslatorPanel = () => {
       return
     }
 
+    const currentInput = input
+    
     setLoading(true)
     translate(input)
       .then((response: TranslationResponse) => {
         console.log("text: ", input)
         console.log(response)
-        if (text.toLowerCase() === response.input.toLowerCase()) {
+        if (currentInput.toLowerCase() === response.input.toLowerCase()) {
           setTextParam(input, 'replaceIn')
           setTranslations(response.translations)
           setDuration(response.duration)
@@ -175,6 +177,7 @@ const TranslatorPanel = () => {
         // Handle errors if necessary
       })
   }
+
 
   function focusOnTextArea() {
     const textarea = document.querySelector("textarea")

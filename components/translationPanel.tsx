@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import translate from "@/api/api"
+import translate, { TranslationResponse } from "@/api/api"
 import { StringParam, useQueryParam, withDefault } from "use-query-params"
 
 import { Icons } from "./icons"
@@ -159,16 +159,15 @@ const TranslatorPanel = () => {
 
     setLoading(true)
     translate(text)
-      .then((response) => {
+      .then((response: TranslationResponse) => {
         console.log("text: ", text)
         console.log(response)
-        const { input, translations } = response.data
-        // if (text === input) {
-        setTextParam(text, 'replaceIn')
-        setTranslations(translations)
-        setDuration(response.duration)
-        setLoading(false)
-        // }
+        if (text === response.input) {
+          setTextParam(text, 'replaceIn')
+          setTranslations(response.translations)
+          setDuration(response.duration)
+          setLoading(false)
+        }
       })
       .catch((error) => {
         // Handle errors if necessary

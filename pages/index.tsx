@@ -2,7 +2,7 @@ import Head from "next/head"
 
 import { siteConfig } from "@/config/site"
 import { Layout } from "@/components/layout"
-import TranslatorPanel from "@/components/translationPanel"
+import TranslatorPanel from "@/components/translatorPanel"
 
 export default function IndexPage() {
   return (

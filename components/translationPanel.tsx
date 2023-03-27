@@ -98,7 +98,7 @@ const TranslatorPanel = () => {
       clearTimeout(timeoutId)
       setTimeoutId(
         setTimeout(() => {
-          api_translate(text)
+          api_translate()
         }, 500)
       )
     }
@@ -153,7 +153,7 @@ const TranslatorPanel = () => {
     focusOnTextArea()
   }
 
-  function api_translate(text: string) {
+  function api_translate() {
     if (text.length == 0) {
       setTranslations([])
       return

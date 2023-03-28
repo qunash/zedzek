@@ -41,6 +41,7 @@
     "@radix-ui/react-tooltip": "^1.0.5",
     "@types/next": "^9.0.0",
     "@typescript-eslint/parser": "^5.56.0",
+    "@vercel/og": "^0.4.1",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
     "lucide-react": "0.105.0-alpha.4",

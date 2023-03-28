@@ -1,77 +1,27 @@
-# next-template
+# Zədzək – Russian-Circassian Translator Demo
 
-A Next.js 13 template for building apps with Radix UI and Tailwind CSS.
+This is a demo of a Russian-Circassian translator app, which uses a machine learning model trained on Russian-Circassian sentence pairs. It is capable of translating from over 100 other languages, but accuracy may vary.
 
 ## Features
 
-- Radix UI Primitives
-- Tailwind CSS
-- Fonts with `@next/font`
-- Icons from [Lucide](https://lucide.dev)
-- Dark mode with `next-themes`
-- Automatic import sorting with `@ianvs/prettier-plugin-sort-imports`
+- Translates Russian to Kabardian dialect of Circassian
+- Can translate from over 100 other languages with varying accuracy
+- Uses a fine-tuned version of the [facebook/m2m100_418M](https://huggingface.co/facebook/m2m100_418M) model
 
-## Tailwind CSS Features
+## Techincal Details
 
-- Class merging with `taiwind-merge`
-- Animation with `tailwindcss-animate`
-- Conditional classes with `clsx`
-- Variants with `class-variance-authority`
-- Automatic class sorting with `eslint-plugin-tailwindcss`
+The demo uses a fine-tuned version of the `facebook/m2m100_418M` model, which has been trained on the "ru-kbd" dataset, consisting of ~44K sentences from various sources. More information about the model and dataset can be found in the following links:
 
-## Import Sort
+- Base m2m100_418M Model: https://huggingface.co/facebook/m2m100_418M
+- ru-kbd model: https://huggingface.co/anzorq/m2m100_418M_ft_ru-kbd_44K
+- Paper: https://arxiv.org/abs/2010.11125
+- Dataset: https://huggingface.co/datasets/anzorq/kbd-ru
 
-The starter comes with `@ianvs/prettier-plugin-sort-imports` for automatically sort your imports.
+## How to Help
 
-### Input
+The quality of translations depends on the amount of training data. Currently, the model has been trained on ~44K sentence pairs. To improve translation accuracy, more training data is needed. You can help by collecting monolingual or bilingual text in any Circassian dialect. Contributions can be in the form of plain text, PDFs, or links to web pages containing the text.
 
-```tsx
-import * as React from "react"
-import Link from "next/link"
-
-import { siteConfig } from "@/config/site"
-import { buttonVariants } from "@/components/ui/button"
-import "@/styles/globals.css"
-import { twMerge } from "tailwind-merge"
-
-import { NavItem } from "@/types/nav"
-import { cn } from "@/lib/utils"
-```
-
-### Output
-
-```tsx
-import * as React from "react"
-// React is always first.
-import Link from "next/link"
-// Followed by next modules.
-import { twMerge } from "tailwind-merge"
-
-// Followed by third-party modules
-// Space
-import "@/styles/globals.css"
-// styles
-import { NavItem } from "@/types/nav"
-// types
-import { siteConfig } from "@/config/site"
-// config
-import { cn } from "@/lib/utils"
-// lib
-import { buttonVariants } from "@/components/ui/button"
-
-// components
-```
-
-### Class Merging
-
-The `cn` util handles conditional classes and class merging.
-
-### Input
-
-```ts
-cn("px-2 bg-slate-100 py-2 bg-slate-200")
-// Outputs `p-2 bg-slate-200`
-```
+To contribute, join our Discord server: https://discord.gg/ppmwTNUZQb
 
 ## License
 

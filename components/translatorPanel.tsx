@@ -1,5 +1,5 @@
 import translate from '@/api/api'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, MutableRefObject } from 'react'
 import { useQueryParam, StringParam, withDefault } from 'use-query-params'
 import { Icons } from './icons'
 import TranslationPanel from './translationPanel'
@@ -30,7 +30,7 @@ const TranslatorPanel = () => {
 
 
     useEffect(() => {
-        textareaRef.current.focus()
+        focusOnTextArea()
     }, [])
 
     useEffect(() => {
@@ -49,6 +49,8 @@ const TranslatorPanel = () => {
 
     }, [text, setTextParam])
 
+    const focusOnTextArea = () => textareaRef.current.focus()
+
     const onTextInput = (event: React.FormEvent<HTMLTextAreaElement>) => {
         const currentText = event.currentTarget.value
         setText(currentText)
@@ -56,7 +58,10 @@ const TranslatorPanel = () => {
         clearTimeout(timeoutId)
     }
 
-    const onClearClick = () => setText('')
+    const onClearClick = () => {
+        setText('')
+        focusOnTextArea()
+    }
 
     const handleExampleClick = (example: string) => {
         window.scrollTo(0, 0)

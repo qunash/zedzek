@@ -115,7 +115,7 @@ const TranslatorPanel = () => {
                 <h2 className="mb-2 text-xl font-semibold">Examples:</h2>
                 <ul className="space-y-2 text-slate-700 dark:text-slate-400">
                     {examples.map((example, index) => (
-                        <li key={index} className="cursor-pointer rounded-lg bg-gray-100 p-2 text-base transition-colors duration-200 ease-in-out hover:bg-gray-200 hover:text-slate-900 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-slate-100"
+                        <li key={index} className="w-fit cursor-pointer rounded-lg bg-gray-100 p-2 text-base transition-colors duration-200 ease-in-out hover:bg-gray-200 hover:text-slate-900 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-slate-100"
                             onClick={() => handleExampleClick(example[0])}>
                             {example[0]}
                         </li>

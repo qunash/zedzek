@@ -28,4 +28,5 @@ To contribute, join our Discord server: https://discord.gg/ppmwTNUZQb
 Licensed under the [MIT license](https://github.com/shadcn/ui/blob/main/LICENSE.md).
 
 <br>
+
 [![visitors](https://visitor-badge.glitch.me/badge?page_id=qunash/zedzek_repo)](https://visitor-badge.glitch.me)

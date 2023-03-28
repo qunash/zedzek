@@ -87,7 +87,7 @@ const TranslatorPanel = () => {
                 <div className="flex w-full rounded-l-lg border-gray-800 p-4 md:h-96">
                     <textarea
                         ref={textareaRef}
-                        className="h-full w-full resize-none bg-transparent p-2 text-xl focus:outline-none focus:ring-0"
+                        className="h-full min-h-[150px] w-full resize-none bg-transparent p-2 text-xl focus:outline-none focus:ring-0"
                         placeholder="Type to translate..."
                         value={text}
                         onInput={onTextInput}
@@ -111,11 +111,11 @@ const TranslatorPanel = () => {
                     duration={duration}
                 />
             </div>
-            <div className="mt-4 max-w-[980px] rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
+            <div className="mt-4 max-w-[980px] rounded-lg p-4">
                 <h2 className="mb-2 text-xl font-semibold">Examples:</h2>
                 <ul className="space-y-2 text-slate-700 dark:text-slate-400">
                     {examples.map((example, index) => (
-                        <li key={index} className="cursor-pointer text-base hover:text-slate-900 dark:hover:text-slate-100"
+                        <li key={index} className="cursor-pointer rounded-lg bg-gray-100 p-2 text-base transition-colors duration-200 ease-in-out hover:bg-gray-200 hover:text-slate-900 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-slate-100"
                             onClick={() => handleExampleClick(example[0])}>
                             {example[0]}
                         </li>

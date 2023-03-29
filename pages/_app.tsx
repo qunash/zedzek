@@ -1,4 +1,5 @@
 import type { AppProps } from "next/app"
+import { NextIntlProvider } from 'next-intl'
 import { Inter as FontSans } from "next/font/google"
 import { NextAdapter } from "next-query-params"
 import { ThemeProvider } from "next-themes"
@@ -24,7 +25,9 @@ export default function App({ Component, pageProps }: AppProps) {
 				}
 			}`}</style>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <Component {...pageProps} />
+        <NextIntlProvider messages={pageProps.messages}>
+          <Component {...pageProps} />
+        </NextIntlProvider>
       </ThemeProvider>
     </QueryParamProvider>
   )

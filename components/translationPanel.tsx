@@ -4,12 +4,17 @@ import { StringParam, useQueryParam, withDefault } from "use-query-params"
 
 import { Icons } from "./icons"
 import { buttonVariants } from "./ui/button"
+import { useTranslations } from "next-intl"
+import { useRouter } from "next/router"
 
 const TranslationPanel = (props: {
   loading: boolean
   translations: string[]
   duration: number
 }) => {
+  const t = useTranslations("Translator")
+  const { locale } = useRouter()
+  
   const [copyClicked, setCopyClicked] = useState(false)
 
   // console.log(props) // this component is being re-rendered many times, find out why
@@ -43,7 +48,7 @@ const TranslationPanel = (props: {
         <div className="h-full w-full overflow-y-auto p-4">
           <div className="text-xl">{props.translations[0]}</div>
           <div className="my-4 h-px w-full bg-gray-500" />
-          <div className="pb-2 text-xl text-gray-500">Alternatives:</div>
+          <div className="pb-2 text-xl text-gray-500">{t("alternatives", { locale })}:</div>
           <div className="flex flex-col gap-2">
             {props.translations.slice(1).map((translation, index) => {
               return <div key={index}>{translation}</div>

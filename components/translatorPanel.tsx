@@ -1,4 +1,6 @@
 import translate from '@/api/api'
+import { useTranslations } from 'next-intl'
+import { useRouter } from 'next/router'
 import { useState, useEffect, useRef, MutableRefObject } from 'react'
 import { useQueryParam, StringParam, withDefault } from 'use-query-params'
 import { Icons } from './icons'
@@ -6,6 +8,9 @@ import TranslationPanel from './translationPanel'
 import { buttonVariants } from './ui/button'
 
 const TranslatorPanel = () => {
+    const t = useTranslations('Translator')
+    const { locale } = useRouter()
+
     const [textParam, setTextParam] = useQueryParam('text', withDefault(StringParam, ""))
     const [text, setText] = useState(textParam)
     const [translations, setTranslations] = useState([])
@@ -93,7 +98,7 @@ const TranslatorPanel = () => {
                     <textarea
                         ref={textareaRef}
                         className="h-full min-h-[150px] w-full resize-none bg-transparent p-2 text-xl focus:outline-none focus:ring-0"
-                        placeholder="Type to translate..."
+                        placeholder={t('type_to_translate', { locale })}
                         value={text}
                         onInput={onTextInput}
                     />
@@ -101,8 +106,7 @@ const TranslatorPanel = () => {
                         className={buttonVariants({
                             size: "sm",
                             variant: "ghost",
-                            className: `items-center justify-end self-start p-4 text-slate-700 dark:text-slate-400 cursor-pointer ${text.length == 0 ? "hidden" : ""
-                                }`,
+                            className: `items-center justify-end self-start p-4 text-slate-700 dark:text-slate-400 cursor-pointer ${text.length == 0 ? "hidden" : ""}`,
                         })}
                         onClick={onClearClick}
                     >
@@ -117,7 +121,7 @@ const TranslatorPanel = () => {
                 />
             </div>
             <div className="mt-4 max-w-[980px] rounded-lg p-4">
-                <h2 className="mb-2 text-xl font-semibold">Examples:</h2>
+                <h2 className="mb-2 text-xl font-semibold">{t('examples', { locale })}:</h2>
                 <ul className="flex flex-wrap gap-2 text-slate-700 dark:text-slate-400">
                     {examples.map((example, index) => (
                         <li key={index} className="cursor-pointer rounded-lg bg-gray-100 p-3 text-base transition-colors duration-200 ease-in-out hover:bg-gray-200 hover:text-slate-900 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-slate-100"

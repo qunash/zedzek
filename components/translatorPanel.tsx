@@ -93,7 +93,7 @@ const TranslatorPanel = () => {
 
     return (
         <div>
-            <div className="flex max-w-[980px] flex-col items-start rounded-lg border border-gray-800 shadow-lg md:flex-row">
+            <div className="flex max-w-4xl flex-col items-start rounded-lg border border-gray-800 shadow-lg md:flex-row">
                 <div className="flex w-full rounded-l-lg border-gray-800 p-4 md:h-96">
                     <textarea
                         ref={textareaRef}
@@ -120,7 +120,7 @@ const TranslatorPanel = () => {
                     duration={duration}
                 />
             </div>
-            <div className="mt-4 max-w-[980px] rounded-lg p-4">
+            <div className="mt-4 max-w-4xl rounded-lg p-4">
                 <h2 className="mb-2 text-xl font-semibold">{t('examples', { locale })}:</h2>
                 <ul className="flex flex-wrap gap-2 text-slate-700 dark:text-slate-400">
                     {examples.map((example, index) => (

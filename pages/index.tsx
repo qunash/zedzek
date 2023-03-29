@@ -5,6 +5,7 @@ import { siteConfig } from "@/config/site"
 import { Layout } from "@/components/layout"
 import TranslatorPanel from "@/components/translatorPanel"
 import { useRouter } from "next/router"
+import Faq from "@/components/faq"
 
 export default function IndexPage() {
 
@@ -26,6 +27,7 @@ export default function IndexPage() {
           {t('header', { locale })}
         </h1>
         <TranslatorPanel />
+        <Faq />
       </section>
     </Layout>
   )
@@ -37,6 +39,7 @@ export async function getStaticProps(context) {
       messages: {
         ...(await import(`../messages/index/${context.locale}.json`)).default,
         ...(await import(`../messages/translator/${context.locale}.json`)).default,
+        ...(await import(`../messages/faq/${context.locale}.json`)).default,
       }
     }
   };

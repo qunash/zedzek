@@ -1,7 +1,7 @@
 import translate from '@/api/api'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/router'
-import { useState, useEffect, useRef, MutableRefObject } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useQueryParam, StringParam, withDefault } from 'use-query-params'
 import { Icons } from './icons'
 import TranslationPanel from './translationPanel'

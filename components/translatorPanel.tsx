@@ -1,4 +1,4 @@
-import translate from '@/api/api_replicate'
+import translate from '@/api/api'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/router'
 import { useState, useEffect, useRef } from 'react'

@@ -41,7 +41,7 @@ export function SiteHeader() {
                   className: "text-slate-700 dark:text-slate-400",
                 })}
               >
-                <Icons.discord className="h-5 w-5 fill-current" />
+                <Icons.discord className="h-5 w-5 stroke-current" />
                 <span className="sr-only">Discord</span>
               </div>
             </Link>

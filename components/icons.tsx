@@ -51,13 +51,14 @@ export const Icons = {
   ),
   discord: (props: LucideProps) => (
     <svg
-      fill="#ffffff"
+      fill="none"
       width="24"
       height="24"
       viewBox="0 0 32 32"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       stroke="#ffffff"
+      strokeWidth="2"
       {...props}
     >
       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>

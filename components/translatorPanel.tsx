@@ -1,4 +1,4 @@
-import translate from '@/api/api'
+import translate from '@/api/api_replicate'
 import { useState, useEffect, useRef } from 'react'
 import { useQueryParam, StringParam, withDefault } from 'use-query-params'
 import { Icons } from './icons'

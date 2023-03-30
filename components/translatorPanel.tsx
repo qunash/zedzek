@@ -1,4 +1,5 @@
-import translate from '@/api/api'
+// import translate from '@/api/api'
+import translate from '@/api/api_hf'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/router'
 import { useState, useEffect, useRef } from 'react'
@@ -88,6 +89,7 @@ const TranslatorPanel = () => {
             .catch((error) => {
                 setLoading(false)
                 console.log(error)
+                setTranslations(['Error: ' + error])
             })
     }
 

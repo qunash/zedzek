@@ -1,31 +1,47 @@
 export type TranslationResponse = {
-  input: string
-  translations: string[]
-  duration: number
+    input: string
+    translations: string[]
+    duration: number
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 const translate = async (text: string): Promise<TranslationResponse> => {
-  try {
-    text = text.charAt(0).toLowerCase() + text.slice(1) // TODO: remove this hack
-    const response = await fetch("https://anzorq-zedzek.hf.space/api/predict", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ data: [text.trim(), 4, 4] }),
+
+    const response = await fetch("/api/translate", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            text: text,
+        }),
     })
-    const json = await response.json()
-    console.debug("API response: ", json)
-    const translations = JSON.parse(json.data[1].replace(/'/g, '"'))
-    return {
-      input: json.data[0],
-      translations,
-      duration: json.duration,
+
+    let prediction = await response.json()
+
+    if (response.status !== 201) {
+        throw new Error(prediction.detail)
     }
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
+
+    while (prediction.status !== "succeeded" && prediction.status !== "failed") {
+        await sleep(100)
+        const response = await fetch("/api/translate/" + prediction.id)
+        prediction = await response.json()
+        if (response.status !== 200) {
+            throw new Error(prediction.detail)
+        }
+    }
+
+    if (prediction?.error) {
+        throw new Error(prediction.error)
+    }
+
+    return {
+        input: prediction.input.text,
+        translations: prediction.output,
+        duration: prediction.metrics.predict_time,
+    }
 }
 
 export default translate

@@ -1,4 +1,7 @@
 import {
+  ThumbsUp,
+  ThumbsDown,
+  Edit,
   Check,
   Copy,
   Github,
@@ -18,6 +21,9 @@ export const Icons = {
   moon: Moon,
   laptop: Laptop,
   twitter: Twitter,
+  thumbsUp: ThumbsUp,
+  thumbsDown: ThumbsDown,
+  edit: Edit,
   check: Check,
   copy: Copy,
   gitHub: Github,

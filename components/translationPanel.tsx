@@ -5,6 +5,31 @@ import { buttonVariants } from "./ui/button"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/router"
 
+const IconButton = ({ icon, onClick, clickedIcon = null, isClicked = false }) => (
+  <div
+    className={buttonVariants({
+      size: "lg",
+      variant: "ghost",
+      className: "items-center justify-end self-starttext-slate-700 dark:text-slate-400 cursor-pointer",
+    })}
+    onClick={onClick}
+  >
+    {isClicked && clickedIcon ? clickedIcon : icon}
+  </div>
+)
+
+const LoadingState = () => (
+  <div className="h-80 w-full rounded-r-lg p-4 md:h-96">
+    <div className="flex h-full flex-col items-center justify-center">
+      <div className="h-5 w-5 animate-spin rounded-full border-y-2 border-gray-500" />
+    </div>
+  </div>
+)
+
+const EmptyState = () => (<div className="h-80 w-full rounded-r-lg p-4 md:h-96" />)
+
+const TranslationItem = ({ translation }) => <div>{translation}</div>
+
 const TranslationPanel = (props: {
   loading: boolean
   translations: string[]
@@ -12,10 +37,8 @@ const TranslationPanel = (props: {
 }) => {
   const t = useTranslations("Translator")
   const { locale } = useRouter()
-  
-  const [copyClicked, setCopyClicked] = useState(false)
 
-  // console.log(props) // this component is being re-rendered many times, find out why
+  const [copyClicked, setCopyClicked] = useState(false)
 
   function onCopyClick(event: React.MouseEvent<HTMLDivElement>) {
     event.currentTarget.blur()
@@ -27,17 +50,11 @@ const TranslationPanel = (props: {
   }
 
   if (props.loading) {
-    return (
-      <div className="h-80 w-full rounded-r-lg p-4 md:h-96">
-        <div className="flex h-full flex-col items-center justify-center">
-          <div className="h-5 w-5 animate-spin rounded-full border-y-2 border-gray-500" />
-        </div>
-      </div>
-    )
+    return <LoadingState />
   }
 
   if (props.translations.length == 0) {
-    return (<div className="h-80 w-full rounded-r-lg p-4 md:h-96" />)
+    return <EmptyState />
   }
 
   return (
@@ -46,31 +63,36 @@ const TranslationPanel = (props: {
         <div className="h-full w-full overflow-y-auto p-4">
           <div className="text-xl">{props.translations[0]}</div>
           <div className="my-4 h-px w-full bg-gray-500" />
-          <div className="pb-2 text-xl text-gray-500">{t("alternatives", { locale })}:</div>
+          <div className="flex w-full flex-row items-center justify-between">
+            <IconButton
+              icon={<Icons.thumbsUp className="h-4 w-4" />}
+              onClick={() => { }}
+            />
+            <IconButton
+              icon={<Icons.thumbsDown className="h-4 w-4" />}
+              onClick={() => { }}
+            />
+            <IconButton
+              icon={<Icons.edit className="h-4 w-4" />}
+              onClick={() => { }}
+            />
+            <IconButton
+              icon={<Icons.copy className="h-4 w-4" />}
+              clickedIcon={<Icons.check className="h-4 w-4" />}
+              isClicked={copyClicked}
+              onClick={onCopyClick}
+            />
+          </div>
+          <div className="pb-2 pt-4 text-xl text-gray-500">{t("alternatives", { locale })}:</div>
           <div className="flex flex-col gap-2">
-            {props.translations.slice(1).map((translation, index) => {
-              return <div key={index}>{translation}</div>
-            })}
+            {props.translations.slice(1).map((translation, index) => (
+              <TranslationItem key={index} translation={translation} />
+            ))}
           </div>
         </div>
         <div className="flex w-full flex-row items-center justify-between p-4">
           <div className="text-xs text-gray-500">
             {Math.round(props.duration * 100) / 100}s
-          </div>
-          <div
-            className={buttonVariants({
-              size: "sm",
-              variant: "ghost",
-              className:
-                "items-center justify-end self-start p-4 text-slate-700 dark:text-slate-400 cursor-pointer",
-            })}
-            onClick={onCopyClick}
-          >
-            {copyClicked ? (
-              <Icons.check className="h-4 w-4" />
-            ) : (
-              <Icons.copy className="h-4 w-4" />
-            )}
           </div>
         </div>
       </div>

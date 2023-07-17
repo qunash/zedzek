@@ -2,6 +2,8 @@
   "Index": {
     "title": "Home",
     "description": "Zədzək is a demo translator into Circassian language.",
-    "header": "Circassian translator demo"
+    "header": "Circassian translator demo",
+    "sign_in": "Sign in",
+    "log_out": "Log out"
   }
 }

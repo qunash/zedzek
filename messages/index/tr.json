@@ -2,6 +2,8 @@
   "Index": {
     "title": "Ana Sayfa",
     "description": "Zədzək - Çerkes diline demo çevirmen.",
-    "header": "Çerkesçe çevirmen demosu"
+    "header": "Çerkesçe çevirmen demosu",
+    "sign_in": "Giriş yap",
+    "log_out": "Çıkış yap"
   }
 }

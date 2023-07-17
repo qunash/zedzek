@@ -5,6 +5,7 @@ import { NextAdapter } from "next-query-params"
 import { ThemeProvider } from "next-themes"
 import { GoogleAnalytics } from "nextjs-google-analytics"
 import { QueryParamProvider } from "use-query-params"
+import { SessionProvider } from "next-auth/react"
 
 import "@/styles/globals.css"
 
@@ -16,19 +17,21 @@ const fontSans = FontSans({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <QueryParamProvider adapter={NextAdapter}>
-      <GoogleAnalytics trackPageViews />
+    <SessionProvider session={pageProps.session}>
+      <QueryParamProvider adapter={NextAdapter}>
+        <GoogleAnalytics trackPageViews />
 
-      <style jsx global>{`
+        <style jsx global>{`
 				:root {
 					--font-sans: ${fontSans.style.fontFamily};
 				}
 			}`}</style>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <NextIntlProvider messages={pageProps.messages}>
-          <Component {...pageProps} />
-        </NextIntlProvider>
-      </ThemeProvider>
-    </QueryParamProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <NextIntlProvider messages={pageProps.messages}>
+            <Component {...pageProps} />
+          </NextIntlProvider>
+        </ThemeProvider>
+      </QueryParamProvider>
+    </SessionProvider>
   )
 }

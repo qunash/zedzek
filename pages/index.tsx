@@ -21,7 +21,7 @@ export default function IndexPage() {
         <meta property="og:image" content="https://zedzek.com/api/og" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+      <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10 justify-items-center">
         <h1 className="text-xl font-bold lg:text-2xl">
           {t('header', { locale })}
         </h1>

@@ -48,7 +48,8 @@ const TranslationPanel = ({ loading, translations, duration }) => {
   const t = useTranslations("Translator")
   const { locale } = useRouter()
 
-  const [iconClicked, setIconClicked] = useState({ copy: false, thumbsUp: false, thumbsDown: false })
+  const [iconClicked, setIconClicked] = useState({ copy: false, upvote: false, downvote: false })
+  const [upvoted, setUpvoted] = useState(false)
   const [showSignIn, setShowSignIn] = useState(false)
 
   function onIconClick(event: { currentTarget: { blur: () => void } }, type: string) {
@@ -60,10 +61,34 @@ const TranslationPanel = ({ loading, translations, duration }) => {
         navigator.clipboard.writeText(translations[0])
         setTimeout(() => setIconClicked({ ...iconClicked, copy: false }), 1500)
         break
-      case 'thumbsUp':
-      case 'thumbsDown':
-      case 'edit': // Added 'edit' to the switch case
-        setIconClicked(prev => ({ ...prev, [type]: !prev[type], [type === 'thumbsUp' ? 'thumbsDown' : 'thumbsUp']: false }))
+      case 'upvote':
+        if (status === 'unauthenticated') {
+          setShowSignIn(true);
+        } else {
+          fetch('/api/supabase/handle-upvote', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              removeUpvote: upvoted,
+              userId: session.user.id,
+              text: 'test',
+              translation: translations[0],
+            }),
+          })
+            .then(response => response.json())
+            .then(data => {
+              console.log('Translation updated', data);
+              setUpvoted(data.upvoted);
+              setIconClicked(prev => ({ ...prev, upvote: !prev.upvote, downvote: false }))
+            })
+            .catch(error => {
+              console.error('An error occurred while updating the translation:', error);
+            });
+        }
+        break
+      case 'downvote':
+      case 'edit':
+        // setIconClicked(prev => ({ ...prev, [type]: !prev[type], [type === 'thumbsUp' ? 'thumbsDown' : 'thumbsUp']: false }))
         if (status === 'unauthenticated') {
           setShowSignIn(true)
         }
@@ -84,14 +109,14 @@ const TranslationPanel = ({ loading, translations, duration }) => {
             <IconButton
               icon={<Icons.thumbsUp className="h-4 w-4" />}
               clickedIcon={<Icons.thumbsUp className="h-4 w-4 fill-current" />}
-              isClicked={iconClicked.thumbsUp}
-              onClick={(e) => onIconClick(e, 'thumbsUp')}
+              isClicked={iconClicked.upvote}
+              onClick={(e) => onIconClick(e, 'upvote')}
             />
             <IconButton
               icon={<Icons.thumbsDown className="h-4 w-4" />}
               clickedIcon={<Icons.thumbsDown className="h-4 w-4 fill-current" />}
-              isClicked={iconClicked.thumbsDown}
-              onClick={(e) => onIconClick(e, 'thumbsDown')}
+              isClicked={iconClicked.downvote}
+              onClick={(e) => onIconClick(e, 'downvote')}
             />
             <IconButton
               icon={<Icons.edit className="h-4 w-4" />}

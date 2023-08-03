@@ -43,7 +43,7 @@ const SignInDiv = () => {
 
 const TranslationItem = ({ translation }) => <div>{translation}</div>
 
-const TranslationPanel = ({ loading, translations, duration }) => {
+const TranslationPanel = ({ loading, text, translations, duration }) => {
   const { data: session, status } = useSession()
   const t = useTranslations("Translator")
   const { locale } = useRouter()
@@ -71,7 +71,7 @@ const TranslationPanel = ({ loading, translations, duration }) => {
             body: JSON.stringify({
               removeUpvote: upvoted,
               userId: session.user.id,
-              text: 'test',
+              text: text,
               translation: translations[0],
             }),
           })

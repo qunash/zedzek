@@ -117,6 +117,7 @@ const TranslatorPanel = () => {
                 </div>
                 <div className="h-px w-full bg-gray-800 md:h-full md:w-px" />
                 <TranslationPanel
+                    text={text}
                     loading={loading}
                     translations={translations}
                     duration={duration}

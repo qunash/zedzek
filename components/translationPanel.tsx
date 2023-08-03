@@ -1,8 +1,9 @@
-import { Key, useState } from "react"
-import { Icons } from "./icons"
-import { buttonVariants } from "./ui/button"
+import { useSession, signIn, signOut } from 'next-auth/react';
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/router"
+import { Key, useState } from "react"
+import { Icons } from "./icons"
+import { Button, buttonVariants } from "./ui/button"
 
 const IconButton = ({ icon, onClick, clickedIcon = null, isClicked = false }) => (
   <div
@@ -27,13 +28,28 @@ const LoadingState = () => (
 
 const EmptyState = () => (<div className="h-80 w-full rounded-r-lg p-4 md:h-96" />)
 
+const SignInDiv = () => {
+  const t = useTranslations("Index")
+  const { locale } = useRouter()
+
+  return (
+    <div className="flex w-full flex-row items-center justify-center rounded-r-lg p-4">
+      <Button onClick={() => signIn('google')}>
+        {t('sign_in', { locale })}
+      </Button>
+    </div>
+  )
+}
+
 const TranslationItem = ({ translation }) => <div>{translation}</div>
 
 const TranslationPanel = ({ loading, translations, duration }) => {
+  const { data: session, status } = useSession()
   const t = useTranslations("Translator")
   const { locale } = useRouter()
 
   const [iconClicked, setIconClicked] = useState({ copy: false, thumbsUp: false, thumbsDown: false })
+  const [showSignIn, setShowSignIn] = useState(false)
 
   function onIconClick(event: { currentTarget: { blur: () => void } }, type: string) {
     event.currentTarget.blur()
@@ -46,7 +62,11 @@ const TranslationPanel = ({ loading, translations, duration }) => {
         break
       case 'thumbsUp':
       case 'thumbsDown':
+      case 'edit': // Added 'edit' to the switch case
         setIconClicked(prev => ({ ...prev, [type]: !prev[type], [type === 'thumbsUp' ? 'thumbsDown' : 'thumbsUp']: false }))
+        if (status === 'unauthenticated') {
+          setShowSignIn(true)
+        }
         break
     }
   }
@@ -75,7 +95,7 @@ const TranslationPanel = ({ loading, translations, duration }) => {
             />
             <IconButton
               icon={<Icons.edit className="h-4 w-4" />}
-              onClick={() => { }}
+              onClick={(e) => onIconClick(e, 'edit')}
             />
             <IconButton
               icon={<Icons.copy className="h-4 w-4" />}
@@ -84,6 +104,7 @@ const TranslationPanel = ({ loading, translations, duration }) => {
               onClick={(e) => onIconClick(e, 'copy')}
             />
           </div>
+          {showSignIn && <SignInDiv />}
           <div className="pb-2 pt-4 text-xl text-gray-500">{t("alternatives", { locale })}:</div>
           <div className="flex flex-col gap-2">
             {translations.slice(1).map((translation, index: Key) => (

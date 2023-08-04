@@ -49,6 +49,7 @@ const TranslatorPanel = () => {
             setTimeoutId(setTimeout(() => api_translate(text), 500))
         } else {
             setTextParam(undefined, 'replaceIn')
+            setTranslationResponse(null)
             setTranslations([])
             setDuration(0)
             setLoading(false)

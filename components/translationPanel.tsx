@@ -48,16 +48,19 @@ const TranslationPanel = ({ translationResponse, loading }) => {
   const { locale } = useRouter()
   const t = useTranslations("Translator")
 
-  const [state, setState] = useState({
+  const emptyState = {
     text: '',
     translations: [],
     duration: 0,
     iconClicked: { copy: false, upvote: false, downvote: false },
     upvoted: false,
     showSignIn: false
-  });
+  };
+  
+  const [state, setState] = useState(emptyState);
   
   useEffect(() => {
+    console.log('Translation response', translationResponse);
     if (translationResponse) {
       setState({
         ...translationResponse,
@@ -65,6 +68,8 @@ const TranslationPanel = ({ translationResponse, loading }) => {
         upvoted: false,
         showSignIn: false,
       });
+    } else {
+      setState(emptyState);
     }
   }, [translationResponse])
 

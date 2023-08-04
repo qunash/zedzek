@@ -19,7 +19,7 @@ const handleUpvote = async (req: NextApiRequest, res: NextApiResponse) => {
 
         return error
             ? res.status(status || 500).json({ error: error.message })
-            : res.status(200).json({ upvoted:false, message: 'Upvote removed.' });
+            : res.status(200).json({ upvoted:false, message: 'Translation removed.' });
     }
 
     const { data, error, status } = await supabase
@@ -28,7 +28,7 @@ const handleUpvote = async (req: NextApiRequest, res: NextApiResponse) => {
 
     return error
         ? res.status(status || 500).json({ upvoted: status === 409 ? true : false, error: error.message })
-        : res.status(200).json({ upvoted: true, data });
+        : res.status(200).json({ upvoted: true, message: 'Translation added.' });
 };
 
 export default handleUpvote;

@@ -14,6 +14,7 @@ const TranslatorPanel = () => {
 
     const [textParam, setTextParam] = useQueryParam('text', withDefault(StringParam, ""))
     const [text, setText] = useState(textParam)
+    const [translationResponse, setTranslationResponse] = useState(null)
     const [translations, setTranslations] = useState([])
     const [duration, setDuration] = useState(0)
     const [loading, setLoading] = useState(false)
@@ -81,6 +82,7 @@ const TranslatorPanel = () => {
         translate(inputText)
             .then((response) => {
                 if (latestInputTextRef.current === inputText) {
+                    setTranslationResponse(response)
                     setTranslations(response.translations)
                     setDuration(response.duration)
                     setLoading(false)
@@ -117,10 +119,8 @@ const TranslatorPanel = () => {
                 </div>
                 <div className="h-px w-full bg-gray-800 md:h-full md:w-px" />
                 <TranslationPanel
-                    text={text}
+                    translationResponse={translationResponse}
                     loading={loading}
-                    translations={translations}
-                    duration={duration}
                 />
             </div>
             <div className="mt-4 max-w-4xl rounded-lg p-4">

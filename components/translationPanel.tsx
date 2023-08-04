@@ -1,7 +1,7 @@
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/router"
-import { Key, useState } from "react"
+import { useEffect, useState } from "react"
 import { Icons } from "./icons"
 import { Button, buttonVariants } from "./ui/button"
 
@@ -16,7 +16,8 @@ const IconButton = ({ icon, onClick, clickedIcon = null, isClicked = false }) =>
   >
     {isClicked && clickedIcon ? clickedIcon : icon}
   </div>
-)
+);
+
 
 const LoadingState = () => (
   <div className="h-80 w-full rounded-r-lg p-4 md:h-96">
@@ -29,9 +30,8 @@ const LoadingState = () => (
 const EmptyState = () => (<div className="h-80 w-full rounded-r-lg p-4 md:h-96" />)
 
 const SignInDiv = () => {
-  const t = useTranslations("Index")
   const { locale } = useRouter()
-
+  const t = useTranslations("Index")
   return (
     <div className="flex w-full flex-row items-center justify-center rounded-r-lg p-4">
       <Button onClick={() => signIn('google')}>
@@ -43,103 +43,117 @@ const SignInDiv = () => {
 
 const TranslationItem = ({ translation }) => <div>{translation}</div>
 
-const TranslationPanel = ({ loading, text, translations, duration }) => {
+const TranslationPanel = ({ translationResponse, loading }) => {
   const { data: session, status } = useSession()
-  const t = useTranslations("Translator")
   const { locale } = useRouter()
+  const t = useTranslations("Translator")
 
-  const [iconClicked, setIconClicked] = useState({ copy: false, upvote: false, downvote: false })
-  const [upvoted, setUpvoted] = useState(false)
-  const [showSignIn, setShowSignIn] = useState(false)
+  const [state, setState] = useState({
+    text: '',
+    translations: [],
+    duration: 0,
+    iconClicked: { copy: false, upvote: false, downvote: false },
+    upvoted: false,
+    showSignIn: false
+  });
+  
+  useEffect(() => {
+    if (translationResponse) {
+      setState({
+        ...translationResponse,
+        iconClicked: { copy: false, upvote: false, downvote: false },
+        upvoted: false,
+        showSignIn: false,
+      });
+    }
+  }, [translationResponse])
 
-  function onIconClick(event: { currentTarget: { blur: () => void } }, type: string) {
+  const onIconClick = async (event, type) => {
     event.currentTarget.blur()
+    const updateState = newState => setState(prevState => ({ ...prevState, ...newState }))
 
     switch (type) {
       case 'copy':
-        setIconClicked({ ...iconClicked, copy: true })
-        navigator.clipboard.writeText(translations[0])
-        setTimeout(() => setIconClicked({ ...iconClicked, copy: false }), 1500)
+        navigator.clipboard.writeText(state.translations[0])
+        updateState({ iconClicked: { ...state.iconClicked, copy: true } })
+        setTimeout(() => updateState({ iconClicked: { ...state.iconClicked, copy: false } }), 1500)
         break
       case 'upvote':
         if (status === 'unauthenticated') {
-          setShowSignIn(true);
+          updateState({ showSignIn: true });
         } else {
-          fetch('/api/supabase/handle-upvote', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              removeUpvote: upvoted,
-              userId: session.user.id,
-              text: text,
-              translation: translations[0],
-            }),
+          const body = JSON.stringify({
+            removeUpvote: state.upvoted,
+            userId: session.user.id,
+            text: state.text,
+            translation: state.translations[0],
           })
-            .then(response => response.json())
-            .then(data => {
-              console.log('Translation updated', data);
-              setUpvoted(data.upvoted);
-              setIconClicked(prev => ({ ...prev, upvote: !prev.upvote, downvote: false }))
+          try {
+            const response = await fetch('/api/supabase/handle-upvote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body })
+            const data = await response.json()
+            console.log('Translation updated', data);
+            updateState({
+              upvoted: data.upvoted,
+              iconClicked: { ...state.iconClicked, upvote: !state.iconClicked.upvote, downvote: false }
             })
-            .catch(error => {
-              console.error('An error occurred while updating the translation:', error);
-            });
+          } catch (error) {
+            console.error('An error occurred while updating the translation:', error);
+          }
         }
         break
       case 'downvote':
       case 'edit':
-        // setIconClicked(prev => ({ ...prev, [type]: !prev[type], [type === 'thumbsUp' ? 'thumbsDown' : 'thumbsUp']: false }))
         if (status === 'unauthenticated') {
-          setShowSignIn(true)
+          updateState({ showSignIn: true })
         }
         break
     }
   }
 
   if (loading) return <LoadingState />
-  if (translations.length === 0) return <EmptyState />
+  if (state.translations.length === 0) return <EmptyState />
 
   return (
     <div className="min-h-80 md:min-h-96 h-fit w-full rounded-r-lg p-4">
       <div className="flex h-full flex-col items-center justify-center pt-4">
         <div className="h-full w-full overflow-y-auto p-4">
-          <div className="text-xl">{translations[0]}</div>
+          <div className="text-xl">{state.translations[0]}</div>
           <div className="my-4 h-px w-full bg-gray-500" />
           <div className="flex w-full flex-row items-center justify-between">
             <IconButton
               icon={<Icons.thumbsUp className="h-4 w-4" />}
               clickedIcon={<Icons.thumbsUp className="h-4 w-4 fill-current" />}
-              isClicked={iconClicked.upvote}
-              onClick={(e) => onIconClick(e, 'upvote')}
+              isClicked={state.iconClicked.upvote}
+              onClick={e => onIconClick(e, 'upvote')}
             />
             <IconButton
               icon={<Icons.thumbsDown className="h-4 w-4" />}
               clickedIcon={<Icons.thumbsDown className="h-4 w-4 fill-current" />}
-              isClicked={iconClicked.downvote}
-              onClick={(e) => onIconClick(e, 'downvote')}
+              isClicked={state.iconClicked.downvote}
+              onClick={e => onIconClick(e, 'downvote')}
             />
             <IconButton
               icon={<Icons.edit className="h-4 w-4" />}
-              onClick={(e) => onIconClick(e, 'edit')}
+              onClick={e => onIconClick(e, 'edit')}
             />
             <IconButton
               icon={<Icons.copy className="h-4 w-4" />}
               clickedIcon={<Icons.check className="h-4 w-4" />}
-              isClicked={iconClicked.copy}
-              onClick={(e) => onIconClick(e, 'copy')}
+              isClicked={state.iconClicked.copy}
+              onClick={e => onIconClick(e, 'copy')}
             />
           </div>
-          {showSignIn && <SignInDiv />}
+          {state.showSignIn && <SignInDiv />}
           <div className="pb-2 pt-4 text-xl text-gray-500">{t("alternatives", { locale })}:</div>
           <div className="flex flex-col gap-2">
-            {translations.slice(1).map((translation, index: Key) => (
+            {state.translations.slice(1).map((translation, index) => (
               <TranslationItem key={index} translation={translation} />
             ))}
           </div>
         </div>
         <div className="flex w-full flex-row items-center justify-between p-4">
           <div className="text-xs text-gray-500">
-            {Math.round(duration * 100) / 100}s
+            {Math.round(state.duration * 100) / 100}s
           </div>
         </div>
       </div>

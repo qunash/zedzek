@@ -1,5 +1,5 @@
 export type TranslationResponse = {
-  input: string
+  text: string
   translations: string[]
   duration: number
 }
@@ -18,7 +18,7 @@ const translate = async (text: string): Promise<TranslationResponse> => {
     console.debug("API response: ", json)
     const translations = JSON.parse(json.data[1].replace(/'/g, '"'))
     return {
-      input: json.data[0],
+      text: json.data[0],
       translations,
       duration: json.duration,
     }

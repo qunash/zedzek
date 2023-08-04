@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import supabase from '@/lib/supabase-client';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface UpvoteRequest {
@@ -10,11 +10,6 @@ interface UpvoteRequest {
 
 const handleUpvote = async (req: NextApiRequest, res: NextApiResponse) => {
     const { removeUpvote: removeUpvote, userId, text, translation }: UpvoteRequest = req.body;
-
-    const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
 
     if (removeUpvote) {
         const { error, status } = await supabase

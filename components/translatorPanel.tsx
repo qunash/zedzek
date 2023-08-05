@@ -7,6 +7,7 @@ import { useQueryParam, StringParam, withDefault } from 'use-query-params'
 import { Icons } from './icons'
 import TranslationPanel from './translationPanel'
 import { buttonVariants } from './ui/button'
+import { TranslationResponse } from '@/types/translation-response'
 
 const TranslatorPanel = () => {
     const t = useTranslations('Translator')
@@ -14,13 +15,11 @@ const TranslatorPanel = () => {
 
     const [textParam, setTextParam] = useQueryParam('text', withDefault(StringParam, ""))
     const [text, setText] = useState(textParam)
-    const [translationResponse, setTranslationResponse] = useState(null)
-    const [translations, setTranslations] = useState([])
-    const [duration, setDuration] = useState(0)
+    const [translationResponse, setTranslationResponse] = useState<TranslationResponse | Error | null>(null)
     const [loading, setLoading] = useState(false)
-    const [timeoutId, setTimeoutId] = useState(null)
-    const textareaRef = useRef<HTMLTextAreaElement>()
-    const latestInputTextRef = useRef<string>()
+    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>()
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+    // const latestInputTextRef = useRef<string>()
     const examples = [
         ["Мы идем домой"],
         ["Сегодня хорошая погода"],
@@ -46,18 +45,16 @@ const TranslatorPanel = () => {
 
     useEffect(() => {
         if (text.length > 0) {
-            setTimeoutId(setTimeout(() => api_translate(text), 500))
+            setTimeoutId(setTimeout(() => api_translate(), 500))
         } else {
             setTextParam(undefined, 'replaceIn')
             setTranslationResponse(null)
-            setTranslations([])
-            setDuration(0)
             setLoading(false)
         }
 
     }, [text, setTextParam])
 
-    const focusOnTextArea = () => textareaRef.current.focus()
+    const focusOnTextArea = () => textareaRef?.current?.focus()
 
     const onTextInput = (event: React.FormEvent<HTMLTextAreaElement>) => {
         const currentText = event.currentTarget.value
@@ -77,24 +74,32 @@ const TranslatorPanel = () => {
         setTextParam(example, 'replaceIn')
     }
 
-    const api_translate = async (inputText: string) => {
-        setLoading(true)
-        latestInputTextRef.current = inputText
-        translate(inputText)
-            .then((response) => {
-                if (latestInputTextRef.current === inputText) {
-                    setTranslationResponse(response)
-                    setTranslations(response.translations)
-                    setDuration(response.duration)
-                    setLoading(false)
-                }
-            })
-            .catch((error) => {
-                setLoading(false)
-                console.log(error)
-                setTranslations(['Error: ' + error])
-            })
-    }
+    const api_translate = async () => {
+        setLoading(true);
+    
+        try {
+            const response = await fetch('/api/translate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    text: text,
+                }),
+            });
+    
+            if (!response.ok) {
+                throw new Error((await response.json()).message || "Unknown error");
+            }
+    
+            const data = await response.json();
+            setTranslationResponse(data);
+        } catch (error) {
+            setTranslationResponse(Error(error.message));
+        } finally {
+            setLoading(false);
+        }
+    }    
 
     return (
         <div>

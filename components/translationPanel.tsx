@@ -5,7 +5,8 @@ import { useEffect, useState } from "react"
 import { Icons } from "./icons"
 import { Button, buttonVariants } from "./ui/button"
 
-const IconButton = ({ icon, onClick, clickedIcon = null, isClicked = false }) => (
+const IconButton = ({ icon, onClick, clickedIcon = null, isClicked = false }: { icon: React.ReactNode, onClick: (e: any) => Promise<void>, clickedIcon?: React.ReactNode | null, isClicked?: boolean }) => (
+
   <div
     className={buttonVariants({
       size: "lg",
@@ -20,10 +21,8 @@ const IconButton = ({ icon, onClick, clickedIcon = null, isClicked = false }) =>
 
 
 const LoadingState = () => (
-  <div className="h-80 w-full rounded-r-lg p-4 md:h-96">
-    <div className="flex h-full flex-col items-center justify-center">
-      <div className="h-5 w-5 animate-spin rounded-full border-y-2 border-gray-500" />
-    </div>
+  <div className="flex h-80 w-full flex-col items-center justify-center rounded-r-lg p-4 md:h-96">
+    <div className="h-5 w-5 animate-spin rounded-full border-y-2 border-gray-500" />
   </div>
 )
 
@@ -56,12 +55,12 @@ const TranslationPanel = ({ translationResponse, loading }) => {
     upvoted: false,
     showSignIn: false
   };
-  
+
   const [state, setState] = useState(emptyState);
-  
+
   useEffect(() => {
     console.log('Translation response', translationResponse);
-    if (translationResponse) {
+    if (translationResponse && !(translationResponse instanceof Error)) {
       setState({
         ...translationResponse,
         iconClicked: { copy: false, upvote: false, downvote: false },
@@ -89,7 +88,7 @@ const TranslationPanel = ({ translationResponse, loading }) => {
         } else {
           const body = JSON.stringify({
             removeUpvote: state.upvoted,
-            userId: session.user.id,
+            userId: session?.user.id,
             text: state.text,
             translation: state.translations[0],
           })
@@ -116,6 +115,15 @@ const TranslationPanel = ({ translationResponse, loading }) => {
   }
 
   if (loading) return <LoadingState />
+
+  if (translationResponse instanceof Error) {
+    return (
+      <div className="flex h-80 w-full items-center justify-center rounded-r-lg p-4 md:h-96">
+        <div className='text-center text-xl'>{translationResponse.message}</div>
+      </div>
+    )
+  }
+
   if (state.translations.length === 0) return <EmptyState />
 
   return (

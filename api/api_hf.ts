@@ -1,8 +1,4 @@
-export type TranslationResponse = {
-  text: string
-  translations: string[]
-  duration: number
-}
+import { TranslationResponse } from "@/types/translation-response"
 
 const translate = async (text: string): Promise<TranslationResponse> => {
   try {

@@ -1,8 +1,4 @@
-export type TranslationResponse = {
-    input: string
-    translations: string[]
-    duration: number
-}
+import { TranslationResponse } from "@/types/translation-response";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -38,7 +34,7 @@ const translate = async (text: string): Promise<TranslationResponse> => {
     }
 
     return {
-        input: prediction.input.text,
+        text: prediction.input.text,
         translations: prediction.output,
         duration: prediction.metrics.predict_time,
     }

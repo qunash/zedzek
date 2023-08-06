@@ -1,54 +1,54 @@
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { Icons } from "./icons";
-import { buttonVariants } from "./ui/button";
-import LikeAndEdit from './like-edit-panel';
+import { useTranslations } from "next-intl"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
+import { Icons } from "./icons"
+import { buttonVariants } from "./ui/button"
+import LikeAndEdit from './like-edit-panel'
 
 const LoadingState = () => (
   <div className="flex h-80 w-full flex-col items-center justify-center rounded-r-lg p-4 md:h-96">
     <div className="h-5 w-5 animate-spin rounded-full border-y-2 border-gray-500" />
   </div>
-);
+)
 
-const EmptyState = () => <div className="h-80 w-full rounded-r-lg p-4 md:h-96" />;
+const EmptyState = () => <div className="h-80 w-full rounded-r-lg p-4 md:h-96" />
 
 const ErrorState = ({ error }) => (
   <div className="flex h-80 w-full items-center justify-center rounded-r-lg p-4 md:h-96">
     <div className='text-center text-xl'>{error.message}</div>
   </div>
-);
+)
 
 const TranslationPanel = ({ translationResponse, loading }) => {
-  const { locale } = useRouter();
-  const t = useTranslations("Translator");
+  const { locale } = useRouter()
+  const t = useTranslations("Translator")
 
   const emptyState = {
     text: '',
     translations: [],
     duration: 0,
     isCopyClicked: false,
-  };
+  }
 
-  const [state, setState] = useState(emptyState);
+  const [state, setState] = useState(emptyState)
 
   useEffect(() => {
     if (translationResponse && !(translationResponse instanceof Error)) {
-      setState({ ...translationResponse, isCopyClicked: false });
+      setState({ ...translationResponse, isCopyClicked: false })
     } else {
-      setState(emptyState);
+      setState(emptyState)
     }
-  }, [translationResponse]);
+  }, [translationResponse])
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(state.translations[0]);
-    setState(prevState => ({ ...prevState, isCopyClicked: true }));
-    setTimeout(() => setState(prevState => ({ ...prevState, isCopyClicked: false })), 1500);
-  };
+    await navigator.clipboard.writeText(state.translations[0])
+    setState(prevState => ({ ...prevState, isCopyClicked: true }))
+    setTimeout(() => setState(prevState => ({ ...prevState, isCopyClicked: false })), 1500)
+  }
 
-  if (loading) return <LoadingState />;
-  if (translationResponse instanceof Error) return <ErrorState error={translationResponse} />;
-  if (state.translations.length === 0) return <EmptyState />;
+  if (loading) return <LoadingState />
+  if (translationResponse instanceof Error) return <ErrorState error={translationResponse} />
+  if (state.translations.length === 0) return <EmptyState />
 
   return (
     <div className="min-h-80 md:min-h-96 h-fit w-full rounded-r-lg p-4">
@@ -84,6 +84,6 @@ const TranslationPanel = ({ translationResponse, loading }) => {
       </div>
     </div>
   )
-};
+}
 
-export default TranslationPanel;
+export default TranslationPanel

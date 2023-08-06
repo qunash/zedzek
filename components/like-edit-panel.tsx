@@ -45,7 +45,7 @@ export default function LikeAndEdit({ text, translation }) {
     const handleSignIn = async () => {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
-            options: { redirectTo: window.location.href }
+            options: { redirectTo: `${location.origin}/auth/callback/${location.search}` }
         })
         if (error) logError(error)
     }

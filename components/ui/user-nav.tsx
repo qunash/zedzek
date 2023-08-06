@@ -1,83 +1,84 @@
-import { useSession, signIn, signOut } from 'next-auth/react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/router"
+import { useEffect, useState } from 'react'
+import { Session, createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { Database } from "@/types/database.types"
 
 export function UserNav() {
-    const { data: session, status } = useSession();
+    const supabase = createClientComponentClient<Database>()
+    const [session, setSession] = useState<Session | null>(null)
     const t = useTranslations('Index')
     const { locale } = useRouter()
 
+    useEffect(() => {
+        const fetchSession = async () => {
+            const supaSession = await supabase.auth.getSession()
+            if (supaSession?.data) {
+                setSession(supaSession.data.session)
+            }
+        }
 
-    if (status === 'loading') {
-        return (
-            <Avatar className="h-8 w-8 bg-gray-400">
-                <AvatarFallback/>
-            </Avatar>
+        fetchSession()
+
+        const { data: listener } = supabase.auth.onAuthStateChange(
+            async (event, newSession) => {
+                if (event === 'SIGNED_OUT') {
+                    setSession(null)
+                } else if (event === 'SIGNED_IN' && newSession) {
+                    setSession(newSession)
+                }
+            }
         )
+
+        return () => {
+            listener?.subscription.unsubscribe()
+        }
+    }, [supabase.auth])
+
+    const handleSignIn = async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: { redirectTo: `${location.origin}/auth/callback/` }
+        })
+        if (error) console.log('Error: ', error.message)
     }
 
-    if (status === 'authenticated') {
-        return (
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                        <Avatar className="h-7 w-7">
-                            <AvatarImage src={session.user.image} alt={session.user.name} />
-                            <AvatarFallback>{session.user.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                    <DropdownMenuLabel className="font-normal">
-                        <div className="flex flex-col space-y-1">
-                            <p className="text-sm font-medium leading-none">{session.user.name}</p>
-                            <p className="text-muted-foreground text-xs leading-none">
-                                {session.user.email}
-                            </p>
-                        </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {/* <DropdownMenuGroup>
-            <DropdownMenuItem>
-              Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Billing
-              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Settings
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>New Team</DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator /> */}
-                    <DropdownMenuItem onClick={() => signOut()}>
-                        {t('log_out', { locale })}
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        );
-    }
+    const handleSignOut = () => supabase.auth.signOut()
 
-    return (
-        <div>
-            <Button onClick={() => signIn('google')}>
-                {t('sign_in', { locale })}
-            </Button>
-        </div>
-    );
+    return session ? (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-7 w-7">
+                        <AvatarImage src={session.user.user_metadata.avatar_url} alt={session.user.user_metadata.name} />
+                        <AvatarFallback>{session.user.user_metadata.name[0]}</AvatarFallback>
+                    </Avatar>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{session.user.user_metadata.name}</p>
+                        <p className="text-muted-foreground text-xs leading-none">{session.user.email}</p>
+                    </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut}>
+                    {t('log_out', { locale })}
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    ) : (
+        <Button onClick={handleSignIn}>{t('sign_in', { locale })}</Button>
+    )
 }

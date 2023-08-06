@@ -12,11 +12,12 @@ export async function POST(req: Request): Promise<Response> {
     })
 
     if (!response.ok) {
-        return new Response(JSON.stringify({error: `HTTP error! status: ${response.status}`}), {status: response.status});
+        const errorMessage = await response.text();
+        return new Response(JSON.stringify({error: errorMessage}), {status: response.status, headers: {"Content-Type": "application/json"}});
     }
   
     const json = await response.json();
-    console.debug("API response: ", json)
+    // console.debug("API response: ", json)
 
     const translations = JSON.parse(json.data[1].replace(/'/g, '"'))
     return new Response(JSON.stringify({

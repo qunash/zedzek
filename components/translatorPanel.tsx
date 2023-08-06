@@ -89,7 +89,7 @@ const TranslatorPanel = () => {
             });
     
             if (!response.ok) {
-                throw new Error((await response.json()).message || "Unknown error");
+                throw new Error((await response.json()).error || "Unknown error");
             }
     
             const data = await response.json();

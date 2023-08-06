@@ -84,7 +84,7 @@ export default function LikeAndEdit({ text, translation }) {
 
 
     const SignInDiv = (
-        <div className="flex w-full flex-row items-center justify-center rounded-r-lg p-4">
+        <div className="flex w-full flex-row items-center justify-center">
             <Button onClick={handleSignIn}>
                 {t('sign_in', { locale })}
             </Button>

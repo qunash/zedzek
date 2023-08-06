@@ -11,7 +11,7 @@ const translate = async (text: string): Promise<TranslationResponse> => {
       body: JSON.stringify({ data: [text.trim(), 4, 4] }),
     })
     const json = await response.json()
-    console.debug("API response: ", json)
+    // console.debug("API response: ", json)
     const translations = JSON.parse(json.data[1].replace(/'/g, '"'))
     return {
       text: json.data[0],
@@ -19,7 +19,7 @@ const translate = async (text: string): Promise<TranslationResponse> => {
       duration: json.duration,
     }
   } catch (error) {
-    console.error(error)
+    // console.error(error)
     throw error
   }
 }

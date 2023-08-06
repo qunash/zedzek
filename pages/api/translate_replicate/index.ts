@@ -9,7 +9,7 @@ const replicate = new Replicate({
 
 export default async function handler(req: { body: { text: any } }, res: any) {
 
-    console.log("handler, req.body.text", req.body.text)
+    // console.log("handler, req.body.text", req.body.text)
     let text = req.body.text
     text = text.charAt(0).toLowerCase() + text.slice(1) // TODO: remove this hack
 

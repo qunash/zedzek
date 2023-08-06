@@ -59,7 +59,7 @@ const TranslationPanel = ({ translationResponse, loading }) => {
   const [state, setState] = useState(emptyState);
 
   useEffect(() => {
-    console.log('Translation response', translationResponse);
+    // console.log('Translation response', translationResponse);
     if (translationResponse && !(translationResponse instanceof Error)) {
       setState({
         ...translationResponse,
@@ -95,7 +95,7 @@ const TranslationPanel = ({ translationResponse, loading }) => {
           try {
             const response = await fetch('/api/supabase/handle-upvote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body })
             const data = await response.json()
-            console.log('Translation updated', data);
+            // console.log('Translation updated', data);
             updateState({
               upvoted: data.upvoted,
               iconClicked: { ...state.iconClicked, upvote: !state.iconClicked.upvote, downvote: false }

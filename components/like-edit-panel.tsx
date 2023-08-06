@@ -101,7 +101,7 @@ export default function LikeAndEdit({ text, translation }) {
         })
 
         return (
-            <div className={baseClass} onClick={handleLike}>
+            <div className={baseClass} onClick={onClick}>
                 {cloneElement(icon, { className: `h-4 w-4 ${isFilled ? "fill-current" : ""}` })}
             </div>
         )

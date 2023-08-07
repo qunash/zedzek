@@ -17,6 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import Link from "next/link"
 
 export function UserNav() {
   const supabase = createClientComponentClient<Database>()
@@ -91,14 +92,13 @@ export function UserNav() {
             </p>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuItem
-          className="cursor-pointer px-4 py-3"
-          onClick={() => {
-            window.location.href = "/profile"
-          }}
-        >
-          {t("profile", { locale })}
-        </DropdownMenuItem>
+        <Link href="/profile">
+          <DropdownMenuItem
+            className="cursor-pointer px-4 py-3"
+          >
+            {t("profile", { locale })}
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="cursor-pointer px-4 py-3"

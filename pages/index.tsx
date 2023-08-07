@@ -1,18 +1,17 @@
+import { useTranslations } from "next-intl"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useTranslations } from "next-intl"
 
-import { siteConfig } from "@/config/site"
 import Faq from "@/components/faq"
-import { Layout } from "@/components/layout"
 import TranslatorPanel from "@/components/translatorPanel"
+import { siteConfig } from "@/config/site"
 
 export default function IndexPage() {
   const t = useTranslations("Index")
   const { locale } = useRouter()
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{siteConfig.name}</title>
         <meta name="description" content={t("description", { locale })} />
@@ -27,17 +26,16 @@ export default function IndexPage() {
         <TranslatorPanel />
         <Faq />
       </section>
-    </Layout>
+    </>
   )
 }
 
-export async function getStaticProps(context) {
+export async function getStaticProps(context: { locale: any }) {
   return {
     props: {
       messages: {
         ...(await import(`../messages/index/${context.locale}.json`)).default,
-        ...(await import(`../messages/translator/${context.locale}.json`))
-          .default,
+        ...(await import(`../messages/translator/${context.locale}.json`)).default,
         ...(await import(`../messages/faq/${context.locale}.json`)).default,
       },
     },

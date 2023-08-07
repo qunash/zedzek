@@ -1,12 +1,12 @@
-import type { AppProps } from "next/app"
-import { Inter as FontSans } from "next/font/google"
 import { NextIntlProvider } from "next-intl"
 import { NextAdapter } from "next-query-params"
-import { ThemeProvider } from "next-themes"
+import type { AppProps } from "next/app"
+import { Inter as FontSans } from "next/font/google"
 import { GoogleAnalytics } from "nextjs-google-analytics"
 import { QueryParamProvider } from "use-query-params"
 
 import "@/styles/globals.css"
+import { Layout } from "@/components/layout"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -16,19 +16,19 @@ const fontSans = FontSans({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <QueryParamProvider adapter={NextAdapter}>
-      <GoogleAnalytics trackPageViews />
+    <NextIntlProvider messages={pageProps.messages}>
+      <QueryParamProvider adapter={NextAdapter}>
+        <GoogleAnalytics trackPageViews />
 
-      <style jsx global>{`
+        <style jsx global>{`
 				:root {
-					--font-sans: ${fontSans.style.fontFamily};
+          --font-sans: ${fontSans.style.fontFamily};
 				}
 			}`}</style>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <NextIntlProvider messages={pageProps.messages}>
+        <Layout>
           <Component {...pageProps} />
-        </NextIntlProvider>
-      </ThemeProvider>
-    </QueryParamProvider>
+        </Layout>
+      </QueryParamProvider>
+    </NextIntlProvider>
   )
 }

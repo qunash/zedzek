@@ -1,6 +1,6 @@
 import type { AppProps } from "next/app"
-import { NextIntlProvider } from 'next-intl'
 import { Inter as FontSans } from "next/font/google"
+import { NextIntlProvider } from "next-intl"
 import { NextAdapter } from "next-query-params"
 import { ThemeProvider } from "next-themes"
 import { GoogleAnalytics } from "nextjs-google-analytics"

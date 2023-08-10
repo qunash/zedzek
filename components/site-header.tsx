@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
@@ -5,7 +7,7 @@ import { Icons } from "@/components/icons"
 import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { buttonVariants } from "@/components/ui/button"
-import { UserNav } from "./ui/user-nav"
+import { UserNav } from "./user-nav"
 
 export function SiteHeader() {
   return (

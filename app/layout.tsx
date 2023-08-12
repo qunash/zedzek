@@ -14,8 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <body
+        className='bg-background'
+      >
+        <ThemeProvider attribute="class" enableSystem>
           {children}
         </ThemeProvider>
       </body>

@@ -1,6 +1,6 @@
 "use client"
 
-import { postRequest } from '@/lib/utils'
+import { postRequest } from '@/lib/get-post-requests'
 import '@/styles/globals.css'
 import { TranslationResponse } from '@/types/translation-response'
 import { useEffect, useRef, useState } from "react"

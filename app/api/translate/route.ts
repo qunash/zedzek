@@ -1,4 +1,4 @@
-import { postRequest } from "@/lib/utils"
+import { postRequest } from "@/lib/get-post-requests"
 
 const createJsonResponse = (data: any, status: number = 200): Response => {
     return new Response(JSON.stringify(data), {

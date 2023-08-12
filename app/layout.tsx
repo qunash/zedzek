@@ -1,3 +1,4 @@
+import { SiteHeader } from '@/components/site-header'
 import { ThemeProvider } from '@/components/theme-provider'
 import '@/styles/globals.css'
 import type { Metadata } from 'next'
@@ -18,6 +19,7 @@ export default function RootLayout({
         className='bg-background'
       >
         <ThemeProvider attribute="class" enableSystem>
+          <SiteHeader />
           {children}
         </ThemeProvider>
       </body>

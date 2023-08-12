@@ -52,7 +52,7 @@ export default function Translator() {
         return <p>{translationResponse.message}</p>
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-50">
+        <div className="flex flex-col items-center justify-center min-h-screen py-2">
             <form>
                 <textarea className='w-full h-32 p-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-gray-600'
                     ref={textareaRef}

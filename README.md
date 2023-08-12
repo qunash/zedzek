@@ -1,34 +1,32 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Zədzək – Russian-Circassian Translator Demo
 
-## Getting Started
+This is a demo of a Russian-Circassian translator app, which uses a machine learning model trained on Russian-Circassian sentence pairs. It is capable of translating from over 100 other languages, but accuracy may vary.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+- Translates Russian to Kabardian dialect of Circassian
+- Can translate from over 100 other languages with varying accuracy
+- Uses a fine-tuned version of the [facebook/m2m100_418M](https://huggingface.co/facebook/m2m100_418M) model
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Techincal Details
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The demo uses a fine-tuned version of the `facebook/m2m100_418M` model, which has been trained on the "ru-kbd" dataset, consisting of ~44K sentences from various sources. More information about the model and dataset can be found in the following links:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Base m2m100_418M Model: https://huggingface.co/facebook/m2m100_418M
+- ru-kbd model: https://huggingface.co/anzorq/m2m100_418M_ft_ru-kbd_44K
+- Paper: https://arxiv.org/abs/2010.11125
+- Dataset: https://huggingface.co/datasets/anzorq/kbd-ru
 
-## Learn More
+## How to Help
 
-To learn more about Next.js, take a look at the following resources:
+The quality of translations depends on the amount of training data. Currently, the model has been trained on ~44K sentence pairs. To improve translation accuracy, more training data is needed. You can help by collecting monolingual or bilingual text in any Circassian dialect. Contributions can be in the form of plain text, PDFs, or links to web pages containing the text.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To contribute, join our Discord server: https://discord.gg/ppmwTNUZQb
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
+Licensed under the [MIT license](https://github.com/shadcn/ui/blob/main/LICENSE.md).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+<br>
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[![visitors](https://visitor-badge.glitch.me/badge?page_id=qunash/zedzek_repo)](https://visitor-badge.glitch.me)

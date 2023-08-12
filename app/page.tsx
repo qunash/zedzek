@@ -8,7 +8,14 @@ export default function Home() {
   return (
     // <QueryParamProvider adapter={NextAdapterApp}>
     <QueryParamProvider adapter={NextQueryParamAdapter}>
-      <Translator />
+      <section className="container grid justify-items-center gap-4">
+        <h1 className="text-xl font-bold lg:text-2xl">
+          {/* {t("header", { locale })} */}
+          Circassian translator demo
+        </h1>
+        <Translator />
+        {/* <Faq /> */}
+      </section>
     </QueryParamProvider>
   )
 }

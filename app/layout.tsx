@@ -16,9 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className='bg-background'
+        className='bg-background min-h-screen flex flex-col items-center gap-12'
       >
-        <ThemeProvider attribute="class" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme='system' enableSystem>
           <SiteHeader />
           {children}
         </ThemeProvider>

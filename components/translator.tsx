@@ -17,7 +17,6 @@ export default function Translator() {
     const [loading, setLoading] = useState(false)
     const [textParam, setTextParam] = useQueryParam('text', withDefault(StringParam, ''))
     const [text, setText] = useState(textParam)
-    const isClearedRef = useRef<boolean>(false)
     const debouncedText = useDebounce(text, 500)
 
     useEffect(() => {
@@ -29,7 +28,7 @@ export default function Translator() {
     useEffect(() => {
         setTextParam(text, "replaceIn");
     }, [text]);
-    
+
     useEffect(() => {
         const fetchTranslation = async () => {
             if (debouncedText.trim().length > 0) {
@@ -37,24 +36,22 @@ export default function Translator() {
                 const response = await postRequest("/api/translate", { text: debouncedText })
                 const data = await response.json()
 
-                if (!isClearedRef.current) {
-                    setTranslationResponse(response.ok ? data : new Error(data.error))
-                    setLoading(false)
-                }
+                setTranslationResponse(response.ok ? data : new Error(data.error))
             } else {
                 setTextParam(undefined, 'replaceIn')
-                setLoading(false)
                 setTranslationResponse(null)
             }
+            setLoading(false)
         }
 
         fetchTranslation()
     }, [debouncedText])
 
+
+
     const handleInputChange = useCallback((event: React.FormEvent<HTMLTextAreaElement>) => {
         const newText = event.currentTarget.value
         setText(newText)
-        setTextParam(newText, "replaceIn")
     }, [])
 
     return (
@@ -64,10 +61,7 @@ export default function Translator() {
                     ref={textareaRef}
                     value={text}
                     onChange={handleInputChange}
-                    onClear={() => {
-                        isClearedRef.current = true
-                        setText('')
-                    }}
+                    onClear={() => { setText('') }}
                 />
                 <div className="h-px w-full bg-gray-800 md:h-full md:w-px" />
                 <TranslationPanel

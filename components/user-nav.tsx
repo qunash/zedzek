@@ -58,10 +58,6 @@ export function UserNav() {
     }
   }, [supabase, supabase.auth])
 
-  useEffect(() => {
-    console.log('session', session)
-  }, [session])
-
   const handleSignIn = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",

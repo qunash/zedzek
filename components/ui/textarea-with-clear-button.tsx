@@ -1,6 +1,6 @@
-import { forwardRef } from "react";
-import { Icons } from "../icons";
-import { buttonVariants } from "./button";
+import { forwardRef } from "react"
+import { Icons } from "../icons"
+import { buttonVariants } from "./button"
 
 const TextAreaWithClearButton = forwardRef<HTMLTextAreaElement, { value: string, onChange: any, onClear: any }>(({ value, onChange, onClear }, ref) => {
     return (
@@ -10,7 +10,7 @@ const TextAreaWithClearButton = forwardRef<HTMLTextAreaElement, { value: string,
                 className="h-full min-h-[150px] w-full resize-none bg-transparent p-2 text-xl focus:outline-none focus:ring-0"
                 placeholder='Type to translate...'
                 value={value}
-                onInput={onChange}
+                onChange={onChange}
             />
             {value && (
                 <div
@@ -25,9 +25,9 @@ const TextAreaWithClearButton = forwardRef<HTMLTextAreaElement, { value: string,
                 </div>
             )}
         </div>
-    );
-});
+    )
+})
 
-TextAreaWithClearButton.displayName = "TextAreaWithClearButton";
+TextAreaWithClearButton.displayName = "TextAreaWithClearButton"
 
-export default TextAreaWithClearButton;
+export default TextAreaWithClearButton

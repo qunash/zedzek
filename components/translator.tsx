@@ -26,33 +26,30 @@ export default function Translator() {
     })
 
     useEffect(() => {
-        setTextParam(text, "replaceIn");
-    }, [text]);
+        setTextParam(text || undefined, "replaceIn")
+    }, [text])
 
     useEffect(() => {
-        const fetchTranslation = async () => {
-            if (debouncedText.trim().length > 0) {
-                setLoading(true)
-                const response = await postRequest("/api/translate", { text: debouncedText })
-                const data = await response.json()
-
-                setTranslationResponse(response.ok ? data : new Error(data.error))
-            } else {
-                setTextParam(undefined, 'replaceIn')
-                setTranslationResponse(null)
-            }
-            setLoading(false)
-        }
-
         fetchTranslation()
     }, [debouncedText])
 
-
-
     const handleInputChange = useCallback((event: React.FormEvent<HTMLTextAreaElement>) => {
-        const newText = event.currentTarget.value
-        setText(newText)
+        setText(event.currentTarget.value)
     }, [])
+
+    const fetchTranslation = async () => {
+        setLoading(true)
+        if (debouncedText.trim().length > 0) {
+            const response = await postRequest("/api/translate", { text: debouncedText })
+            const data = await response.json()
+            
+            setTranslationResponse(response.ok ? data : new Error(data.error))
+        } else {
+            setTranslationResponse(null)
+        }
+        setLoading(false)
+    }
+    
 
     return (
         <div>
@@ -68,8 +65,7 @@ export default function Translator() {
                     translationResponse={translationResponse}
                     loading={loading}
                     onRetry={() => {
-                        setText(text + ' ')
-                        setText(text)
+                        fetchTranslation()
                     }}
                 />
             </div>

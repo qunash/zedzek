@@ -114,7 +114,8 @@ export function UserNav() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="mx-2" />
-        <Link href={`/${profile.username}`} passHref>
+        {/* <Link href={`/${profile.username}`} passHref> */}
+        <Link href={`/`} passHref>
           <DropdownMenuItem
             className="cursor-pointer px-4 py-3"
           >

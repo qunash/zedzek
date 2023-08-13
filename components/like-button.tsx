@@ -1,16 +1,20 @@
-import { cloneElement, useEffect, useState } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { AuthError, PostgrestError, User } from "@supabase/supabase-js"
+import { PostgrestError, User } from "@supabase/supabase-js"
+import { cloneElement, useEffect, useState } from "react"
 // import { useTranslations } from "next-intl"
 
+import { TranslationResponse } from "@/types/translation-response"
+import { EditTranslationDialog } from "./edit-translation"
 import { Icons } from "./icons"
 import { Button, buttonVariants } from "./ui/button"
 
-export default function LikeButton({ text, translation }: { text: string, translation: string }) {
+export default function LikeButton({ translation }: { translation: TranslationResponse }) {
     const supabase = createClientComponentClient<Database>()
     const [user, setUser] = useState<User | null | undefined>()
     const [showSignIn, setShowSignIn] = useState(false)
     const [isLiked, setIsLiked] = useState(false)
+    const [isDialogOpen, setDialogOpen] = useState(false)
+
     // const { locale } = useRouter()
     // const t = useTranslations("Index")
 
@@ -61,14 +65,14 @@ export default function LikeButton({ text, translation }: { text: string, transl
             const { error } = await supabase
                 .from("translations")
                 .delete()
-                .match({ user_id: user?.id, text, translation })
+                .match({ user_id: user?.id, text: translation.text, translation: translation.translations[0] })
             setIsLiked(false)
             if (error) logError(error)
         } else {
             const { error } = await supabase.from("translations").insert({
                 user_id: user?.id,
-                text,
-                translation,
+                text: translation.text,
+                translation: translation.translations[0],
                 is_user_translation: false,
             })
             setIsLiked(true)
@@ -76,13 +80,10 @@ export default function LikeButton({ text, translation }: { text: string, transl
         }
     }
 
-    const handleEdit = async () => {
-        if (!user) {
-            setShowSignIn(true)
-            return
-        }
-        console.log("edit")
-    }
+    const openDialog = () => setDialogOpen(true)
+    
+    const closeDialog = () => setDialogOpen(false)
+    
 
     const SignInDiv = (
         <div className="flex w-full flex-row items-center justify-center">
@@ -119,8 +120,20 @@ export default function LikeButton({ text, translation }: { text: string, transl
                 isFilled={isLiked}
                 onClick={handleLike}
             />
-            <ButtonDiv icon={<Icons.thumbsDown />} onClick={handleEdit} />
-            <ButtonDiv icon={<Icons.edit />} onClick={handleEdit} />
+            <EditTranslationDialog
+                translation={translation}
+                isOpen={isDialogOpen}
+                onClose={closeDialog}
+            >
+                <ButtonDiv icon={<Icons.thumbsDown />} onClick={openDialog} />
+            </EditTranslationDialog>
+            <EditTranslationDialog
+                translation={translation}
+                isOpen={isDialogOpen}
+                onClose={closeDialog}
+            >
+                <ButtonDiv icon={<Icons.edit />} onClick={openDialog} />
+            </EditTranslationDialog>
         </div>
-    )
+    )    
 }

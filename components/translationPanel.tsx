@@ -51,8 +51,7 @@ const TranslationPanel = ({ translationResponse, loading, onRetry }: {
           <div className="my-4 h-px w-full bg-gray-500" />
           <div className="flex w-full items-center justify-between">
             <LikeButton
-              text={translationResponse.text}
-              translation={translationResponse.translations[0]}
+              translation={translationResponse}
             />
             <div
               className={buttonVariants({

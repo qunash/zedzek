@@ -7,6 +7,7 @@ import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { buttonVariants } from "@/components/ui/button"
 import { siteConfig } from "@/config/site"
+import { UserNav } from "./user-nav"
 
 export function SiteHeader() {
   return (
@@ -48,7 +49,7 @@ export function SiteHeader() {
               </div>
             </Link>
             <ThemeToggle />
-            {/* <UserNav /> */}
+            <UserNav />
           </nav>
         </div>
       </div>

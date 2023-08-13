@@ -1,14 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/router"
 import {
   Session,
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs"
-import { useTranslations } from "next-intl"
+import { useEffect, useState } from "react"
+// import { useTranslations } from "next-intl"
 
-import { Database } from "@/types/database.types"
 import {
   Avatar,
   AvatarFallback,
@@ -23,8 +21,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Profile } from "@/types/supabase"
 import Link from "next/link"
-import { Profile } from "@/global"
 import { UserAvatar } from "./user-avatar"
 
 export function UserNav() {
@@ -32,8 +30,8 @@ export function UserNav() {
   const [loading, setLoading] = useState(true)
   const [session, setSession] = useState<Session | null>()
   const [profile, setProfile] = useState<Profile>()
-  const t = useTranslations("Index")
-  const { locale } = useRouter()
+  // const t = useTranslations("Index")
+  // const { locale } = useRouter()
 
   useEffect(() => {
     const fetchProfile = async (user_id: string) => {
@@ -42,7 +40,7 @@ export function UserNav() {
         .select("*")
         .eq("id", user_id)
 
-      setProfile(data ? data[0] : null)
+      setProfile(data ? data[0] : undefined)
     }
 
     const { data: listener } = supabase.auth.onAuthStateChange(
@@ -77,7 +75,10 @@ export function UserNav() {
   if (loading) return <div className="h-8 w-8" />
 
   if (!session) {
-    return <Button onClick={handleSignIn}>{t("sign_in", { locale })}</Button>
+    return <Button onClick={handleSignIn}>
+      {/* { t("sign_in", { locale })} */}
+      Sign In
+    </Button>
   }
 
   if (!profile) {
@@ -117,7 +118,8 @@ export function UserNav() {
           <DropdownMenuItem
             className="cursor-pointer px-4 py-3"
           >
-            {t("profile", { locale })}
+            {/* {t("profile", { locale })} */}
+            Profile
           </DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator className="mx-2" />
@@ -125,7 +127,8 @@ export function UserNav() {
           className="cursor-pointer px-4 py-3"
           onClick={handleSignOut}
         >
-          {t("sign_out", { locale })}
+          {/* {t("sign_out", { locale })} */}
+          Sign Out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

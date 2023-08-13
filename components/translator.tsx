@@ -58,9 +58,6 @@ export default function Translator() {
     }
 
 
-    if (translationResponse instanceof Error)
-        return <p>{translationResponse.message}</p>
-
     return (
         <div>
             <div className="flex max-w-4xl flex-col items-start rounded-lg border border-gray-800 shadow-lg md:flex-row">
@@ -89,6 +86,7 @@ export default function Translator() {
                 <TranslationPanel
                     translationResponse={translationResponse}
                     loading={loading}
+                    onRetry={() => api_translate(text)}
                 />
             </div>
             <Examples onExampleClick={onExampleClick} />

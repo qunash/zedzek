@@ -1,6 +1,5 @@
 "use client"
 
-import { postRequest } from '@/lib/get-post-requests'
 import '@/styles/globals.css'
 import { TranslationResponse } from '@/types/translation-response'
 import { useDebounce } from "@uidotdev/usehooks"
@@ -39,16 +38,30 @@ export default function Translator() {
 
     const fetchTranslation = async () => {
         setLoading(true)
-        if (debouncedText.trim().length > 0) {
-            const response = await postRequest("/api/translate", { text: debouncedText })
-            const data = await response.json()
-            
-            setTranslationResponse(response.ok ? data : new Error(data.error))
-        } else {
-            setTranslationResponse(null)
+        try {
+            if (debouncedText.trim().length > 0) {
+                const response = await fetch("/api/translate", {
+                    method: "POST",
+                    body: JSON.stringify({ text: debouncedText }),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                const data = await response.json()
+                if (response.ok) {
+                    setTranslationResponse(data)
+                } else {
+                    throw new Error(data.error)
+                }
+            } else {
+                setTranslationResponse(null)
+            }
+        } catch (error: any) {
+            setTranslationResponse(error)
+        } finally {
+            setLoading(false)
         }
-        setLoading(false)
-    }
+    } 
     
 
     return (

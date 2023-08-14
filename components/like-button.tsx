@@ -1,6 +1,6 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { PostgrestError, User } from "@supabase/supabase-js"
-import { cloneElement, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 // import { useTranslations } from "next-intl"
 
 import { TranslationResponse } from "@/types/translation-response"
@@ -8,7 +8,6 @@ import { EditTranslationDialog } from "./edit-translation"
 import { Icons } from "./icons"
 import { Button, buttonVariants } from "./ui/button"
 import IconButton from "./ui/icon-button"
-
 
 export default function LikeButton({ translation }: { translation: TranslationResponse }) {
     const supabase = createClientComponentClient<Database>()
@@ -103,15 +102,11 @@ export default function LikeButton({ translation }: { translation: TranslationRe
             />
             <EditTranslationDialog
                 translation={translation}
-                isOpen={isDialogOpen}
-                onClose={closeDialog}
             >
                 <IconButton icon={<Icons.thumbsDown />} onClick={openDialog} />
             </EditTranslationDialog>
             <EditTranslationDialog
                 translation={translation}
-                isOpen={isDialogOpen}
-                onClose={closeDialog}
             >
                 <IconButton icon={<Icons.edit />} onClick={openDialog} />
             </EditTranslationDialog>

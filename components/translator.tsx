@@ -22,7 +22,7 @@ export default function Translator() {
         const textarea = textareaRef.current
         textarea?.focus()
         textarea?.setSelectionRange(text.length, text.length)
-    })
+    }, [])
 
     useEffect(() => {
         setTextParam(text || undefined, "replaceIn")

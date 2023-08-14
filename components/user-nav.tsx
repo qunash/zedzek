@@ -104,7 +104,7 @@ export function UserNav() {
             <p className="bold font-medium leading-none">
               {profile.name}
             </p>
-            <p className="text-muted-foreground text-xs leading-none">
+            <p className="text-xs leading-none text-muted-foreground">
               {session.user.email}
             </p>
           </div>

@@ -37,7 +37,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "bg-background min-h-screen flex flex-col items-center gap-12",
+          "flex min-h-screen flex-col items-center gap-12 bg-background",
           fontSans.variable
         )}
       >

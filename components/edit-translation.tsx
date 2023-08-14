@@ -71,7 +71,7 @@ export function EditTranslationDialog(
             </DialogTrigger>
             <DialogContent className="min-w-fit max-w-sm sm:max-w-[425px] md:w-full">
                 <DialogHeader className="items-center justify-center">
-                    <h1 className="max-h-12 overflow-hidden text-ellipsis text-xl font-bold md:max-h-20">
+                    <h1 className="max-h-12 overflow-hidden text-ellipsis font-bold md:max-h-20">
                         {translation.text}
                     </h1>
                 </DialogHeader>
@@ -79,7 +79,7 @@ export function EditTranslationDialog(
                     <DialogDescription>
                         Choose correct translations
                     </DialogDescription>
-                    <div className="flex max-h-52 w-full flex-wrap justify-center gap-3 overflow-y-auto py-4 md:max-h-52">
+                    <div className="flex max-h-52 w-full flex-wrap justify-center gap-3 overflow-y-auto py-4 md:max-h-full">
                         {
                             translation.translations.map((t, i) => (
                                 <div key={i} className="w-content md:w-content group relative max-w-full">

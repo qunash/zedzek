@@ -18,6 +18,10 @@ export const siteConfig: SiteConfig = {
             title: "Home",
             href: "/",
         },
+        {
+            title: "Contribute",
+            href: "/contribute",
+        },
     ],
     links: {
         discord: "https://discord.gg/ppmwTNUZQb",

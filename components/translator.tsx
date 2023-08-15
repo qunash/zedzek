@@ -65,7 +65,7 @@ export default function Translator() {
     
 
     return (
-        <div>
+        <div className="max-w-full">
             <div className="flex max-w-4xl flex-col items-start rounded-lg border border-gray-800 shadow-lg md:flex-row">
                 <TextAreaWithClearButton
                     ref={textareaRef}

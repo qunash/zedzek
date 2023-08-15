@@ -1,3 +1,4 @@
+import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { ThemeProvider } from '@/components/theme-provider'
 import { siteConfig } from '@/config/site'
@@ -43,7 +44,8 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme='system' enableSystem>
           <SiteHeader />
-          {children}
+          <main className="flex-1">{children}</main>
+          <SiteFooter />
         </ThemeProvider>
       </body>
     </html>

@@ -1,12 +1,7 @@
 "use client"
 
-import Link from "next/link"
 
-import { Icons } from "@/components/icons"
 import { MainNav } from "@/components/main-nav"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { buttonVariants } from "@/components/ui/button"
-import { siteConfig } from "@/config/site"
 import { UserNav } from "./user-nav"
 
 export function SiteHeader() {
@@ -16,39 +11,6 @@ export function SiteHeader() {
         <MainNav />
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
-            <Link
-              href={siteConfig.links.github}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div
-                className={buttonVariants({
-                  size: "sm",
-                  variant: "ghost",
-                  className: "text-slate-700 dark:text-slate-400",
-                })}
-              >
-                <Icons.gitHub className="h-5 w-5" />
-                <span className="sr-only">GitHub</span>
-              </div>
-            </Link>
-            <Link
-              href={siteConfig.links.discord}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div
-                className={buttonVariants({
-                  size: "sm",
-                  variant: "ghost",
-                  className: "text-slate-700 dark:text-slate-400",
-                })}
-              >
-                <Icons.discord className="h-5 w-5 stroke-current" />
-                <span className="sr-only">Discord</span>
-              </div>
-            </Link>
-            <ThemeToggle />
             <UserNav />
           </nav>
         </div>

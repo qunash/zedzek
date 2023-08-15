@@ -80,10 +80,12 @@ export default function LikeButton({ translation }: { translation: TranslationRe
         }
     }
 
-    const openDialog = () => setDialogOpen(true)
-
-    const closeDialog = () => setDialogOpen(false)
-
+    const handleEdit = () => {
+        if (!user) {
+            setShowSignIn(true)
+            return
+        }
+    }
 
     if (showSignIn) return (
         <div className="flex w-full flex-row items-center justify-center">
@@ -103,12 +105,12 @@ export default function LikeButton({ translation }: { translation: TranslationRe
             <EditTranslationDialog
                 translation={translation}
             >
-                <IconButton icon={<Icons.thumbsDown />} onClick={openDialog} />
+                <IconButton icon={<Icons.thumbsDown />} onClick={handleEdit} />
             </EditTranslationDialog>
             <EditTranslationDialog
                 translation={translation}
             >
-                <IconButton icon={<Icons.edit />} onClick={openDialog} />
+                <IconButton icon={<Icons.edit />} onClick={handleEdit} />
             </EditTranslationDialog>
         </div>
     )

@@ -69,17 +69,17 @@ export function EditTranslationDialog(
             <DialogTrigger asChild>
                 {children}
             </DialogTrigger>
-            <DialogContent className="min-w-fit max-w-sm sm:max-w-[425px] md:w-full">
+            <DialogContent className="max-h-[80%] min-w-fit max-w-sm overflow-y-auto sm:max-w-[425px] md:w-full">
                 <DialogHeader className="items-center justify-center">
-                    <h1 className="max-h-12 overflow-hidden text-ellipsis font-bold md:max-h-20">
+                    <h1 className="text-2xl font-bold">
                         {translation.text}
                     </h1>
                 </DialogHeader>
-                <div className="flex flex-col flex-wrap items-center justify-center gap-4">
+                <div className="flex flex-col flex-wrap items-center justify-center gap-3">
                     <DialogDescription>
                         Choose correct translations
                     </DialogDescription>
-                    <div className="flex max-h-52 w-full flex-wrap justify-center gap-3 overflow-y-auto py-4 md:max-h-full">
+                    <div className="flex w-full flex-wrap justify-center gap-3 py-4 ">
                         {
                             translation.translations.map((t, i) => (
                                 <div key={i} className="w-content md:w-content group relative max-w-full">
@@ -103,7 +103,7 @@ export function EditTranslationDialog(
                         }
                     </div>
                     <DialogDescription>
-                        Or suggest your own
+                        Or add your own
                     </DialogDescription>
                     <Textarea value={text} onChange={handleTextChange}
                         ref={textAreaRef}
@@ -117,7 +117,7 @@ export function EditTranslationDialog(
                                     Submit
                                 </Button>
                             </TooltipTrigger>
-                            <TooltipContent side='bottom' className='mt-2'>
+                            <TooltipContent side='left' className='mr-4'>
                                 <p>Ctrl + Enter</p>
                             </TooltipContent>
                         </Tooltip>

@@ -63,6 +63,10 @@ export default function Translator() {
         }
     } 
     
+    const onExampleClick = (example: string) => {
+        setText(example)
+        window.scrollTo({top: 0,behavior: "smooth"})
+    }
 
     return (
         <div className="max-w-full">
@@ -82,7 +86,7 @@ export default function Translator() {
                     }}
                 />
             </div>
-            <Examples onExampleClick={setText} />
+            <Examples onExampleClick={onExampleClick} />
         </div>
     )
 }

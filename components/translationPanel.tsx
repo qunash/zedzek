@@ -46,7 +46,7 @@ const TranslationPanel = ({ translationResponse, loading, onRetry }: {
   return (
     <div className="min-h-80 md:min-h-96 h-fit w-full rounded-r-lg p-4">
       <div className="flex h-full flex-col items-center justify-center pt-4">
-        <div className="h-full w-full overflow-y-auto p-4">
+        <div className="h-full w-full overflow-y-auto">
           <div className="text-xl">{translationResponse.translations[0]}</div>
           <div className="my-4 h-px w-full bg-gray-500" />
           <div className="flex w-full items-center justify-between">

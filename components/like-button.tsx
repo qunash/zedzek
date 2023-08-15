@@ -103,11 +103,15 @@ export default function LikeButton({ translation }: { translation: TranslationRe
                 onClick={handleLike}
             />
             <EditTranslationDialog
+                supabase={supabase}
+                user={user}
                 translation={translation}
             >
                 <IconButton icon={<Icons.thumbsDown />} onClick={handleEdit} />
             </EditTranslationDialog>
             <EditTranslationDialog
+                supabase={supabase}
+                user={user}
                 translation={translation}
             >
                 <IconButton icon={<Icons.edit />} onClick={handleEdit} />

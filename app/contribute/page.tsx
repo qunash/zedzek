@@ -7,7 +7,8 @@ import Link from "next/link"
 
 export default async function ContributePage() {
 
-    const supabase = createServerComponentClient<Database>({ cookies })
+    const cookieStore = cookies()
+    const supabase = createServerComponentClient<Database>({ cookies: () => cookieStore })
     const supaSession = await supabase.auth.getSession()
     const user = supaSession.data?.session?.user
 

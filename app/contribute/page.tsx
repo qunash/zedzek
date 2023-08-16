@@ -1,5 +1,6 @@
 "use client"
 
+import CountingNumbers from "@/components/counting-numbers"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -11,8 +12,8 @@ export default function ContributePage() {
 
     const supabase = createClientComponentClient<Database>()
     const [user, setUser] = useState<User | null | undefined>()
-    const [userContributions, setUserContributions] = useState<string>("0")
-    const [allContributions, setAllContributions] = useState<string>("0")
+    const [userContributions, setUserContributions] = useState(0)
+    const [allContributions, setAllContributions] = useState(0)
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -50,8 +51,7 @@ export default function ContributePage() {
                 .select('*', { count: 'exact', head: true })
                 .match({ user_id: user?.id, is_user_translation: true })
 
-            const formattedNumber = new Intl.NumberFormat().format(count ? count : 0)
-            setUserContributions(formattedNumber)
+            setUserContributions(count ? count : 0)
 
             if (error) console.error(error)
         }
@@ -62,8 +62,7 @@ export default function ContributePage() {
                 .from('translations')
                 .select('*', { count: 'exact', head: true })
 
-            const formattedNumber = new Intl.NumberFormat().format(count ? count : 0)
-            setAllContributions(formattedNumber)
+            setAllContributions(count ? count : 0)
 
             if (error) console.error(error)
         }
@@ -91,9 +90,10 @@ export default function ContributePage() {
                         </CardHeader>
                         <CardContent className="flex flex-row items-center justify-center gap-4">
                             <Icons.listPlus className="h-12 w-12" />
-                            <div className="text-6xl font-bold">
-                                {userContributions}
-                            </div>
+                            <CountingNumbers
+                                value={userContributions}
+                                className="text-6xl font-bold"
+                            />
                         </CardContent>
                     </Card>
                     <Card className="mx-auto w-full min-w-[18rem] lg:min-w-[24rem]">
@@ -103,9 +103,10 @@ export default function ContributePage() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="flex flex-row items-center justify-center gap-4">
-                            <div className="text-6xl font-bold">
-                                {allContributions}
-                            </div>
+                            <CountingNumbers
+                                value={allContributions}
+                                className="text-6xl font-bold"
+                            />
                         </CardContent>
                     </Card>
                 </div>

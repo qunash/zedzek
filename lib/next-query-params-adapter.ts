@@ -23,8 +23,8 @@ const NextQueryParamAdapter: QueryParamAdapterComponent = ({
 
     return {
       replace(location: PartialLocation) {
-        // router.replace(getUrl(location))
-        history.replaceState(null, '', getUrl(location))
+        router.replace(getUrl(location))
+        // history.replaceState(null, '', getUrl(location))
       },
       push(location: PartialLocation) {
         router.push(getUrl(location))

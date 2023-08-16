@@ -1,3 +1,4 @@
+import GoogleAnalytics from '@/components/google-analytics'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -43,6 +44,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme='system' enableSystem>
+          <GoogleAnalytics />
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />

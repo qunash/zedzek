@@ -1,11 +1,7 @@
-"use client"
-
 import Link from "next/link"
 
 import { Icons } from "@/components/icons"
 import { siteConfig } from "@/config/site"
-
-interface MainNavProps { }
 
 export function MainNav() {
   return (

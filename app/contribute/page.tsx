@@ -1,39 +1,78 @@
+"use client"
+
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
+import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 
-export default async function ContributePage() {
+export default function ContributePage() {
 
-    const cookieStore = cookies()
-    const supabase = createServerComponentClient<Database>({ cookies: () => cookieStore })
-    const supaSession = await supabase.auth.getSession()
-    const user = supaSession.data?.session?.user
+    const supabase = createClientComponentClient<Database>()
+    const [user, setUser] = useState<User | null | undefined>()
+    const [userContributions, setUserContributions] = useState<string>("0")
+    const [allContributions, setAllContributions] = useState<string>("0")
 
-    var userContributions = "0"
-    if (user) {
-        const { count, error } = await supabase
-            .from('translations')
-            .select('*', { count: 'exact', head: true })
-            .match({ user_id: user?.id, is_user_translation: true })
+    useEffect(() => {
+        const fetchUser = async () => {
+            const supaSession = await supabase.auth.getSession()
+            if (supaSession?.data) {
+                setUser(supaSession.data.session?.user)
+            }
+        }
 
-        const formattedNumber = new Intl.NumberFormat().format(count ? count : 0)
-        userContributions = formattedNumber
+        fetchUser()
 
-        if (error) console.error(error)
-    }
+        const { data: listener } = supabase.auth.onAuthStateChange(
+            async (event, newSession) => {
+                if (event === "SIGNED_OUT") {
+                    setUser(null)
+                } else if (event === "SIGNED_IN" && newSession) {
+                    setUser(newSession.user)
+                }
+            }
+        )
 
-    var allContributions = "0"
-    const { count, error } = await supabase
-        .from('translations')
-        .select('*', { count: 'exact', head: true })
+        return () => {
+            listener?.subscription.unsubscribe()
+        }
+    }, [supabase.auth])
 
-    const formattedNumber = new Intl.NumberFormat().format(count ? count : 0)
-    allContributions = formattedNumber
+    useEffect(() => {
 
-    if (error) console.error(error)
+        const fetchUserContributions = async () => {
+
+            if (!user) return
+
+            const { count, error } = await supabase
+                .from('translations')
+                .select('*', { count: 'exact', head: true })
+                .match({ user_id: user?.id, is_user_translation: true })
+
+            const formattedNumber = new Intl.NumberFormat().format(count ? count : 0)
+            setUserContributions(formattedNumber)
+
+            if (error) console.error(error)
+        }
+
+        const fetchAllContributions = async () => {
+
+            const { count, error } = await supabase
+                .from('translations')
+                .select('*', { count: 'exact', head: true })
+
+            const formattedNumber = new Intl.NumberFormat().format(count ? count : 0)
+            setAllContributions(formattedNumber)
+
+            if (error) console.error(error)
+        }
+
+        fetchUserContributions()
+        fetchAllContributions()
+
+    }, [supabase, user])
+
 
 
     const Stats = () => {

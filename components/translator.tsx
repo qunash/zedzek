@@ -3,34 +3,51 @@
 import '@/styles/globals.css'
 import { TranslationResponse } from '@/types/translation-response'
 import { useDebounce } from "@uidotdev/usehooks"
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from "react"
-import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 import Examples from './examples'
 import TranslationPanel from './translationPanel'
 import TextAreaWithClearButton from './ui/textarea-with-clear-button'
 
 
 export default function Translator() {
+    const router = useRouter()
+    const pathname = usePathname()
+    
     const textareaRef = useRef<HTMLTextAreaElement | null>(null)
     const [translationResponse, setTranslationResponse] = useState<TranslationResponse | Error | null>(null)
     const [loading, setLoading] = useState(false)
-    const [textParam, setTextParam] = useQueryParam('text', withDefault(StringParam, ''))
-    const [text, setText] = useState(textParam)
+    const [text, setText] = useState('')
     const debouncedText = useDebounce(text, 500)
 
+    const searchParams = useSearchParams();
+    
     useEffect(() => {
+        setText(searchParams.get("text") || "")
         const textarea = textareaRef.current
         textarea?.focus()
         textarea?.setSelectionRange(text.length, text.length)
     }, [])
 
     useEffect(() => {
-        setTextParam(text || undefined, "replaceIn")
+        updateQueryParam("text", text)
     }, [text])
 
     useEffect(() => {
         fetchTranslation()
     }, [debouncedText])
+
+    const updateQueryParam = (param: string, value: string) => {
+        const current = new URLSearchParams(Array.from(searchParams.entries()))
+        if (!value) {
+            current.delete(param)
+        } else {
+            current.set(param, value)
+        }
+        const search = current.toString()
+        const query = search ? `?${search}` : ""
+        router.replace(`${pathname}${query}`)
+    }
 
     const handleInputChange = useCallback((event: React.FormEvent<HTMLTextAreaElement>) => {
         setText(event.currentTarget.value)

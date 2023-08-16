@@ -1,6 +1,7 @@
 import {
   BarChart2,
   Check,
+  ClipboardCheck,
   Copy,
   Edit,
   Github,
@@ -21,6 +22,7 @@ import {
 
 export const Icons = {
   sun: SunMedium,
+  clipboardCheck: ClipboardCheck,
   stats: BarChart2,
   moon: Moon,
   laptop: Laptop,

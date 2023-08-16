@@ -61,28 +61,34 @@ export function EditTranslationDialog(
     const handleSubmit = async () => {
         const translations = translation.translations.filter((_, i) => activeToggles[i])
         const userTranslation = text.trim()
-
+    
+        const upsertData = [
+            ...translations.map((t) => ({
+                user_id: user?.id,
+                text: translation.text,
+                translation: t,
+                is_user_translation: false,
+            }))
+        ]
+    
+        if (userTranslation) {
+            upsertData.push({
+                user_id: user?.id,
+                text: translation.text.trim(),
+                translation: userTranslation,
+                is_user_translation: true,
+            })
+        }
+    
         const { error } = await supabase
             .from("translations")
-            .upsert([
-                ...translations.map((t) => ({
-                    user_id: user?.id,
-                    text: translation.text,
-                    translation: t,
-                    is_user_translation: false,
-                })),
-                {
-                    user_id: user?.id,
-                    text: translation.text,
-                    translation: userTranslation,
-                    is_user_translation: true,
-                }
-            ],
+            .upsert(
+                upsertData,
                 { onConflict: 'user_id, text, translation' }
             )
-
-        console.log('supabase error', error)
-
+    
+        if (error) console.log('supabase error', error)
+    
         handleClose()
     }
 

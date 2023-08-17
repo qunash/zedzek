@@ -76,7 +76,19 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_10_random_translations: {
+        Args: {
+          p_user_id: string
+        }
+        Returns: {
+          created_at: string
+          id: string
+          is_user_translation: boolean
+          text: string
+          translation: string
+          user_id: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

@@ -1,4 +1,5 @@
 import {
+  Ban,
   BarChart2,
   Check,
   ClipboardCheck,
@@ -14,6 +15,7 @@ import {
   ThumbsUp,
   Twitter,
   X,
+  Undo2,
   User,
   // type Icon as LucideIcon,
 } from "lucide-react"
@@ -35,6 +37,8 @@ export const Icons = {
   copy: Copy,
   gitHub: Github,
   close: X,
+  skip: Ban,
+  undo: Undo2,
   user: User,
   logo: (props: LucideProps) => (
     <svg

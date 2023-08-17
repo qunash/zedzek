@@ -39,15 +39,15 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "flex min-h-screen flex-col items-center gap-8 bg-background md:gap-12",
+          "flex h-screen flex-col items-center gap-8 bg-background md:gap-12",
           fontSans.variable
         )}
       >
         <ThemeProvider attribute="class" defaultTheme='system' enableSystem>
           <GoogleAnalytics />
           <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
+          <main className="flex w-full flex-1 justify-center">{children}</main>
+          {/* <SiteFooter /> */}
         </ThemeProvider>
       </body>
     </html>

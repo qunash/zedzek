@@ -30,16 +30,16 @@ export function EditTranslationDialog(
     const textAreaRef = useRef() as MutableRefObject<HTMLTextAreaElement>
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
-        const { ctrlKey, key, target } = event
-
+        const { ctrlKey, metaKey, key, target } = event
+    
         if (!isOpened) return
-
+    
         if (key === "Escape") {
             handleClose()
             return
         }
-
-        if (ctrlKey && key === "Enter") {
+    
+        if ((ctrlKey || metaKey) && key === "Enter") {
             handleSubmit()
             return
         }

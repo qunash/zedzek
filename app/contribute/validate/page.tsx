@@ -1,7 +1,8 @@
-import { SignInButton } from "@/components/sign-in-button";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-import TranslationValidator from "./translation-validator";
+import { SignInButton } from "@/components/sign-in-button"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
+import TranslationValidator from "./translation-validator"
+
 
 export default async function ValidatePage() {
     const _cookies = cookies()
@@ -17,8 +18,9 @@ export default async function ValidatePage() {
     if (error) console.error(error)
 
     return (
-        <TranslationValidator 
+        <TranslationValidator
             translations={data}
+            user={user}
         />
     )
 }

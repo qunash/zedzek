@@ -47,9 +47,9 @@ export default function ContributePage() {
             if (!user) return
 
             const { count, error } = await supabase
-                .from('translations')
+                .from('votes')
                 .select('*', { count: 'exact', head: true })
-                .match({ user_id: user?.id, is_user_translation: true })
+                .match({ user_id: user?.id })
 
             setUserContributions(count ? count : 0)
 
@@ -59,7 +59,7 @@ export default function ContributePage() {
         const fetchAllContributions = async () => {
 
             const { count, error } = await supabase
-                .from('translations')
+                .from('votes')
                 .select('*', { count: 'exact', head: true })
 
             setAllContributions(count ? count : 0)
@@ -115,7 +115,7 @@ export default function ContributePage() {
     }
 
     return (
-        <div className="container flex flex-col gap-16">
+        <div className="container flex flex-col gap-16 items-center">
             <div className="flex flex-col gap-6">
                 <h2 className="flex items-end text-4xl font-semibold">
                     <Icons.clipboardCheck className="mr-4 h-8 w-8" />

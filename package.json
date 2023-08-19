@@ -9,7 +9,8 @@
     "preview": "next build && next start",
     "lint": "next lint",
     "format:write": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
-    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache"
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
+    "supabase:generate-types": "node ./lib/generate-supabase-types.js"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.3",
@@ -44,6 +45,7 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
+    "dotenv": "^16.3.1",
     "encoding": "^0.1.13",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-tailwindcss": "^3.13.0",

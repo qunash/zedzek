@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Icons } from "./icons"
 import { Button, buttonVariants } from "./ui/button"
 import { TranslationResponse } from "@/types/translation-response"
-import UpvoteDownvoteEditButtons from "./like-button"
+import UpvoteDownvoteEditButtons from "./upvote-downvote-edit-buttons"
 
 const TranslationPanel = ({ translationResponse, loading, onRetry }: {
   translationResponse?: TranslationResponse | Error | null,

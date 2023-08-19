@@ -84,7 +84,7 @@ export function EditTranslationDialog(
             .from("translations")
             .upsert(
                 upsertData,
-                { onConflict: 'user_id, text, translation' }
+                { onConflict: 'text, translation' }
             )
     
         if (error) console.log('supabase error', error)

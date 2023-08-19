@@ -105,7 +105,7 @@ export function UserNav() {
               {profile.name}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
-              {session.user.email}
+              {profile.username}
             </p>
           </div>
         </DropdownMenuLabel>

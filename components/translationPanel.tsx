@@ -49,7 +49,7 @@ const TranslationPanel = ({ translationResponse, loading, onRetry }: {
         <div className="h-full w-full overflow-y-auto">
           <div className="text-xl">{translationResponse.translations[0]}</div>
           <div className="my-4 h-px w-full bg-gray-500" />
-          <div className="flex w-full items-center justify-between">
+          <div className="flex w-full items-center justify-between gap-4">
             <UpvoteDownvoteEditButtons
               translation={translationResponse}
             />

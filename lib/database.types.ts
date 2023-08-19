@@ -41,7 +41,6 @@ export interface Database {
         Row: {
           created_at: string
           id: string
-          is_user_translation: boolean
           text: string
           translation: string
           user_id: string
@@ -49,7 +48,6 @@ export interface Database {
         Insert: {
           created_at?: string
           id?: string
-          is_user_translation?: boolean
           text: string
           translation: string
           user_id: string
@@ -57,7 +55,6 @@ export interface Database {
         Update: {
           created_at?: string
           id?: string
-          is_user_translation?: boolean
           text?: string
           translation?: string
           user_id?: string
@@ -65,6 +62,43 @@ export interface Database {
         Relationships: [
           {
             foreignKeyName: "translations_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      votes: {
+        Row: {
+          created_at: string
+          id: string
+          translation_id: string
+          user_id: string
+          vote: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          translation_id: string
+          user_id: string
+          vote: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          translation_id?: string
+          user_id?: string
+          vote?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "votes_translation_id_fkey"
+            columns: ["translation_id"]
+            referencedRelation: "translations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "votes_user_id_fkey"
             columns: ["user_id"]
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -83,11 +117,34 @@ export interface Database {
         Returns: {
           created_at: string
           id: string
-          is_user_translation: boolean
           text: string
           translation: string
           user_id: string
         }[]
+      }
+      translation_downvote: {
+        Args: {
+          p_user_id: string
+          p_text: string
+          p_translation: string
+        }
+        Returns: undefined
+      }
+      translation_remove_vote: {
+        Args: {
+          p_user_id: string
+          p_text: string
+          p_translation: string
+        }
+        Returns: undefined
+      }
+      translation_upvote: {
+        Args: {
+          p_user_id: string
+          p_text: string
+          p_translation: string
+        }
+        Returns: undefined
       }
     }
     Enums: {

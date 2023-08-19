@@ -1,20 +1,19 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { PostgrestError, User } from "@supabase/supabase-js"
 import { useEffect, useState } from "react"
-// import { useTranslations } from "next-intl"
 
 import { TranslationResponse } from "@/types/translation-response"
 import { EditTranslationDialog } from "./edit-translation"
 import { Icons } from "./icons"
-import { Button, buttonVariants } from "./ui/button"
+import { Button } from "./ui/button"
 import IconButton from "./ui/icon-button"
 
-export default function LikeButton({ translation }: { translation: TranslationResponse }) {
+export default function UpvoteDownvoteEditButtons({ translation }: { translation: TranslationResponse }) {
     const supabase = createClientComponentClient<Database>()
     const [user, setUser] = useState<User | null | undefined>()
     const [showSignIn, setShowSignIn] = useState(false)
-    const [isLiked, setIsLiked] = useState(false)
-    const [isDialogOpen, setDialogOpen] = useState(false)
+    const [isUpvoted, setIsUpvoted] = useState(false)
+    const [isDownvoted, setIsDownvoted] = useState(false)
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -53,29 +52,48 @@ export default function LikeButton({ translation }: { translation: TranslationRe
         if (error) logError(error)
     }
 
-    const handleLike = async () => {
+    const handleUpvote = async () => {
         if (!user) {
             setShowSignIn(true)
             return
         }
 
-        if (isLiked) {
-            const { error } = await supabase
-                .from("translations")
-                .delete()
-                .match({ user_id: user?.id, text: translation.text, translation: translation.translations[0] })
-            setIsLiked(false)
+        setIsDownvoted(false)
+
+        if (isUpvoted) {
+            const { error } = await supabase.rpc("translation_remove_vote",
+                { p_user_id: user?.id, p_text: translation.text, p_translation: translation.translations[0] }
+            )
             if (error) logError(error)
+            setIsUpvoted(false)
         } else {
-            const { error } = await supabase
-                .from("translations")
-                .insert({
-                    user_id: user?.id,
-                    text: translation.text,
-                    translation: translation.translations[0],
-                    is_user_translation: false,
-                })
-            setIsLiked(true)
+            const { error } = await supabase.rpc("translation_upvote",
+                { p_user_id: user?.id, p_text: translation.text, p_translation: translation.translations[0] }
+            )
+            setIsUpvoted(true)
+            if (error) logError(error)
+        }
+    }
+
+    const handleDownvote = async () => {
+        if (!user) {
+            setShowSignIn(true)
+            return
+        }
+
+        setIsUpvoted(false)
+
+        if (isDownvoted) {
+            const { error } = await supabase.rpc("translation_remove_vote",
+                { p_user_id: user?.id, p_text: translation.text, p_translation: translation.translations[0] }
+            )
+            if (error) logError(error)
+            setIsDownvoted(false)
+        } else {
+            const { error } = await supabase.rpc("translation_downvote",
+                { p_user_id: user?.id, p_text: translation.text, p_translation: translation.translations[0] }
+            )
+            setIsDownvoted(true)
             if (error) logError(error)
         }
     }
@@ -99,16 +117,14 @@ export default function LikeButton({ translation }: { translation: TranslationRe
         <div className="flex w-full flex-row items-center justify-between">
             <IconButton
                 icon={<Icons.thumbsUp />}
-                isFilled={isLiked}
-                onClick={handleLike}
+                isFilled={isUpvoted}
+                onClick={handleUpvote}
             />
-            <EditTranslationDialog
-                supabase={supabase}
-                user={user}
-                translation={translation}
-            >
-                <IconButton icon={<Icons.thumbsDown />} onClick={handleEdit} />
-            </EditTranslationDialog>
+            <IconButton
+                icon={<Icons.thumbsDown />}
+                isFilled={isDownvoted}
+                onClick={handleDownvote}
+            />
             <EditTranslationDialog
                 supabase={supabase}
                 user={user}

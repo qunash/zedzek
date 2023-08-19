@@ -1,7 +1,6 @@
 "use client"
 
 import { Icons } from '@/components/icons'
-import { SignInButton } from '@/components/sign-in-button'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { cn } from '@/lib/utils'
@@ -48,20 +47,16 @@ export default function TranslationValidator({ translations, user }: {
 }) {
     const router = useRouter()
     const supabase = createClientComponentClient<Database>()
-    const [history, setHistory] = useState<{ index: number, action: 'like' | 'dislike' | 'skip' }[]>([])
+    const [history, setHistory] = useState<{ index: number, action: 'upvote' | 'downvote' | 'skip' }[]>([])
     const currentIndex = history.length
 
     useEffect(() => {
         setHistory([])
     }, [translations])
 
-    useEffect(() => {
-        console.log("translations", translations)
-    }, [translations])
-
     const logError = (error: any) => console.error("Error:", error)
 
-    const handleAction = async (action: 'like' | 'dislike' | 'skip') => {
+    const handleAction = async (action: 'upvote' | 'downvote' | 'skip') => {
         if (!user || !translations) return
 
         const currentTranslation = translations[currentIndex]
@@ -71,30 +66,18 @@ export default function TranslationValidator({ translations, user }: {
 
         if (action === 'skip') return
 
-        if (action === 'like') {
-            const { error } = await supabase
-                .from("translations")
-                .insert({
-                    user_id: user.id,
-                    text: currentTranslation.text,
-                    translation: currentTranslation.translation,
-     
-                    is_user_translation: true,
-                })
+        if (action === 'upvote') {
+            const { error } = await supabase.rpc("translation_upvote",
+                { p_user_id: user?.id, p_text: currentTranslation.text, p_translation: currentTranslation.translation }
+            )
 
             if (error) logError(error)
         }
 
-        if (action === 'dislike') {
-            const { error } = await supabase
-                .from("translations")
-                .delete()
-                .match({
-                    user_id: user.id,
-                    text: currentTranslation.text,
-                    translation: currentTranslation.translation,
-                    is_user_translation: true,
-                })
+        if (action === 'downvote') {
+            const { error } = await supabase.rpc("translation_downvote",
+                { p_user_id: user?.id, p_text: currentTranslation.text, p_translation: currentTranslation.translation }
+            )
 
             if (error) logError(error)
         }
@@ -108,7 +91,7 @@ export default function TranslationValidator({ translations, user }: {
         const lastAction = history.pop()
         setHistory([...history])
 
-        if (lastAction?.action === 'like') {
+        if (lastAction?.action === 'upvote') {
             const { error } = await supabase
                 .from("translations")
                 .delete()
@@ -132,10 +115,10 @@ export default function TranslationValidator({ translations, user }: {
                 handleAction('skip')
                 break
             case 'ArrowLeft':
-                handleAction('dislike')
+                handleAction('downvote')
                 break
             case 'ArrowRight':
-                handleAction('like')
+                handleAction('upvote')
                 break
             default:
                 return
@@ -238,14 +221,14 @@ export default function TranslationValidator({ translations, user }: {
                     icon={Icons.thumbsDown}
                     text="Incorrect"
                     shortcut="←"
-                    onClick={() => handleAction('dislike')}
+                    onClick={() => handleAction('downvote')}
                 />
                 <HoverButton
                     className="flex-1"
                     icon={Icons.thumbsUp}
                     text="Correct"
                     shortcut="→"
-                    onClick={() => handleAction('like')}
+                    onClick={() => handleAction('upvote')}
                 />
             </div >
         </div >

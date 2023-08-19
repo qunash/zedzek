@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Icons } from "./icons"
 import { Button, buttonVariants } from "./ui/button"
 import { TranslationResponse } from "@/types/translation-response"
-import LikeButton from "./like-button"
+import UpvoteDownvoteEditButtons from "./like-button"
 
 const TranslationPanel = ({ translationResponse, loading, onRetry }: {
   translationResponse?: TranslationResponse | Error | null,
@@ -50,7 +50,7 @@ const TranslationPanel = ({ translationResponse, loading, onRetry }: {
           <div className="text-xl">{translationResponse.translations[0]}</div>
           <div className="my-4 h-px w-full bg-gray-500" />
           <div className="flex w-full items-center justify-between">
-            <LikeButton
+            <UpvoteDownvoteEditButtons
               translation={translationResponse}
             />
             <div

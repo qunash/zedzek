@@ -32,7 +32,7 @@ export default {
         "submit": "إرسال",
         "sign_in": "تسجيل الدخول",
         "sign_out": "تسجيل الخروج",
-        "retry": "Retry",
+        "retry": "إعادة المحاولة",
         "undo": "تراجع",
         "skip": "التخطّي",
         "correct": "صحيح",

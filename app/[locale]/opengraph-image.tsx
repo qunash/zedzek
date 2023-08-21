@@ -1,18 +1,21 @@
 import { ImageResponse } from "next/server"
 import { getI18nServer } from "../locales/server"
+import ar from "../locales/ar"
+import en from "../locales/en"
+import ru from "../locales/ru"
+import tr from "../locales/tr"
 
 export const runtime = "edge"
 export const size = {
-    width: 1200,
-    height: 600,
-  }
-   
-  export const contentType = 'image/png'
-  
+  width: 1200,
+  height: 600,
+}
 
-export default async function Image({ params: { lang } }: { params: { lang: string } }) {
+export const contentType = 'image/png'
 
-  const t = await getI18nServer()
+export default async function Image({ params: { locale } }: { params: { locale: string } }) {
+
+  const fallbackLocale = { ru, ar, tr }[locale] || en
 
   return new ImageResponse(
     (
@@ -57,11 +60,11 @@ export default async function Image({ params: { lang } }: { params: { lang: stri
           </svg>
         </div>
         <div tw="p-4 text-8xl text-white">Zədzək</div>
-        <div tw="p-4 text-6xl text-white">{t("index.header")}</div>
+        <div tw="p-4 text-6xl text-white">{fallbackLocale.index.header}</div>
       </div>
     ),
     {
-        ...size,
+      ...size,
     }
   )
 }

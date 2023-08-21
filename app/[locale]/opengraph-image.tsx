@@ -60,7 +60,7 @@ export default async function Image({ params: { locale } }: { params: { locale: 
           </svg>
         </div>
         <div tw="p-4 text-8xl text-white">Zədzək</div>
-        <div tw="p-4 text-6xl text-white">{fallbackLocale.index.header}</div>
+        <div tw="p-4 text-6xl text-white w-1/2 text-center">{fallbackLocale.index.header}</div>
       </div>
     ),
     {

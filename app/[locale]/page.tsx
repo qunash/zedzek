@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import I18nProviderClientWrapper from "../locales/i18n-client-component-wrapper"
 import { getI18nServer } from "../locales/server"
+import Faq from "@/components/faq"
 
 export default async function Home({ params }: { params: { locale: string } }) {
 
@@ -11,9 +12,13 @@ export default async function Home({ params }: { params: { locale: string } }) {
 
   return (
     <section className="container grid justify-items-center gap-4">
-      <h1 className="text-xl font-bold lg:text-2xl">
+      <h1 className="text-xl font-bold lg:text-2xl text-center">
         {t("index.header")}
       </h1>
+      <h2
+        className="text-base text-center"
+        dangerouslySetInnerHTML={{ __html: t("index.info") }}
+      />
       <I18nProviderClientWrapper params={params} >
         <Translator />
       </I18nProviderClientWrapper>
@@ -25,7 +30,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
           {t("index.contribute")}
         </Button>
       </Link>
-      {/* <Faq /> */}
+      <Faq />
     </section >
   )
 }

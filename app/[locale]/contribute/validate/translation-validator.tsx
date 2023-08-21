@@ -54,7 +54,6 @@ export default function TranslationValidator({ translations, user }: {
 
     useEffect(() => {
         setHistory([])
-        console.log(t("contribute.is_this_translation_correct"))
     }, [translations])
 
     const logError = (error: any) => console.error("Error:", error)

@@ -1,10 +1,9 @@
 import { Icons } from "@/components/icons"
-import TranslatorI18nWrapper from "@/components/translator"
+import Translator from "@/components/translator"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { getI18nServer } from "../locales/server"
 import I18nProviderClientWrapper from "../locales/i18n-client-component-wrapper"
-import Translator from "@/components/translator"
+import { getI18nServer } from "../locales/server"
 
 export default async function Home({ params }: { params: { locale: string } }) {
 

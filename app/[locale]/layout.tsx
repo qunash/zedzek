@@ -14,7 +14,7 @@ const fontSans = FontSans({
   variable: "--font-sans",
 })
 
-export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
 
   const t = await getI18nServer()
   
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: { locale: string } 
         url: "https://github.com/qunash",
       }
     ],
-    creator: "qunash",
+    creator: "anzor.qunash",
     icons: {
       icon: "/favicon.ico",
     }

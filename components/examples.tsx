@@ -1,6 +1,10 @@
+import { getI18nCLient } from "@/app/locales/client"
+
 export default function Examples(
     { onExampleClick }: { onExampleClick: (example: string) => void }
 ) {
+
+    const t = getI18nCLient()
 
     const examples = [
         ["Мы идем домой"],
@@ -23,8 +27,7 @@ export default function Examples(
     return (
         <div className="mt-4 max-w-4xl rounded-lg p-4">
             <h2 className="mb-2 text-xl font-semibold">
-                {/* {t("examples", { locale })}: */}
-                Examples:
+                {t("translator.examples")}
             </h2>
             <ul className="flex flex-wrap gap-2 text-slate-700 dark:text-slate-400">
                 {examples.map((example, index) => (

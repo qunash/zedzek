@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/server"
+import { getI18nServer } from "../locales/server"
 
 export const runtime = "edge"
 export const size = {
@@ -9,7 +10,10 @@ export const size = {
   export const contentType = 'image/png'
   
 
-export default function Image() {
+export default async function Image({ params: { lang } }: { params: { lang: string } }) {
+
+  const t = await getI18nServer()
+
   return new ImageResponse(
     (
       <div tw="flex h-full w-full flex-col items-center justify-center bg-black border-2 border-white/10">
@@ -53,7 +57,7 @@ export default function Image() {
           </svg>
         </div>
         <div tw="p-4 text-8xl text-white">Zədzək</div>
-        <div tw="p-4 text-6xl text-white">Circassian translator demo</div>
+        <div tw="p-4 text-6xl text-white">{t("index.header")}</div>
       </div>
     ),
     {

@@ -1,4 +1,3 @@
-import React, { useRef, useEffect, useState, MutableRefObject } from 'react'
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -9,10 +8,12 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog"
 import { TranslationResponse } from "@/types/translation-response"
+import { User } from '@supabase/supabase-js'
+import React, { MutableRefObject, useRef, useState } from 'react'
 import { Textarea } from './ui/textarea'
 import { Toggle } from "./ui/toggle"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip'
-import { User } from '@supabase/supabase-js'
+import { getI18nCLient } from "@/app/locales/client"
 
 export function EditTranslationDialog(
     { supabase, user, translation, children }: {
@@ -22,6 +23,7 @@ export function EditTranslationDialog(
         children: JSX.Element
     }
 ) {
+    const t = getI18nCLient()
     const [isOpened, setIsOpened] = useState(false)
     const [activeToggles, setActiveToggles] = useState(
         new Array(translation.translations.length).fill(false)
@@ -108,7 +110,7 @@ export function EditTranslationDialog(
                     </DialogHeader>
                     <div className="flex flex-col flex-wrap items-center justify-center gap-3">
                         <DialogDescription>
-                            Choose correct translations
+                            {t('edit_translations.choose_correct_translations')}
                         </DialogDescription>
                         <div className="flex w-full flex-wrap justify-center gap-3 py-4 ">
                             {
@@ -134,7 +136,7 @@ export function EditTranslationDialog(
                             }
                         </div>
                         <DialogDescription>
-                            Or add your own
+                            {t('edit_translations.or_add_your_own')}
                         </DialogDescription>
                         <Textarea value={text} onChange={(e) => setText(e.target.value)} ref={textAreaRef} />
                     </div>
@@ -143,7 +145,7 @@ export function EditTranslationDialog(
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Button type="submit" onClick={handleSubmit}>
-                                        Submit
+                                        {t('buttons.submit')}
                                     </Button>
                                 </TooltipTrigger>
                                 <TooltipContent side='left' className='mr-4'>

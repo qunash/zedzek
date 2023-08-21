@@ -1,5 +1,7 @@
 "use client"
 
+import { getI18nCLient } from "@/app/locales/client"
+import I18nProviderClientWrapper from "@/app/locales/i18n-client-component-wrapper"
 import CountingNumbers from "@/components/counting-numbers"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
@@ -8,7 +10,17 @@ import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
-export default function ContributePage() {
+export default function ContributePage({ params }: { params: { locale: string } }) {
+    return (
+        <I18nProviderClientWrapper params={params}>
+            <ContributePageLocalized />
+        </I18nProviderClientWrapper>
+    )
+}
+
+function ContributePageLocalized() {
+
+    const t = getI18nCLient()
 
     const supabase = createClientComponentClient<Database>()
     const [user, setUser] = useState<User | null | undefined>()
@@ -79,13 +91,13 @@ export default function ContributePage() {
             <div className="flex flex-col gap-6">
                 <h2 className="flex items-end text-4xl font-semibold">
                     <Icons.stats className="mr-4 h-8 w-8" />
-                    Stats
+                    {t("contribute.stats")}
                 </h2>
                 <div className="flex max-w-[64rem] flex-col gap-4 text-center md:flex-row">
                     <Card className="mx-auto w-full min-w-[18rem] lg:min-w-[24rem]">
                         <CardHeader className="flex flex-row items-center justify-center space-y-0 pb-2">
                             <CardTitle className="text-base font-medium">
-                                Your contributions
+                                {t("contribute.your_contributions")}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="flex flex-row items-center justify-center gap-4">
@@ -99,7 +111,7 @@ export default function ContributePage() {
                     <Card className="mx-auto w-full min-w-[18rem] lg:min-w-[24rem]">
                         <CardHeader className="flex flex-row items-center justify-center space-y-0 pb-2">
                             <CardTitle className="text-base font-medium">
-                                Contributions by all users
+                                {t("contribute.contributions_by_all_users")}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="flex flex-row items-center justify-center gap-4">
@@ -119,27 +131,27 @@ export default function ContributePage() {
             <div className="flex flex-col gap-6">
                 <h2 className="flex items-end text-4xl font-semibold">
                     <Icons.clipboardCheck className="mr-4 h-8 w-8" />
-                    Tasks
+                    {t("contribute.tasks")}
                 </h2>
                 <div className="flex max-w-[64rem] flex-col gap-4 text-center md:flex-row">
                     <Link href="/contribute/validate">
                         <Button
                             variant={"ghost"}
-                            className="h-fit w-full gap-4 rounded-2xl border-2 border-gray-400 p-6 py-10 text-2xl hover:border-gray-500 md:p-10"
+                            className="h-full w-full gap-4 rounded-2xl border-2 border-gray-400 p-6 py-10 text-2xl hover:border-gray-500 md:p-10"
                         >
                             <Icons.thumbsUp className="h-10 w-10 md:h-8 md:w-8" />
                             <Icons.thumbsDown className="h-10 w-10 md:h-8 md:w-8" />
-                            Validate translations for accuracy
+                            {t("contribute.validate_translations")}
                         </Button>
                     </Link>
 
                     <Link href="/contribute/translate">
                         <Button
                             variant={"ghost"}
-                            className="h-fit w-full gap-4 rounded-2xl border-2 border-gray-400 p-6 text-2xl hover:border-gray-500 md:p-10"
+                            className="h-full w-full gap-4 rounded-2xl border-2 border-gray-400 p-6 text-2xl hover:border-gray-500 md:p-10"
                         >
                             <Icons.logo className="h-20 w-20 fill-current md:h-16 md:w-16" />
-                            Translate words and phrases
+                            {t("contribute.translate")}
                         </Button>
                     </Link>
                 </div>

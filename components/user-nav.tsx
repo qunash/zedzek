@@ -5,7 +5,6 @@ import {
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs"
 import { useEffect, useState } from "react"
-// import { useTranslations } from "next-intl"
 
 import {
   Avatar,
@@ -24,14 +23,14 @@ import {
 import { Profile } from "@/types/supabase"
 import Link from "next/link"
 import { UserAvatar } from "./user-avatar"
+import { getI18nCLient } from "@/app/locales/client"
 
 export function UserNav() {
+  const t = getI18nCLient()
   const supabase = createClientComponentClient<Database>()
   const [loading, setLoading] = useState(true)
   const [session, setSession] = useState<Session | null>()
   const [profile, setProfile] = useState<Profile>()
-  // const t = useTranslations("Index")
-  // const { locale } = useRouter()
 
   useEffect(() => {
     const fetchProfile = async (user_id: string) => {
@@ -72,8 +71,7 @@ export function UserNav() {
 
   if (!session) {
     return <Button onClick={handleSignIn}>
-      {/* { t("sign_in", { locale })} */}
-      Sign In
+      {t("buttons.sign_in")}
     </Button>
   }
 
@@ -115,8 +113,7 @@ export function UserNav() {
           <DropdownMenuItem
             className="cursor-pointer px-4 py-3"
           >
-            {/* {t("profile", { locale })} */}
-            Profile
+            {t("index.profile")}
           </DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator className="mx-2" />
@@ -124,8 +121,7 @@ export function UserNav() {
           className="cursor-pointer px-4 py-3"
           onClick={handleSignOut}
         >
-          {/* {t("sign_out", { locale })} */}
-          Sign Out
+          {t("buttons.sign_out")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

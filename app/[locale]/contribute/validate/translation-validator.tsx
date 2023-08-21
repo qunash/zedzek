@@ -1,5 +1,6 @@
 "use client"
 
+import { getI18nCLient } from '@/app/locales/client'
 import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
@@ -45,6 +46,7 @@ export default function TranslationValidator({ translations, user }: {
     translations: Database["public"]["Tables"]["translations"]["Row"][] | null | undefined,
     user: User | null | undefined
 }) {
+    const t = getI18nCLient()
     const router = useRouter()
     const supabase = createClientComponentClient<Database>()
     const [history, setHistory] = useState<{ index: number, action: 'upvote' | 'downvote' | 'skip' }[]>([])
@@ -52,6 +54,7 @@ export default function TranslationValidator({ translations, user }: {
 
     useEffect(() => {
         setHistory([])
+        console.log(t("contribute.is_this_translation_correct"))
     }, [translations])
 
     const logError = (error: any) => console.error("Error:", error)
@@ -129,7 +132,7 @@ export default function TranslationValidator({ translations, user }: {
         return (
             <div className="flex h-full w-full flex-col items-center justify-center gap-4">
                 <h2 className="text-center text-2xl font-semibold">
-                    No more translations at the moment. Come back later!
+                    {t("contribute.no_more_translations")}
                 </h2>
             </div>
         )
@@ -138,7 +141,9 @@ export default function TranslationValidator({ translations, user }: {
     if (currentIndex >= translations.length) {
         return (
             <div className="flex h-full w-full flex-col items-center justify-center gap-4">
-                <h2 className="text-2xl font-semibold">Thanks for your contribution!</h2>
+                <h2 className="text-2xl font-semibold">
+                    {t("contribute.thank_you_for_your_help")}
+                </h2>
                 <div className="flex flex-col gap-4">
                     <Button
                         size="lg"
@@ -149,14 +154,14 @@ export default function TranslationValidator({ translations, user }: {
                             }
                         }
                     >
-                        Keep going
+                        {t("buttons.keep_going")}
                     </Button>
                     <Button
                         size="lg"
                         variant="secondary"
                         onClick={() => router.push('/')}
                     >
-                        Done
+                        {t("buttons.done")}
                     </Button>
                 </div>
             </div>
@@ -164,6 +169,7 @@ export default function TranslationValidator({ translations, user }: {
     }
 
     return (
+        
         <div className={cn(
             "flex w-full flex-col",
             "md:h-full md:flex-row md:items-start md:gap-2 md:px-20",
@@ -174,7 +180,9 @@ export default function TranslationValidator({ translations, user }: {
         >
             <div className="flex flex-1 flex-col items-center gap-8 md:gap-8">
                 <div className="flex items-center gap-4">
-                    <h2 className="text-2xl font-semibold">Is this translation correct?</h2>
+                    <h2 className="text-2xl font-semibold">
+                        {t("contribute.is_this_translation_correct")}
+                    </h2>
                     <div className="text-xl text-gray-500">{`${currentIndex + 1} / ${translations.length}`}</div>
                 </div>
 
@@ -203,7 +211,7 @@ export default function TranslationValidator({ translations, user }: {
                     <HoverButton
                         className="flex-1"
                         icon={Icons.undo}
-                        text="Undo"
+                        text={t("buttons.undo")}
                         shortcut="↑"
                         onClick={handleUndo}
                     />
@@ -212,21 +220,21 @@ export default function TranslationValidator({ translations, user }: {
                 <HoverButton
                     className="flex-1"
                     icon={Icons.skip}
-                    text="Skip"
+                    text={t("buttons.skip")}
                     shortcut="↓"
                     onClick={() => handleAction('skip')}
                 />
                 <HoverButton
                     className="flex-1"
                     icon={Icons.thumbsDown}
-                    text="Incorrect"
+                    text={t("buttons.incorrect")}
                     shortcut="←"
                     onClick={() => handleAction('downvote')}
                 />
                 <HoverButton
                     className="flex-1"
                     icon={Icons.thumbsUp}
-                    text="Correct"
+                    text={t("buttons.correct")}
                     shortcut="→"
                     onClick={() => handleAction('upvote')}
                 />

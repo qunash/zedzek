@@ -1,5 +1,6 @@
 "use client"
 
+import { getI18nCLient } from '@/app/locales/client'
 import '@/styles/globals.css'
 import { TranslationResponse } from '@/types/translation-response'
 import { useDebounce } from "@uidotdev/usehooks"
@@ -9,11 +10,11 @@ import Examples from './examples'
 import TranslationPanel from './translationPanel'
 import TextAreaWithClearButton from './ui/textarea-with-clear-button'
 
-
 export default function Translator() {
+    const t = getI18nCLient()
     const router = useRouter()
     const pathname = usePathname()
-    
+
     const textareaRef = useRef<HTMLTextAreaElement | null>(null)
     const [translationResponse, setTranslationResponse] = useState<TranslationResponse | Error | null>(null)
     const [loading, setLoading] = useState(false)
@@ -21,7 +22,7 @@ export default function Translator() {
     const debouncedText = useDebounce(text, 500)
 
     const searchParams = useSearchParams();
-    
+
     useEffect(() => {
         setText(searchParams.get("text") || "")
         const textarea = textareaRef.current
@@ -78,11 +79,11 @@ export default function Translator() {
         } finally {
             setLoading(false)
         }
-    } 
-    
+    }
+
     const onExampleClick = (example: string) => {
         setText(example)
-        window.scrollTo({top: 0,behavior: "smooth"})
+        window.scrollTo({ top: 0, behavior: "smooth" })
     }
 
     return (
@@ -91,6 +92,7 @@ export default function Translator() {
                 <TextAreaWithClearButton
                     ref={textareaRef}
                     value={text}
+                    placeholder={t("translator.type_to_translate")}
                     onChange={handleInputChange}
                     onClear={() => { setText('') }}
                 />
@@ -103,7 +105,8 @@ export default function Translator() {
                     }}
                 />
             </div>
-            <Examples onExampleClick={onExampleClick} />
+            <Examples
+                onExampleClick={onExampleClick} />
         </div>
     )
 }

@@ -7,20 +7,26 @@ export default function Examples(
     const t = getI18nCLient()
 
     const examples = [
-        ["Мы идем домой"],
-        ["Сегодня хорошая погода"],
+        ["Мы живем на родине"],
         ["Дети играют во дворе"],
+        ["Луна вращается вокруг Земли"],
         ["We live in a big house"],
+        ["Bugün güzel bir gün"],
         ["Tu es une bonne personne."],
         ["أين تعيش؟"],
         ["Πού ζεις;"],
         ["איפה אתה גר?"],
-        ["Bir şeyler yapmak istiyorum."],
         ["– Если я его отпущу, то ты вовек не сможешь его поймать, – заявил Сосруко."],
         ["Как только старик ушел, Сатаней пошла к Саусырыко."],
         ["我永远不会放弃你。"],
         ["우리는 소치에 살고 있습니다."],
         ["あなたの名前は何ですか？"],
+        ["Zij zijn goede mensen."],
+        ["آنها افراد خوبی هستند"],
+        ["El cielo es azul."],
+        ["Eu gosto de aprender línguas!"],
+        ["Das Leben ist schön."],
+        ["Il mondo è un libro, e chi non viaggia legge solo una pagina"],
     ]
 
 

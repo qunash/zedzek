@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { cn } from '@/lib/utils'
 import { User, createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { franc } from 'franc-min'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -70,7 +71,15 @@ export default function TranslationValidator({ translations, user }: {
 
         if (action === 'upvote') {
             const { error } = await supabase.rpc("translation_upvote",
-                { p_user_id: user?.id, p_text: currentTranslation.text, p_translation: currentTranslation.translation }
+                {
+                    p_user_id: user?.id,
+                    p_lang: franc(
+                        currentTranslation.text,
+                        { minLength: 2, ignore: ['bel', 'ukr', 'srp', 'bul', 'bos', 'koi', 'azj', 'uzn', 'run', 'kin'] }
+                    ),
+                    p_text: currentTranslation.text,
+                    p_translation: currentTranslation.translation
+                }
             )
 
             if (error) logError(error)
@@ -168,7 +177,7 @@ export default function TranslationValidator({ translations, user }: {
     }
 
     return (
-        
+
         <div className={cn(
             "flex w-full flex-col",
             "md:h-full md:flex-row md:items-start md:gap-2 md:px-20",

@@ -1,3 +1,4 @@
+import { franc, francAll } from 'franc-min'
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { PostgrestError, User } from "@supabase/supabase-js"
 import { useEffect, useState } from "react"
@@ -68,7 +69,15 @@ export default function UpvoteDownvoteEditButtons({ translation }: { translation
             setIsUpvoted(false)
         } else {
             const { error } = await supabase.rpc("translation_upvote",
-                { p_user_id: user?.id, p_text: translation.text, p_translation: translation.translations[0] }
+                {
+                    p_user_id: user?.id,
+                    p_lang: franc(
+                        translation.text,
+                        { minLength: 2, ignore: ['bel', 'ukr', 'srp', 'bul', 'bos', 'koi', 'azj', 'uzn', 'run', 'kin'] }
+                    ),
+                    p_text: translation.text,
+                    p_translation: translation.translations[0]
+                }
             )
             setIsUpvoted(true)
             if (error) logError(error)

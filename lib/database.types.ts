@@ -12,18 +12,21 @@ export interface Database {
       profiles: {
         Row: {
           avatar_url: string
+          created_at: string
           id: string
           name: string
           username: string
         }
         Insert: {
           avatar_url: string
+          created_at?: string
           id: string
           name: string
           username: string
         }
         Update: {
           avatar_url?: string
+          created_at?: string
           id?: string
           name?: string
           username?: string
@@ -41,6 +44,8 @@ export interface Database {
         Row: {
           created_at: string
           id: string
+          is_user_translation: boolean
+          lang: string | null
           text: string
           translation: string
           user_id: string
@@ -48,6 +53,8 @@ export interface Database {
         Insert: {
           created_at?: string
           id?: string
+          is_user_translation?: boolean
+          lang?: string | null
           text: string
           translation: string
           user_id: string
@@ -55,6 +62,8 @@ export interface Database {
         Update: {
           created_at?: string
           id?: string
+          is_user_translation?: boolean
+          lang?: string | null
           text?: string
           translation?: string
           user_id?: string
@@ -117,6 +126,8 @@ export interface Database {
         Returns: {
           created_at: string
           id: string
+          is_user_translation: boolean
+          lang: string | null
           text: string
           translation: string
           user_id: string
@@ -141,6 +152,7 @@ export interface Database {
       translation_upvote: {
         Args: {
           p_user_id: string
+          p_lang: string
           p_text: string
           p_translation: string
         }

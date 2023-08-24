@@ -59,7 +59,7 @@ export default function PlayTTS({ text }: { text: string }) {
     }
 
     return (
-        <div className="flex h-10 w-8 items-center justify-center">
+        <div className="flex h-10 w-fit items-center justify-center">
             <div
                 className={buttonVariants({
                     size: "default",

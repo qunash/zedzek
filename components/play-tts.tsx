@@ -59,7 +59,7 @@ export default function PlayTTS({ text }: { text: string }) {
     }
 
     return (
-        <div className="flex items-center justify-center w-fit h-10 w-8">
+        <div className="flex h-10 w-8 items-center justify-center">
             <div
                 className={buttonVariants({
                     size: "default",
@@ -69,7 +69,7 @@ export default function PlayTTS({ text }: { text: string }) {
                 onClick={handlePlay}
             >
                 {
-                    isLoading ? <div className="h-4 w-4 self-center animate-spin rounded-full border-y-2 border-gray-500" /> :
+                    isLoading ? <div className="h-4 w-4 animate-spin self-center rounded-full border-y-2 border-gray-500" /> :
                         isPlaying ? <Icons.stop className="h-5 w-5 fill-current" /> :
                             <Icons.play className="h-5 w-5 fill-current" />
                 }

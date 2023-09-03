@@ -40,6 +40,30 @@ export interface Database {
           }
         ]
       }
+      sentences: {
+        Row: {
+          created_at: string
+          id: string
+          lang: string | null
+          source: string | null
+          text: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lang?: string | null
+          source?: string | null
+          text?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lang?: string | null
+          source?: string | null
+          text?: string | null
+        }
+        Relationships: []
+      }
       translations: {
         Row: {
           created_at: string
@@ -131,6 +155,19 @@ export interface Database {
           text: string
           translation: string
           user_id: string
+        }[]
+      }
+      get_10_random_untranslated_sentences: {
+        Args: {
+          p_user_id: string
+          p_lang: string
+        }
+        Returns: {
+          created_at: string
+          id: string
+          lang: string | null
+          source: string | null
+          text: string | null
         }[]
       }
       translation_downvote: {

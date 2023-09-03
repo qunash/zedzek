@@ -93,12 +93,14 @@ export default function SentenceTranslator({
     }
 
     useEffect(() => {
+        router.refresh() // ugly hack to force data revalidation. Revalidation does not work yet in Next.js 13.4.19. TODO: update later. see /page.tsx
+
         focusOnTextarea()
     }, [])
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.ctrlKey && e.key === "Enter") {
-            handleSubmit()
+            handleAction("submit")
         }
 
         if (e.altKey && e.key === "t") {
@@ -133,47 +135,6 @@ export default function SentenceTranslator({
         }
     }
 
-    const handleSubmit = async () => {
-        if (!user || !sentences) return
-
-        if (userTranslation.trim() === "") return
-
-        setHistory((prev) => [
-            ...prev,
-            {
-                index: currentIndex,
-                action: "submit",
-                translation: userTranslation,
-            },
-        ])
-
-        const { error } = await supabase.rpc("translation_upvote", {
-            p_user_id: user?.id,
-            p_lang: lang,
-            p_text: sentences[currentIndex].text!,
-            p_translation: userTranslation,
-            p_is_user_translation: true,
-        })
-
-        if (error) logError(error)
-
-        setUserTranslation("")
-        focusOnTextarea()
-    }
-
-    const handleSkip = () => {
-        setHistory((prev) => [
-            ...prev,
-            {
-                index: currentIndex,
-                action: "skip",
-                translation: userTranslation,
-            },
-        ])
-        setUserTranslation("")
-        focusOnTextarea()
-    }
-
     const handleUndo = async () => {
         if (!user || !sentences) return
 
@@ -199,6 +160,35 @@ export default function SentenceTranslator({
         focusOnTextarea()
     }
 
+    const handleAction = async (action: "submit" | "skip") => {
+        if (!user || !sentences) return
+
+        const currentSentence = sentences[currentIndex]
+        if (!currentSentence) return
+
+        setHistory((prev) => [
+            ...prev,
+            { index: currentIndex, action, translation: userTranslation },
+        ])
+
+        // if (action === 'skip') {}
+
+        if (action === "submit") {
+            const { error } = await supabase.rpc("translation_upvote", {
+                p_user_id: user?.id,
+                p_lang: lang,
+                p_text: currentSentence.text!,
+                p_translation: userTranslation,
+                p_is_user_translation: true,
+            })
+
+            if (error) logError(error)
+        }
+
+        setUserTranslation("")
+        focusOnTextarea()
+    }
+
     if (!sentences || sentences.length === 0) {
         return <div>No sentences available.</div>
     }
@@ -214,6 +204,7 @@ export default function SentenceTranslator({
                         size="lg"
                         variant="default"
                         onClick={() => {
+                            setHistory([])
                             router.refresh()
                         }}
                     >
@@ -301,12 +292,12 @@ export default function SentenceTranslator({
                 <HoverButton
                     icon={Icons.skip}
                     text="Skip"
-                    onClick={handleSkip}
+                    onClick={() => handleAction("skip")}
                 />
                 <HoverButton
                     icon={Icons.submit}
                     text="Submit"
-                    onClick={handleSubmit}
+                    onClick={() => handleAction("submit")}
                     disabled={userTranslation.trim() === ""}
                 />
                 {history.length > 0 ? (

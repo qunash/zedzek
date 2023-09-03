@@ -4,6 +4,10 @@ import { cookies } from "next/headers"
 import I18nProviderClientWrapper from "@/app/locales/i18n-client-component-wrapper"
 import SentenceTranslator from "./sentence-translator"
 
+export const revalidate = 0 // does not work yet in Next.js 13.4.19. TODO: update later
+// export const dynamic = 'force-dynamic' // same
+
+
 const LANG_MAP: { [key: string]: string } = {
     ar: "ara",
     ru: "rus",

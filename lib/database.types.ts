@@ -192,6 +192,7 @@ export interface Database {
           p_lang: string
           p_text: string
           p_translation: string
+          p_is_user_translation: boolean
         }
         Returns: undefined
       }

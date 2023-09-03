@@ -76,7 +76,8 @@ export default function UpvoteDownvoteEditButtons({ translation }: { translation
                         { minLength: 2, ignore: ['bel', 'ukr', 'srp', 'bul', 'bos', 'koi', 'azj', 'uzn', 'run', 'kin'] }
                     ),
                     p_text: translation.text,
-                    p_translation: translation.translations[0]
+                    p_translation: translation.translations[0],
+                    p_is_user_translation: false,
                 }
             )
             setIsUpvoted(true)

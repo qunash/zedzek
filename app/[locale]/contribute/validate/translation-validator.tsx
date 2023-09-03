@@ -78,7 +78,8 @@ export default function TranslationValidator({ translations, user }: {
                         { minLength: 2, ignore: ['bel', 'ukr', 'srp', 'bul', 'bos', 'koi', 'azj', 'uzn', 'run', 'kin'] }
                     ),
                     p_text: currentTranslation.text,
-                    p_translation: currentTranslation.translation
+                    p_translation: currentTranslation.translation,
+                    p_is_user_translation: false,
                 }
             )
 

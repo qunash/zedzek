@@ -8,13 +8,6 @@ export async function GET(request: NextRequest) {
     const redirectUrl =
         requestUrl.searchParams.get("redirect_to") || requestUrl.origin
 
-    console.log("~~~~~~~~~~~~~ requestUrl :", requestUrl)
-    console.log("~~~~~~~~~~~~~ code       :", code)
-    console.log("~~~~~~~~~~~~~ originalUrl:", redirectUrl)
-
-    // requestUrl.searchParams.delete("redirect_to")
-    // requestUrl.searchParams.delete("code")
-
     if (code) {
         const supabase = createRouteHandlerClient<Database>({ cookies })
         await supabase.auth.exchangeCodeForSession(code)

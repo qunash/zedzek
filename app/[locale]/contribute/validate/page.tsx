@@ -28,9 +28,16 @@ export default async function ValidatePage({
     const supaSession = await supabase.auth.getSession()
     const user = supaSession.data?.session?.user
 
-    if (!user) return <SignInButton />
+    if (!user) {
+        return (
+            <I18nProviderClientWrapper params={params}>
+                <SignInButton />
+            </I18nProviderClientWrapper>
+        )
+    }
 
-    const userLanguage = LANG_MAP[_cookies.get("Next-Locale")?.value || "en"] || "eng"
+    const userLanguage =
+        LANG_MAP[_cookies.get("Next-Locale")?.value || "en"] || "eng"
 
     const { data, error } = await supabase.rpc("get_10_random_translations", {
         p_user_id: user?.id,

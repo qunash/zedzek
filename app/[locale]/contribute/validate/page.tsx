@@ -8,6 +8,13 @@ import TranslationValidator from "./translation-validator"
 
 export const revalidate = 0 // does not work yet in Next.js 13.4.19. TODO: update later
 
+const LANG_MAP: { [key: string]: string } = {
+    ar: "ara",
+    ru: "rus",
+    en: "eng",
+    tr: "tur",
+}
+
 export default async function ValidatePage({
     params,
 }: {
@@ -23,8 +30,11 @@ export default async function ValidatePage({
 
     if (!user) return <SignInButton />
 
+    const userLanguage = LANG_MAP[_cookies.get("Next-Locale")?.value || "en"] || "eng"
+
     const { data, error } = await supabase.rpc("get_10_random_translations", {
         p_user_id: user?.id,
+        p_lang: userLanguage,
     })
 
     if (error) console.error(error)

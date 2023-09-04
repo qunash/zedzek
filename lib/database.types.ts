@@ -146,6 +146,21 @@ export interface Database {
       get_10_random_translations: {
         Args: {
           p_user_id: string
+          p_lang: string
+        }
+        Returns: {
+          created_at: string
+          id: string
+          is_user_translation: boolean
+          lang: string | null
+          text: string
+          translation: string
+          user_id: string
+        }[]
+      }
+      get_10_random_translations_: {
+        Args: {
+          p_user_id: string
         }
         Returns: {
           created_at: string

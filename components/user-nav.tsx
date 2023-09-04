@@ -24,6 +24,7 @@ import { Profile } from "@/types/supabase"
 import Link from "next/link"
 import { UserAvatar } from "./user-avatar"
 import { getI18nCLient } from "@/app/locales/client"
+import { getBaseUrl } from "@/lib/utils"
 
 export function UserNav() {
   const t = getI18nCLient()
@@ -58,10 +59,15 @@ export function UserNav() {
   }, [supabase, supabase.auth])
 
   const handleSignIn = async () => {
+    const { pathname, search } = location
+    const origin = getBaseUrl()
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${location.origin}/auth/callback/` },
+        provider: "google",
+        options: {
+            redirectTo: `${origin}/auth/callback/?redirect_to=${origin}${pathname}/${search}`,
+        },
     })
+    
     if (error) console.log("Error: ", error.message)
   }
 

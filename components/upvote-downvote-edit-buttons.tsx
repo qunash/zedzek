@@ -8,9 +8,13 @@ import { EditTranslationDialog } from "./edit-translation"
 import { Icons } from "./icons"
 import { Button } from "./ui/button"
 import IconButton from "./ui/icon-button"
+import { getBaseUrl } from '@/lib/utils'
+import { getI18nCLient } from '@/app/locales/client'
 
 export default function UpvoteDownvoteEditButtons({ translation }: { translation: TranslationResponse }) {
     const supabase = createClientComponentClient<Database>()
+    const t = getI18nCLient()
+
     const [user, setUser] = useState<User | null | undefined>()
     const [showSignIn, setShowSignIn] = useState(false)
     const [isUpvoted, setIsUpvoted] = useState(false)
@@ -44,7 +48,8 @@ export default function UpvoteDownvoteEditButtons({ translation }: { translation
     const logError = (error: PostgrestError | Error) => console.error("Error:", error)
 
     const handleSignIn = async () => {
-        const { origin, pathname, search } = location
+        const { pathname, search } = location
+        const origin = getBaseUrl()
         const { error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
@@ -119,7 +124,7 @@ export default function UpvoteDownvoteEditButtons({ translation }: { translation
     if (showSignIn) return (
         <div className="flex w-full flex-row items-center justify-center">
             <Button onClick={handleSignIn}>
-                Sign In
+                {t("buttons.sign_in")}
             </Button>
         </div>
     )

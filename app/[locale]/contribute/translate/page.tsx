@@ -6,6 +6,7 @@ import SentenceTranslator from "./sentence-translator"
 
 export const revalidate = 0 // does not work yet in Next.js 13.4.19. TODO: update later
 // export const dynamic = 'force-dynamic' // same
+// export const fetchCache = 'force-no-store' // same
 
 
 const LANG_MAP: { [key: string]: string } = {

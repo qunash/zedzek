@@ -44,10 +44,11 @@ export default function UpvoteDownvoteEditButtons({ translation }: { translation
     const logError = (error: PostgrestError | Error) => console.error("Error:", error)
 
     const handleSignIn = async () => {
+        const { origin, pathname, search } = location
         const { error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
-                redirectTo: `${location.origin}/auth/callback/${location.search}`,
+                redirectTo: `${origin}/auth/callback/?redirect_to=${origin}${pathname}/${search}`,
             },
         })
         if (error) logError(error)

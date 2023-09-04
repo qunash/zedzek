@@ -5,6 +5,7 @@ import { TranslationResponse } from "@/types/translation-response"
 import UpvoteDownvoteEditButtons from "./upvote-downvote-edit-buttons"
 import { getI18nCLient } from "@/app/locales/client"
 import PlayTTS from "./play-tts"
+import { LoadingSpinner } from "./loading-spinner"
 
 const TranslationPanel = ({ translationResponse, loading, onRetry }: {
   translationResponse?: TranslationResponse | Error | null,
@@ -25,9 +26,7 @@ const TranslationPanel = ({ translationResponse, loading, onRetry }: {
 
   if (loading) {
     return (
-      <div className="flex h-80 w-full flex-col items-center justify-center rounded-r-lg p-4 md:h-96">
-        <div className="h-5 w-5 animate-spin rounded-full border-y-2 border-gray-500" />
-      </div>
+      <LoadingSpinner className="flex h-80 w-full flex-col items-center justify-center rounded-r-lg p-4 md:h-96" />
     )
   }
 
@@ -50,7 +49,7 @@ const TranslationPanel = ({ translationResponse, loading, onRetry }: {
     <div className="min-h-80 md:min-h-96 h-fit w-full rounded-r-lg p-4">
       <div className="flex h-full flex-col items-center justify-center pt-4">
         <div className="h-full w-full overflow-y-auto">
-          <div className="flex gap-2 items-start justify-between">
+          <div className="flex items-start justify-between gap-2">
             <div className="text-xl">{translationResponse.translations[0]}</div>
             <PlayTTS text={translationResponse.translations[0]} />
           </div>

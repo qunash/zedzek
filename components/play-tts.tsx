@@ -1,5 +1,7 @@
 import { useRef, useState } from "react"
+
 import { Icons } from "./icons"
+import { LoadingSpinner } from "./loading-spinner"
 import { buttonVariants } from "./ui/button"
 
 export default function PlayTTS({ text }: { text: string }) {
@@ -64,15 +66,18 @@ export default function PlayTTS({ text }: { text: string }) {
                 className={buttonVariants({
                     size: "default",
                     variant: "link",
-                    className: "items-center justify-center p-0 text-slate-700 dark:text-slate-400 cursor-pointer",
+                    className:
+                        "items-center justify-center p-0 text-slate-700 dark:text-slate-400 cursor-pointer",
                 })}
                 onClick={handlePlay}
             >
-                {
-                    isLoading ? <div className="h-4 w-4 animate-spin self-center rounded-full border-y-2 border-gray-500" /> :
-                        isPlaying ? <Icons.stop className="h-5 w-5 fill-current" /> :
-                            <Icons.play className="h-5 w-5 fill-current" />
-                }
+                {isLoading ? (
+                    <LoadingSpinner />
+                ) : isPlaying ? (
+                    <Icons.stop className="h-5 w-5 fill-current" />
+                ) : (
+                    <Icons.play className="h-5 w-5 fill-current" />
+                )}
             </div>
         </div>
     )

@@ -70,9 +70,9 @@ export default function TranslationValidator({
     >([])
     const currentIndex = history.length
 
-    // useEffect(() => {
-    //     router.refresh() // ugly hack to force data revalidation. Revalidation does not work yet in Next.js 13.4.19. TODO: update later. see /page.tsx
-    // }, [])
+    useEffect(() => {
+        router.refresh() // ugly hack to force data revalidation. Revalidation does not work yet in Next.js 13.4.19. TODO: update later. see /page.tsx
+    }, [])
 
     useEffect(() => {
         setHistory([])

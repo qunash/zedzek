@@ -93,7 +93,7 @@ export default function SentenceTranslator({
     }
 
     useEffect(() => {
-        // router.refresh() // ugly hack to force data revalidation. Revalidation does not work yet in Next.js 13.4.19. TODO: update later. see /page.tsx
+        router.refresh() // ugly hack to force data revalidation. Revalidation does not work yet in Next.js 13.4.19. TODO: update later. see /page.tsx
 
         focusOnTextarea()
     }, [])

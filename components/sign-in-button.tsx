@@ -8,6 +8,7 @@ export function SignInButton() {
     const supabase = createClientComponentClient<Database>()
     
     const handleSignIn = async () => {
+        console.log('~~~~~~~~~~~~~  location:', location)
         const { origin, pathname, search } = location
         const { error } = await supabase.auth.signInWithOAuth({
             provider: "google",

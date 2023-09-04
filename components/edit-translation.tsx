@@ -103,8 +103,8 @@ export function EditTranslationDialog(
                     {children}
                 </DialogTrigger>
                 <DialogContent className="max-h-[80%] min-w-fit max-w-sm overflow-y-auto sm:max-w-[425px] md:w-full">
-                    <DialogHeader className="items-center justify-center">
-                        <h1 className="text-2xl font-bold">
+                    <DialogHeader className="items-center justify-center rounded-md bg-white p-4">
+                        <h1 className="text-xl font-semibold text-black">
                             {translation.text}
                         </h1>
                     </DialogHeader>

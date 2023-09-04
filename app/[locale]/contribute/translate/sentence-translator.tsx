@@ -18,8 +18,8 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { Icons } from "@/components/icons"
-import { getI18nCLient } from "@/app/locales/client"
 import { LoadingSpinner } from "@/components/loading-spinner"
+import { getI18nCLient } from "@/app/locales/client"
 
 type HistoryEntry = {
     index: number
@@ -89,7 +89,7 @@ export default function SentenceTranslator({
         // router.refresh() // ugly hack to force data revalidation. Revalidation does not work yet in Next.js 13.4.19. TODO: update later. see /page.tsx
     }, [])
 
-    const handleGlobalKeyDown = (e: React.KeyboardEvent) => {
+    const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.ctrlKey && e.key === "Enter") {
             handleAction("submit")
         }
@@ -214,11 +214,12 @@ export default function SentenceTranslator({
     return (
         <div
             className="flex w-full flex-col items-center gap-10"
-            onKeyDown={handleGlobalKeyDown}
+            tabIndex={-1}
+            onKeyDown={handleKeyDown}
         >
-            <div className="flex items-center gap-4">
+            <div className="flex items-baseline gap-4">
                 <h2 className="text-2xl font-semibold">
-                    Translate the following text
+                    {t("contribute.translate_the_following_text")}
                 </h2>
                 <div className="text-xl text-gray-500">
                     {`${currentIndex + 1} / ${sentences.length}`}

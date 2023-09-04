@@ -50,7 +50,10 @@ export default {
         "contributions_by_all_users": "Вклад всех пользователей",
         "is_this_translation_correct": "Правильный ли это перевод?",
         "thank_you_for_your_help": "Спасибо за помощь!",
-        "no_more_translations": "На данный момент переводов больше нет. Возвращайтесь позже!"
+        "no_more_translations": "На данный момент переводов больше нет. Возвращайтесь позже!",
+        "enter_translation": "Введите перевод текста…",
+        "auto_translate": "Автоматический перевод (Alt+T)",
+        "report_bad_sentences": "Предложения были автоматически собраны из публичной базы данных. Пожалуйста, сообщайте о любых неуместных или неправильных предложениях.",
     },
     edit_translations: {
         "choose_correct_translations": "Выберите правильные переводы",

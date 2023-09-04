@@ -50,7 +50,10 @@ export default {
         "contributions_by_all_users": "مساهماتك ومساهمات المنتدى",
         "is_this_translation_correct": "هل هذه الترجمة صحيحة؟",
         "thank_you_for_your_help": "شكرا لك على مساعدتك!",
-        "no_more_translations": "لا يوجد المزيد من الترجمات في هذا الوقت. عد لاحقا!"
+        "no_more_translations": "لا يوجد المزيد من الترجمات في هذا الوقت. عد لاحقا!",
+        "enter_translation": "أدخل ترجمة النص…",
+        "auto_translate": "ترجمة تلقائية (Alt+T)",
+        "report_bad_sentences": "تم جمع هذه الجمل تلقائيًا من قاعدة بيانات متاحة للجمهور. يرجى الإبلاغ عن الجمل غير المناسبة أو غير الصحيحة."
     },
     edit_translations: {
         "choose_correct_translations": "اختر الترجمات الصحيحة",

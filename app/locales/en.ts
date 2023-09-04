@@ -49,7 +49,10 @@ export default {
         "contributions_by_all_users": "Contributions by all users",
         "is_this_translation_correct": "Is this translation correct?",
         "thank_you_for_your_help": "Thank you for your help!",
-        "no_more_translations": "No more translations at the moment. Come back later!"
+        "no_more_translations": "No more translations at the moment. Come back later!",
+        "enter_translation": "Enter text translation…",
+        "auto_translate": "Auto-translate (Alt+T)",
+        "report_bad_sentences": "These sentences were automatically collected from a public database. Please report any inappropriate or incorrect sentences.",
     },
     edit_translations: {
         "choose_correct_translations": "Choose correct translations",

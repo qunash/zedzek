@@ -50,7 +50,10 @@ export default {
         "contributions_by_all_users": "Sizin ve topluluğunuzun yaptığı katkılar",
         "is_this_translation_correct": "Bu çeviri doğru mu?",
         "thank_you_for_your_help": "Yardımınız için teşekkür ederiz!",
-        "no_more_translations": "Şu anda daha fazla çeviri yok. Daha sonra tekrar gelin!"
+        "no_more_translations": "Şu anda daha fazla çeviri yok. Daha sonra tekrar gelin!",
+        "enter_translation": "Metin çevirisini girin…",
+        "auto_translate": "Otomatik çevir (Alt+T)",
+        "report_bad_sentences": "Bu cümleler otomatik olarak halka açık bir veri tabanından toplandı. Lütfen uygunsuz veya yanlış cümleleri bildirin."
     },
     edit_translations: {
         "choose_correct_translations": "Doğru çevirileri seçin",

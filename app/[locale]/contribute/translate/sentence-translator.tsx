@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/tooltip"
 import { Icons } from "@/components/icons"
 import { getI18nCLient } from "@/app/locales/client"
+import { LoadingSpinner } from "@/components/loading-spinner"
 
 type HistoryEntry = {
     index: number
@@ -27,7 +28,6 @@ type HistoryEntry = {
 }
 
 type HoverButtonProps = {
-    className?: string
     icon: React.ComponentType<{ className?: string }>
     text: string
     onClick?: () => void
@@ -35,33 +35,26 @@ type HoverButtonProps = {
 }
 
 const HoverButton: React.FC<HoverButtonProps> = ({
-    className,
     icon: Icon,
     text,
     onClick,
     disabled,
-}) => {
-    return (
-        <Button
-            variant="ghost"
-            onClick={onClick}
-            size="lg"
-            className={cn(
-                className,
-                "group relative flex flex-col gap-2 border p-10",
-                disabled && "cursor-not-allowed opacity-50"
-            )}
-            disabled={disabled}
-        >
-            <div className="flex flex-col items-center">
-                <Icon className="h-8 w-8 shrink-0" />
-                <div className="text-sm text-gray-500 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
-                    {text}
-                </div>
+}) => (
+    <Button
+        variant="ghost"
+        onClick={onClick}
+        size="lg"
+        className="group flex flex-col border p-10"
+        disabled={disabled}
+    >
+        <div className="flex flex-col items-center justify-center">
+            <Icon className="h-8 w-8" />
+            <div className="text-sm text-gray-500 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
+                {text}
             </div>
-        </Button>
-    )
-}
+        </div>
+    </Button>
+)
 
 export default function SentenceTranslator({
     sentences,
@@ -84,7 +77,7 @@ export default function SentenceTranslator({
     const [history, setHistory] = useState<HistoryEntry[]>([])
     const currentIndex = history.length
     const [userTranslation, setUserTranslation] = useState("")
-    const [loading, setLoading] = useState(false)
+    const [autotranslationLoading, setAutotranslationLoading] = useState(false)
 
     const logError = (error: any) => console.error("Error:", error)
 
@@ -93,26 +86,24 @@ export default function SentenceTranslator({
     }
 
     useEffect(() => {
-        router.refresh() // ugly hack to force data revalidation. Revalidation does not work yet in Next.js 13.4.19. TODO: update later. see /page.tsx
-
-        focusOnTextarea()
+        // router.refresh() // ugly hack to force data revalidation. Revalidation does not work yet in Next.js 13.4.19. TODO: update later. see /page.tsx
     }, [])
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const handleGlobalKeyDown = (e: React.KeyboardEvent) => {
         if (e.ctrlKey && e.key === "Enter") {
             handleAction("submit")
         }
 
-        if (e.altKey && e.key === "t") {
+        if (e.altKey && e.code === "KeyT") {
             handleAutoTranslate()
         }
     }
 
     const handleAutoTranslate = async () => {
-        if (loading) return
+        if (autotranslationLoading) return
         if (!sentences || sentences.length === 0) return
 
-        setLoading(true)
+        setAutotranslationLoading(true)
         try {
             const response = await fetch("/api/translate", {
                 method: "POST",
@@ -130,7 +121,7 @@ export default function SentenceTranslator({
         } catch (error: any) {
             setUserTranslation(error)
         } finally {
-            setLoading(false)
+            setAutotranslationLoading(false)
             focusOnTextarea()
         }
     }
@@ -156,8 +147,6 @@ export default function SentenceTranslator({
         }
 
         setUserTranslation(lastAction?.translation || "")
-
-        focusOnTextarea()
     }
 
     const handleAction = async (action: "submit" | "skip") => {
@@ -186,7 +175,6 @@ export default function SentenceTranslator({
         }
 
         setUserTranslation("")
-        focusOnTextarea()
     }
 
     if (!sentences || sentences.length === 0) {
@@ -204,8 +192,9 @@ export default function SentenceTranslator({
                         size="lg"
                         variant="default"
                         onClick={() => {
-                            setHistory([])
-                            router.refresh()
+                            // setHistory([])
+                            // router.refresh()
+                            window.location.reload()
                         }}
                     >
                         {t("buttons.keep_going")}
@@ -223,7 +212,10 @@ export default function SentenceTranslator({
     }
 
     return (
-        <div className="flex w-full flex-col items-center gap-10">
+        <div
+            className="flex w-full flex-col items-center gap-10"
+            onKeyDown={handleGlobalKeyDown}
+        >
             <div className="flex items-center gap-4">
                 <h2 className="text-2xl font-semibold">
                     Translate the following text
@@ -242,10 +234,8 @@ export default function SentenceTranslator({
                     </CardContent>
                 </Card>
                 <div className="relative h-full w-full md:w-1/2">
-                    {loading ? (
-                        <div className="flex h-full items-center justify-center">
-                            <div className="h-4 w-4 animate-spin rounded-full border-y-2 border-gray-500" />
-                        </div>
+                    {autotranslationLoading ? (
+                        <LoadingSpinner />
                     ) : (
                         <>
                             <Textarea
@@ -254,10 +244,14 @@ export default function SentenceTranslator({
                                 onChange={(e) =>
                                     setUserTranslation(e.target.value)
                                 }
-                                className="h-full w-full text-base focus:border-0"
-                                placeholder="Enter your translation here..."
-                                onKeyDown={handleKeyDown}
+                                className="w-full text-base focus:border-0"
+                                placeholder={t("contribute.enter_translation")}
                             />
+
+                            <p className="p-2 text-start text-sm text-gray-500">
+                                {t("contribute.report_bad_sentences")}
+                            </p>
+
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
@@ -274,7 +268,7 @@ export default function SentenceTranslator({
                                         </div>
                                     </TooltipTrigger>
                                     <TooltipContent side="bottom">
-                                        <p>Auto translate (Alt + T)</p>
+                                        <p>{t("contribute.auto_translate")}</p>
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
@@ -285,25 +279,35 @@ export default function SentenceTranslator({
 
             <div
                 className={cn(
-                    "sticky bottom-0 grid w-full flex-none grid-cols-2 items-center gap-2 bg-background p-4",
+                    "grid w-full flex-none grid-cols-2 items-center gap-2 bg-background p-4",
                     "md:right-6 md:max-w-xs md:pt-16"
                 )}
             >
                 <HoverButton
                     icon={Icons.skip}
-                    text="Skip"
+                    text={t("buttons.skip")}
                     onClick={() => handleAction("skip")}
                 />
-                <HoverButton
-                    icon={Icons.submit}
-                    text="Submit"
-                    onClick={() => handleAction("submit")}
-                    disabled={userTranslation.trim() === ""}
-                />
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <HoverButton
+                                icon={Icons.submit}
+                                text={t("buttons.submit")}
+                                onClick={() => handleAction("submit")}
+                                disabled={userTranslation.trim() === ""}
+                            />
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">
+                            <p>Ctrl+Enter</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+
                 {history.length > 0 ? (
                     <HoverButton
                         icon={Icons.undo}
-                        text="Undo"
+                        text={t("buttons.undo")}
                         onClick={handleUndo}
                     />
                 ) : (

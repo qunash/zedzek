@@ -188,8 +188,9 @@ export default function TranslationValidator({
                         size="lg"
                         variant="default"
                         onClick={() => {
-                            setHistory([])
-                            router.refresh()
+                            // setHistory([])
+                            // router.refresh()
+                            window.location.reload()
                         }}
                     >
                         {t("buttons.keep_going")}

@@ -50,6 +50,7 @@ export default {
         "is_this_translation_correct": "Is this translation correct?",
         "thank_you_for_your_help": "Thank you for your help!",
         "no_more_translations": "No more translations at the moment. Come back later!",
+        "translate_the_following_text": "Translate the following text:",
         "enter_translation": "Enter text translation…",
         "auto_translate": "Auto-translate (Alt+T)",
         "report_bad_sentences": "These sentences were automatically collected from a public database. Please report any inappropriate or incorrect sentences.",

@@ -2,12 +2,12 @@
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 
-import { getBaseUrl } from "@/lib/utils"
-
-import { Button } from "./ui/button"
+import { cn, getBaseUrl } from "@/lib/utils"
 import { getI18nCLient } from "@/app/locales/client"
 
-export function SignInButton() {
+import { Button } from "./ui/button"
+
+export function SignInButton({ className }: { className?: string }) {
     const supabase = createClientComponentClient<Database>()
     const t = getI18nCLient()
 
@@ -17,14 +17,22 @@ export function SignInButton() {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
-                redirectTo: `${origin}/auth/callback/?redirect_url=${origin}${pathname}/${search}`,
+                redirectTo: `${origin}/auth/callback/`,
+                queryParams: {
+                    redirect_url: `${origin}${pathname}/${search}`,
+                },
             },
         })
         if (error) console.error("Supabase auth error:", error)
     }
 
     return (
-        <div className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
+        <div
+            className={cn(
+                className,
+                "self-center"
+            )}
+        >
             <Button onClick={handleSignIn}>{t("buttons.sign_in")}</Button>
         </div>
     )

@@ -18,10 +18,7 @@ export function SignInButton({ className }: { className?: string }) {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
-                redirectTo: `${origin}/auth/callback?redirect_url=${origin}${pathname}${search}`,
-                // queryParams: {
-                //     redirect_url: `${origin}${pathname}${search}`,
-                // },
+                redirectTo: `${origin}/auth/callback/?redirect_url=${origin}${pathname}${search}`,
             },
         })
         if (error) console.error("Supabase auth error:", error)

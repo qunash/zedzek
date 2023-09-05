@@ -8,7 +8,6 @@ import {
 } from "@supabase/auth-helpers-nextjs"
 
 import { Profile } from "@/types/supabase"
-import { getBaseUrl } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {

@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { PostgrestError, User } from "@supabase/supabase-js"
-import { franc, francAll } from "franc-min"
+import { franc } from "franc-min"
 
 import { TranslationResponse } from "@/types/translation-response"
-import { getBaseUrl } from "@/lib/utils"
 import { SignInButton } from "@/components/sign-in-button"
 import { getI18nCLient } from "@/app/locales/client"
 
 import { EditTranslationDialog } from "./edit-translation"
 import { Icons } from "./icons"
-import { Button } from "./ui/button"
 import IconButton from "./ui/icon-button"
 
 export default function UpvoteDownvoteEditButtons({

@@ -14,6 +14,7 @@ export function SignInButton({ className }: { className?: string }) {
     const handleSignIn = async () => {
         const { pathname, search } = location
         const origin = getBaseUrl()
+        console.log("origin", origin)
         const { error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {

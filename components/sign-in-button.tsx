@@ -19,6 +19,9 @@ export function SignInButton({ className }: { className?: string }) {
             provider: "google",
             options: {
                 redirectTo: `${origin}/auth/callback/?redirect_url=${origin}${pathname}${search}`,
+                queryParams: {
+                    redirect_url: `${origin}${pathname}${search}`,
+                },
             },
         })
         if (error) console.error("Supabase auth error:", error)

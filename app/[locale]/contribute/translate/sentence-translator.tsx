@@ -119,7 +119,8 @@ export default function SentenceTranslator({
                 throw new Error(data.error)
             }
         } catch (error: any) {
-            setUserTranslation(error)
+            // setUserTranslation(error)
+            console.error(error)
         } finally {
             setAutotranslationLoading(false)
             focusOnTextarea()

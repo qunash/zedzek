@@ -19,7 +19,7 @@ export function SignInButton({ className }: { className?: string }) {
             options: {
                 redirectTo: `${origin}/auth/callback/`,
                 queryParams: {
-                    redirect_url: `${origin}${pathname}/${search}`,
+                    redirect_url: `${origin}${pathname}${search}`,
                 },
             },
         })

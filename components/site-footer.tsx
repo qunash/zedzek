@@ -6,11 +6,13 @@ import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { ThemeToggle } from "./theme-toggle"
 import { buttonVariants } from "./ui/button"
+import { Separator } from "@radix-ui/react-separator"
 
 export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
     return (
-        <footer className={cn(className)}>
-            <div className="container flex items-center justify-between gap-4 py-6">
+        <footer className={cn(className, "w-full")}>
+            <div className="h-px bg-slate-300 dark:bg-slate-800" />
+            <div className="container flex w-fit items-center justify-between gap-4 py-8">
                 <Link
                     href={siteConfig.links.github}
                     target="_blank"

@@ -1,9 +1,9 @@
 import { ImageResponse } from "next/server"
-import { getI18nServer } from "../locales/server"
-import ar from "../locales/ar"
-import en from "../locales/en"
-import ru from "../locales/ru"
-import tr from "../locales/tr"
+import { getI18nServer } from "@/app/locales/server"
+import ar from "@/app/locales/ar"
+import en from "@/app/locales/en"
+import ru from "@/app/locales/ru"
+import tr from "@/app/locales/tr"
 
 export const runtime = "edge"
 export const size = {

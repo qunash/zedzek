@@ -1,3 +1,4 @@
+import { getI18nServer } from '@/app/locales/server'
 import GoogleAnalytics from '@/components/google-analytics'
 import { SiteHeader } from '@/components/site-header'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -6,7 +7,6 @@ import { cn } from '@/lib/utils'
 import '@/styles/globals.css'
 import type { Metadata } from 'next'
 import { Inter as FontSans } from "next/font/google"
-import { getI18nServer } from '../locales/server'
 
 
 const fontSans = FontSans({
@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
   
   return {
     // metadataBase: new URL(siteConfig.url),
-    title: t("metadata.name"),
+    title: `${t("index.contribute")} | ${t("metadata.name")}`,
     description: t("metadata.description"),
     keywords: siteConfig.keywords,
     authors: [

@@ -9,7 +9,12 @@ export default {
         "header": "Çerkesçe çevirmen demosu",
         "info": "Bu, Çerkesçe çevirmen demosudur. Çeviriler yanlış olabilir. <a href=\"#faq\" style=\"text-decoration: underline; color: inherit;\">Daha fazla bilgi edinin</a>",
         "profile": "Profil",
-        "contribute": "Katkıda bulun"
+        "contribute": "Katkıda bulun",
+        "language": "Dil",
+        "english": "English",
+        "russian": "Русский",
+        "arabic": "العربية",
+        "turkish": "Türkçe",
     },
     faq: {
         "title": "<a href=\"#faq\" id=\"faq\" style=\"cursor: default;\">Sıkça Sorulan Sorular</a>",

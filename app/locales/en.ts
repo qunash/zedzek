@@ -8,7 +8,12 @@ export default {
         "header": "Circassian translator demo",
         "info": "This is a demo of a translator to the Circassian language. Translations can be incorrect. <a href=\"#faq\" style=\"text-decoration: underline; color: inherit;\">Learn more</a>",
         "profile": "Profile",
-        "contribute": "Contribute"
+        "contribute": "Contribute",
+        "language": "Language",
+        "english": "English",
+        "russian": "Русский",
+        "arabic": "العربية",
+        "turkish": "Türkçe",
     },
     faq: {
         "title": "<a href=\"#faq\" id=\"faq\" style=\"cursor: default;\">FAQ</a>",

@@ -15,16 +15,21 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
+    DropdownMenuPortal,
     DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { SignInButton } from "@/components/sign-in-button"
-import { getI18nCLient } from "@/app/locales/client"
+import { getI18nCLient, useChangeLocale } from "@/app/locales/client"
 
 import { UserAvatar } from "./user-avatar"
 
 export function UserNav() {
     const t = getI18nCLient()
+    const changeLocale = useChangeLocale()
     const supabase = createClientComponentClient<Database>()
     const [loading, setLoading] = useState(true)
     const [session, setSession] = useState<Session | null>()
@@ -105,6 +110,28 @@ export function UserNav() {
                         {t("index.profile")}
                     </DropdownMenuItem>
                 </Link>
+                <DropdownMenuSub>
+                    <DropdownMenuSubTrigger className="cursor-pointer px-4 py-3">
+                        {/* <UserPlus className="mr-2 h-4 w-4" /> */}
+                        {t("index.language")}
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                            <DropdownMenuItem className="cursor-pointer" onClick={() => changeLocale('en')}>
+                                {t("index.english")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="cursor-pointer" onClick={() => changeLocale('tr')}>
+                                {t("index.turkish")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="cursor-pointer" onClick={() => changeLocale('ar')}>
+                                {t("index.arabic")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="cursor-pointer" onClick={() => changeLocale('ru')}>
+                                {t("index.russian")}
+                            </DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                </DropdownMenuSub>
                 <DropdownMenuSeparator className="mx-2" />
                 <DropdownMenuItem
                     className="cursor-pointer px-4 py-3"

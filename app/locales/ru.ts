@@ -9,7 +9,12 @@ export default {
         "header": "Демо переводчик на черкесский язык",
         "info": "Это демо-версия переводчика на черкесский язык. Переводы могут быть неправильными. <a href=\"#faq\" style=\"text-decoration: underline; color: inherit;\">Узнать больше</a>",
         "profile": "Профиль",
-        "contribute": "Участвовать"
+        "contribute": "Участвовать",
+        "language": "Язык",
+        "english": "English",
+        "russian": "Русский",
+        "arabic": "العربية",
+        "turkish": "Türkçe",
     },
     faq: {
         "title": "<a href=\"#faq\" id=\"faq\" style=\"cursor: default;\">Часто задаваемые вопросы</a>",

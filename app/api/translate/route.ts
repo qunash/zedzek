@@ -14,7 +14,8 @@ const isJsonResponse = (response: Response): boolean => {
 export async function POST(req: Request): Promise<Response> {
     try {
         const { text } = await req.json()
-        const processedText = text//.charAt(0).toLowerCase() + text.slice(1)
+        // const processedText = text//.charAt(0).toLowerCase() + text.slice(1)
+        const processedText = text.toLowerCase()
 
         const response = await fetch("https://anzorq-zedzek.hf.space/api/predict", {
             method: 'POST',

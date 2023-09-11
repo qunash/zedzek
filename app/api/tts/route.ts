@@ -19,7 +19,7 @@ export async function POST(req: Request): Promise<Response> {
         const response = await fetch(`${BASE_URL}/api/predict`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ data: [processedText] })
+            body: JSON.stringify({ data: [processedText, "Male"] })
         })
 
         if (!response.ok) {

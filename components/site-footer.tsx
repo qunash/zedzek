@@ -1,18 +1,18 @@
 import * as React from "react"
+import Link from "next/link"
 
-import { Icons } from "@/components/icons"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import Link from "next/link"
+import { Icons } from "@/components/icons"
+
 import { ThemeToggle } from "./theme-toggle"
 import { buttonVariants } from "./ui/button"
-import { Separator } from "@radix-ui/react-separator"
 
 export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
     return (
         <footer className={cn(className, "w-full")}>
             <div className="h-px bg-slate-300 dark:bg-slate-800" />
-            <div className="container flex w-fit items-center justify-between gap-4 py-8">
+            <div className="container flex w-fit items-center justify-between gap-4 pt-8 pb-4">
                 <Link
                     href={siteConfig.links.github}
                     target="_blank"
@@ -46,6 +46,16 @@ export function SiteFooter({ className }: React.HTMLAttributes<HTMLElement>) {
                     </div>
                 </Link>
                 <ThemeToggle />
+            </div>
+            <div className="container flex w-fit items-center pb-8">
+                <Link
+                    href="https://www.instagram.com/anzor.q/"
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ textDecoration: "underline" }}
+                >
+                    Qunash Anzor
+                </Link>
             </div>
         </footer>
     )

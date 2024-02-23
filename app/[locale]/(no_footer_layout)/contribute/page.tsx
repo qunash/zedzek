@@ -57,6 +57,8 @@ function ContributePageLocalized() {
 
     useEffect(() => {
 
+        if (!user) return
+
         const fetchProfile = async (user_id: string) => {
             const { data } = await supabase
                 .from("profiles")
@@ -91,7 +93,7 @@ function ContributePageLocalized() {
             if (error) console.error(error)
         }
 
-        fetchProfile(user?.id!!)
+        fetchProfile(user.id)
         fetchUserContributions()
         fetchAllContributions()
 
@@ -168,7 +170,7 @@ function ContributePageLocalized() {
                         </Button>
                     </Link>
 
-                    {profile?.role === "proofreader" && (
+                    {user && profile?.role === "proofreader" && (
                         <Link href="/contribute/proofread">
                             <Button
                                 variant={"ghost"}

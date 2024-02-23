@@ -6,7 +6,8 @@ import CountingNumbers from "@/components/counting-numbers"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { Profile } from "@/types/supabase"
+import { Session, User, createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -26,6 +27,7 @@ function ContributePageLocalized() {
     const [user, setUser] = useState<User | null | undefined>()
     const [userContributions, setUserContributions] = useState(0)
     const [allContributions, setAllContributions] = useState(0)
+    const [profile, setProfile] = useState<Profile>()
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -35,6 +37,7 @@ function ContributePageLocalized() {
             }
         }
 
+        console.log("fetching user")
         fetchUser()
 
         const { data: listener } = supabase.auth.onAuthStateChange(
@@ -50,9 +53,18 @@ function ContributePageLocalized() {
         return () => {
             listener?.subscription.unsubscribe()
         }
-    }, [supabase.auth])
+    }, [supabase, supabase.auth])
 
     useEffect(() => {
+
+        const fetchProfile = async (user_id: string) => {
+            const { data } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("id", user_id)
+
+            setProfile(data ? data[0] : undefined)
+        }
 
         const fetchUserContributions = async () => {
 
@@ -79,6 +91,7 @@ function ContributePageLocalized() {
             if (error) console.error(error)
         }
 
+        fetchProfile(user?.id!!)
         fetchUserContributions()
         fetchAllContributions()
 
@@ -127,7 +140,7 @@ function ContributePageLocalized() {
     }
 
     return (
-        <div className="container flex flex-col gap-16 items-center">
+        <div className="container flex flex-col items-center gap-16">
             <div className="flex flex-col gap-6">
                 <h2 className="flex items-end text-4xl font-semibold">
                     <Icons.clipboardCheck className="mr-4 h-8 w-8" />
@@ -154,6 +167,18 @@ function ContributePageLocalized() {
                             {t("contribute.translate")}
                         </Button>
                     </Link>
+
+                    {profile?.role === "proofreader" && (
+                        <Link href="/contribute/proofread">
+                            <Button
+                                variant={"ghost"}
+                                className="h-full w-full gap-4 rounded-2xl border-2 border-gray-400 p-6 text-2xl hover:border-gray-500 md:p-10"
+                            >
+                                <Icons.proofread className="h-20 w-20 fill-current md:h-16 md:w-16" />
+                                {t("contribute.proofread")}
+                            </Button>
+                        </Link>
+                    )}
                 </div>
             </div>
             <Stats />

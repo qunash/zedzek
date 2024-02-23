@@ -45,7 +45,7 @@ export default function RootLayout({ children, params, }: {
     <html lang={params.locale}>
       <body
         className={cn(
-          "flex h-screen flex-col items-center gap-8 bg-background md:gap-12",
+          "flex h-screen flex-col items-center gap-8 bg-background md:gap-10",
           fontSans.variable
         )}
       >

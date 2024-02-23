@@ -175,7 +175,7 @@ export default function SentenceProofreader({
 
     return (
         <div
-            className="flex w-full flex-col items-center gap-4 md:gap-10"
+            className="flex w-full flex-col items-center gap-4"
             tabIndex={-1}
         >
             <div className="mx-10 flex flex-col items-center gap-1 md:w-1/2 md:gap-4">
@@ -200,7 +200,7 @@ export default function SentenceProofreader({
                         ref={textareaRef}
                         value={text}
                         onChange={(e) => setText(e.target.value)}
-                        className="w-full text-base focus:border-0 h-36"
+                        className="h-36 w-full text-base focus:border-0"
                         placeholder={t("contribute.enter_proofread_text")}
                     />
                     <p className="whitespace-pre-line p-2 text-start text-sm text-gray-500"
@@ -211,8 +211,9 @@ export default function SentenceProofreader({
 
             <div
                 className={cn(
-                    "sticky bottom-0 grid w-full flex-none grid-cols-2 items-center gap-1 bg-background p-2",
-                    "md:right-6 md:max-w-xs md:pt-16"
+                    "grid w-full flex-none grid-cols-2 items-center gap-1 bg-background p-2",
+                    "sticky bottom-0 md:static",
+                    "md:right-6 md:max-w-xs"
                 )}
             >
               

@@ -175,18 +175,18 @@ export default function SentenceProofreader({
 
     return (
         <div
-            className="flex w-full flex-col items-center gap-10"
+            className="flex w-full flex-col items-center gap-4 md:gap-10"
             tabIndex={-1}
         >
-            <div className="mx-10 flex flex-col items-center gap-4 md:w-1/2">
-                <h2 className="text-2xl font-semibold">
+            <div className="mx-10 flex flex-col items-center gap-1 md:w-1/2 md:gap-4">
+                <h2 className="text-lg font-semibold md:text-2xl">
                     {t("contribute.review_the_following_translation_pair")}
                 </h2>
-                <div className="text-xl text-gray-500">
+                <div className="text-lg text-gray-500">
                 {`${currentIndex + 1} / ${texts.length}`}
                 </div>
             </div>
-            <div className="flex w-full flex-1 flex-col items-center gap-6 px-10 text-center">
+            <div className="flex w-full flex-1 flex-col items-center gap-3 px-10 text-center md:gap-6">
                 <Card className="container cursor-pointer bg-white md:w-1/2" onClick={() => setText(texts[currentIndex]?.text || "")}>
                     <CardHeader className="p-2" />
                     <CardContent className="flex flex-col gap-4">
@@ -200,19 +200,18 @@ export default function SentenceProofreader({
                         ref={textareaRef}
                         value={text}
                         onChange={(e) => setText(e.target.value)}
-                        className="w-full text-base focus:border-0"
+                        className="w-full text-base focus:border-0 h-36"
                         placeholder={t("contribute.enter_proofread_text")}
                     />
-
-                    <p className="whitespace-pre-line p-2 text-start text-sm text-gray-500" >
-                        {t("contribute.proofread_instructions")}
+                    <p className="whitespace-pre-line p-2 text-start text-sm text-gray-500"
+                        dangerouslySetInnerHTML={{__html: t("contribute.proofread_instructions")}}>
                     </p>
                 </div>
             </div>
 
             <div
                 className={cn(
-                    "grid w-full flex-none grid-cols-2 items-center gap-2 bg-background p-4",
+                    "sticky bottom-0 grid w-full flex-none grid-cols-2 items-center gap-1 bg-background p-2",
                     "md:right-6 md:max-w-xs md:pt-16"
                 )}
             >

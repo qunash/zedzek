@@ -420,6 +420,12 @@ export type Database = {
           text: string | null
         }[]
       }
+      grant_proofreader_role: {
+        Args: {
+          p_user_id: string
+        }
+        Returns: undefined
+      }
       insert_or_update_proofread_text: {
         Args: {
           p_user_id: string

@@ -110,6 +110,13 @@ export function UserNav() {
                         {t("index.profile")}
                     </DropdownMenuItem>
                 </Link>
+                {profile.role === 'admin' && (
+                    <Link href={`/admin`} passHref>
+                        <DropdownMenuItem className="cursor-pointer px-4 py-3">
+                            {t("index.admin")}
+                        </DropdownMenuItem>
+                    </Link>
+                )}
                 <DropdownMenuSub>
                     <DropdownMenuSubTrigger className="cursor-pointer px-4 py-3">
                         {/* <UserPlus className="mr-2 h-4 w-4" /> */}

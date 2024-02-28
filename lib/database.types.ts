@@ -9,6 +9,66 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      audio_segments: {
+        Row: {
+          created_at: string
+          file_name: string
+          id: string
+          video_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_name?: string
+          id?: string
+          video_id?: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          id?: string
+          video_id?: string
+        }
+        Relationships: []
+      }
+      audio_transcriptions: {
+        Row: {
+          created_at: string
+          id: string
+          segment_id: string | null
+          transcription: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          segment_id?: string | null
+          transcription?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          segment_id?: string | null
+          transcription?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_audio_transcriptions_segment_id_fkey"
+            columns: ["segment_id"]
+            isOneToOne: false
+            referencedRelation: "audio_segments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_audio_transcriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string
@@ -46,18 +106,21 @@ export type Database = {
       }
       proofread_texts: {
         Row: {
+          created_at: string
           id: string
           text: string
           text_id: string
           user_id: string
         }
         Insert: {
+          created_at?: string
           id: string
           text: string
           text_id: string
           user_id: string
         }
         Update: {
+          created_at?: string
           id?: string
           text?: string
           text_id?: string
@@ -73,6 +136,38 @@ export type Database = {
           },
           {
             foreignKeyName: "public_proofread_texts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      role_access_requests: {
+        Row: {
+          created_at: string
+          id: number
+          role: Database["public"]["Enums"]["roles"]
+          status: Database["public"]["Enums"]["status"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          role: Database["public"]["Enums"]["roles"]
+          status: Database["public"]["Enums"]["status"]
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          role?: Database["public"]["Enums"]["roles"]
+          status?: Database["public"]["Enums"]["status"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_role_access_requests_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -361,7 +456,8 @@ export type Database = {
       }
     }
     Enums: {
-      roles: "regular_user" | "proofreader"
+      roles: "regular_user" | "proofreader" | "admin"
+      status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never

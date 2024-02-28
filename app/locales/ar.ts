@@ -45,6 +45,7 @@ export default {
         "incorrect": "غير صحيح",
         "keep_going": "استمر",
         "done": "تم",
+        "request_access": "طلب الوصول",
     },
     contribute: {
         "tasks": "مهام",
@@ -63,7 +64,9 @@ export default {
         "translate_the_following_text": "ترجم النص التالي:",
         "enter_translation": "أدخل ترجمة النص…",
         "auto_translate": "ترجمة تلقائية (Alt+T)",
-        "report_bad_sentences": "تم جمع هذه الجمل تلقائيًا من قاعدة بيانات متاحة للجمهور. يرجى الإبلاغ عن الجمل غير المناسبة أو غير الصحيحة."
+        "report_bad_sentences": "تم جمع هذه الجمل تلقائيًا من قاعدة بيانات متاحة للجمهور. يرجى الإبلاغ عن الجمل غير المناسبة أو غير الصحيحة.",
+        "proofread_access_denied": "للوصول إلى هذه الصفحة ، يجب أن تكون محررًا معتمدًا.",
+        "pending_access_request": "تم تقديم طلب الوصول الخاص بك للمراجعة. يرجى الانتظار.",
     },
     edit_translations: {
         "choose_correct_translations": "اختر الترجمات الصحيحة",

@@ -170,7 +170,7 @@ function ContributePageLocalized() {
                         </Button>
                     </Link>
 
-                    {user && profile?.role === "proofreader" && (
+                    {user && (profile?.role === "proofreader" || profile?.role === "admin") && (
                         <Link href="/contribute/proofread">
                             <Button
                                 variant={"ghost"}

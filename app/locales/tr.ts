@@ -45,6 +45,7 @@ export default {
         "incorrect": "Yanlış",
         "keep_going": "Devam et",
         "done": "Bitti",
+        "request_access": "Erişim iste",
     },
     contribute: {
         "tasks": "Görevler",
@@ -63,7 +64,9 @@ export default {
         "translate_the_following_text": "Aşağıdaki metni çevirin:",
         "enter_translation": "Metin çevirisini girin…",
         "auto_translate": "Otomatik çevir (Alt+T)",
-        "report_bad_sentences": "Bu cümleler otomatik olarak halka açık bir veri tabanından toplandı. Lütfen uygunsuz veya yanlış cümleleri bildirin."
+        "report_bad_sentences": "Bu cümleler otomatik olarak halka açık bir veri tabanından toplandı. Lütfen uygunsuz veya yanlış cümleleri bildirin.",
+        "proofread_access_denied": "Bu sayfaya erişmek için doğrulanmış bir düzeltmen olmanız gerekmektedir.",
+        "pending_access_request": "Erişim isteğiniz beklemede. Lütfen bekleyin.",
     },
     edit_translations: {
         "choose_correct_translations": "Doğru çevirileri seçin",

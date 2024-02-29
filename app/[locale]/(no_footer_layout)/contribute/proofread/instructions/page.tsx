@@ -160,7 +160,7 @@ export default function TranslationInstructions() {
                 </table>
             </div>
             <div className="w-full pb-8 text-center">
-                <Link href="/contribute">
+                <Link href="/contribute/proofread">
                     <Button className="self-center p-10 px-8 text-2xl">
                         Начать работу
                     </Button>

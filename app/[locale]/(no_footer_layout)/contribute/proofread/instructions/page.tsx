@@ -1,3 +1,6 @@
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+
 const instructions = [
     {
         instruction:
@@ -110,7 +113,7 @@ function Example({ original, split }: ExampleProps) {
 
 export default function TranslationInstructions() {
     return (
-        <div className="w-full scroll-m-20 px-4 md:w-2/3">
+        <div className="w-full scroll-m-20 px-4 pb-10 md:w-2/3">
             <h1 className="mb-4 text-3xl font-extrabold tracking-tight lg:text-5xl">
                 Инструкция по вычитке
             </h1>
@@ -155,6 +158,13 @@ export default function TranslationInstructions() {
                         ))}
                     </tbody>
                 </table>
+            </div>
+            <div className="w-full pb-8 text-center">
+                <Link href="/contribute">
+                    <Button className="self-center p-10 px-8 text-2xl">
+                        Начать работу
+                    </Button>
+                </Link>
             </div>
         </div>
     )

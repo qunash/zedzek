@@ -19,6 +19,7 @@ import {
   Undo2,
   User,
   Square,
+  Trophy,
   Volume2,
   // type Icon as LucideIcon,
 } from "lucide-react"
@@ -45,6 +46,7 @@ export const Icons = {
   user: User,
   play: Volume2,
   stop: Square,
+  trophy: Trophy,
   submit: SendHorizonal,
   logo: (props: LucideProps) => (
     <svg

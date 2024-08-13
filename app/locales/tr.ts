@@ -67,6 +67,10 @@ export default {
         "report_bad_sentences": "Bu cümleler otomatik olarak halka açık bir veri tabanından toplandı. Lütfen uygunsuz veya yanlış cümleleri bildirin.",
         "proofread_access_denied": "Bu sayfaya erişmek için doğrulanmış bir düzeltmen olmanız gerekmektedir.",
         "pending_access_request": "Erişim isteğiniz beklemede. Lütfen bekleyin.",
+        "leaderboard": "Lider Tablosu",
+        "leaderboard_name": "İsim",
+        "leaderboard_translations": "Çeviriler",
+        "leaderboard_votes": "Oylar",
     },
     edit_translations: {
         "choose_correct_translations": "Doğru çevirileri seçin",

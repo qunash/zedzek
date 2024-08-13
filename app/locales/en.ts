@@ -67,6 +67,10 @@ export default {
         "report_bad_sentences": "These sentences were automatically collected from a public database. Please report any inappropriate or incorrect sentences.",
         "proofread_access_denied": "You need to be a verified proofreader to access this page.",
         "pending_access_request": "Your access request is pending. Please wait.",
+        "leaderboard": "Leaderboard",
+        "leaderboard_name": "Name",
+        "leaderboard_translations": "Translations",
+        "leaderboard_votes": "Votes",
     },
     edit_translations: {
         "choose_correct_translations": "Choose correct translations",

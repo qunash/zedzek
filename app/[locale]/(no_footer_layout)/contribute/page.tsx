@@ -6,10 +6,18 @@ import CountingNumbers from "@/components/counting-numbers"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Profile } from "@/types/supabase"
 import { Session, User, createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+
+type LeaderboardEntry = {
+    name: string;
+    avatar_url: string;
+    translations: number;
+    votes: number;
+}
 
 export default function ContributePage({ params }: { params: { locale: string } }) {
     return (
@@ -20,14 +28,13 @@ export default function ContributePage({ params }: { params: { locale: string } 
 }
 
 function ContributePageLocalized() {
-
     const t = getI18nCLient()
-
     const supabase = createClientComponentClient<Database>()
     const [user, setUser] = useState<User | null | undefined>()
     const [userContributions, setUserContributions] = useState(0)
     const [allContributions, setAllContributions] = useState(0)
     const [profile, setProfile] = useState<Profile>()
+    const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -37,7 +44,6 @@ function ContributePageLocalized() {
             }
         }
 
-        console.log("fetching user")
         fetchUser()
 
         const { data: listener } = supabase.auth.onAuthStateChange(
@@ -56,7 +62,6 @@ function ContributePageLocalized() {
     }, [supabase, supabase.auth])
 
     useEffect(() => {
-
         if (!user) return
 
         const fetchProfile = async (user_id: string) => {
@@ -69,7 +74,6 @@ function ContributePageLocalized() {
         }
 
         const fetchUserContributions = async () => {
-
             if (!user) return
 
             const { count, error } = await supabase
@@ -83,7 +87,6 @@ function ContributePageLocalized() {
         }
 
         const fetchAllContributions = async () => {
-
             const { count, error } = await supabase
                 .from('votes')
                 .select('*', { count: 'exact', head: true })
@@ -93,13 +96,21 @@ function ContributePageLocalized() {
             if (error) console.error(error)
         }
 
+        const fetchLeaderboard = async () => {
+            const { data, error } = await supabase.rpc('get_contributors_leaderboard')
+
+            if (error) {
+                console.error('Error fetching leaderboard:', error)
+            } else {
+                setLeaderboard(data)
+            }
+        }
+
         fetchProfile(user.id)
         fetchUserContributions()
         fetchAllContributions()
-
+        fetchLeaderboard()
     }, [supabase, user])
-
-
 
     const Stats = () => {
         return (
@@ -136,6 +147,59 @@ function ContributePageLocalized() {
                             />
                         </CardContent>
                     </Card>
+                </div>
+            </div>
+        )
+    }
+
+    const Leaderboard = () => {
+        return (
+            <div className="flex flex-col gap-4 w-full max-w-sm sm:max-w-md md:max-w-lg pb-16">
+                <h2 className="flex items-center text-2xl sm:text-3xl font-semibold">
+                    <Icons.trophy className="mr-2 sm:mr-4 h-6 w-6 sm:h-8 sm:w-8" />
+                    {t("contribute.leaderboard")}
+                </h2>
+                <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
+                    <table className="w-full table-auto">
+                        <thead>
+                            <tr className="text-left bg-gray-100 dark:bg-gray-700">
+                                <th className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {t("contribute.leaderboard_name")}
+                                </th>
+                                <th className="px-2 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                                    {t("contribute.leaderboard_translations")}
+                                </th>
+                                <th className="px-2 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                                    {t("contribute.leaderboard_votes")}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+                            {leaderboard.map((entry, index) => (
+                                <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                    <td className="px-3 py-2">
+                                        <div className="flex items-center">
+                                            <Avatar className="h-8 w-8 mr-2 border border-gray-200 dark:border-gray-600 flex-shrink-0">
+                                                <AvatarImage src={entry.avatar_url} alt={entry.name} />
+                                                <AvatarFallback className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                    {entry.name.charAt(0)}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <div className="font-medium text-xs md:text-base text-gray-900 dark:text-gray-100 truncate">
+                                                {entry.name}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="px-2 py-2 text-center text-sm">
+                                        {entry.translations}
+                                    </td>
+                                    <td className="px-2 py-2 text-center text-sm">
+                                        {entry.votes}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         )
@@ -184,6 +248,7 @@ function ContributePageLocalized() {
                 </div>
             </div>
             <Stats />
+            <Leaderboard />
         </div>
     )
 }

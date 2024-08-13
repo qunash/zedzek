@@ -68,6 +68,10 @@ export default {
         "report_bad_sentences": "Предложения для перевода автоматически загружены из публичной базы данных. Пожалуйста, сообщайте о любых неуместных или неправильных предложениях.",
         "proofread_access_denied": "Для доступа к этой странице вам необходимо быть подтвержденным редактором.",
         "pending_access_request": "Ваш запрос на доступ находится на рассмотрении. Пожалуйста, подождите.",
+        "leaderboard": "Топ участников",
+        "leaderboard_name": "Имя",
+        "leaderboard_translations": "Переводы",
+        "leaderboard_votes": "Голоса",
     },
     edit_translations: {
         "choose_correct_translations": "Выберите правильные переводы",

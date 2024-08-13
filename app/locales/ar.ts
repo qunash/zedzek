@@ -67,6 +67,10 @@ export default {
         "report_bad_sentences": "تم جمع هذه الجمل تلقائيًا من قاعدة بيانات متاحة للجمهور. يرجى الإبلاغ عن الجمل غير المناسبة أو غير الصحيحة.",
         "proofread_access_denied": "للوصول إلى هذه الصفحة ، يجب أن تكون محررًا معتمدًا.",
         "pending_access_request": "تم تقديم طلب الوصول الخاص بك للمراجعة. يرجى الانتظار.",
+        "leaderboard": "لوحة المتصدرين",
+        "leaderboard_name": "الاسم",
+        "leaderboard_translations": "الترجمات",
+        "leaderboard_votes": "الأصوات",
     },
     edit_translations: {
         "choose_correct_translations": "اختر الترجمات الصحيحة",

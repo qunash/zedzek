@@ -35,23 +35,56 @@ function ContributePageLocalized() {
     const [allContributions, setAllContributions] = useState(0)
     const [profile, setProfile] = useState<Profile>()
     const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchData = async () => {
+            setIsLoading(true)
+            
+            // Fetch user session
             const supaSession = await supabase.auth.getSession()
-            if (supaSession?.data) {
-                setUser(supaSession.data.session?.user)
+            const currentUser = supaSession?.data?.session?.user
+            setUser(currentUser)
+
+            // Fetch leaderboard and all contributions
+            const [leaderboardData, allContributionsData] = await Promise.all([
+                supabase.rpc('get_contributors_leaderboard'),
+                supabase.from('votes').select('*', { count: 'exact', head: true })
+            ])
+
+            if (leaderboardData.error) console.error('Error fetching leaderboard:', leaderboardData.error)
+            else setLeaderboard(leaderboardData.data)
+
+            if (allContributionsData.error) console.error('Error fetching all contributions:', allContributionsData.error)
+            else setAllContributions(allContributionsData.count || 0)
+
+            // Fetch user-specific data if user is logged in
+            if (currentUser) {
+                const [profileData, userContributionsData] = await Promise.all([
+                    supabase.from("profiles").select("*").eq("id", currentUser.id).single(),
+                    supabase.from('votes').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id)
+                ])
+
+                if (profileData.error) console.error('Error fetching profile:', profileData.error)
+                else setProfile(profileData.data)
+
+                if (userContributionsData.error) console.error('Error fetching user contributions:', userContributionsData.error)
+                else setUserContributions(userContributionsData.count || 0)
             }
+
+            setIsLoading(false)
         }
 
-        fetchUser()
+        fetchData()
 
         const { data: listener } = supabase.auth.onAuthStateChange(
             async (event, newSession) => {
                 if (event === "SIGNED_OUT") {
                     setUser(null)
+                    setProfile(undefined)
+                    setUserContributions(0)
                 } else if (event === "SIGNED_IN" && newSession) {
-                    setUser(newSession.user)
+                    fetchData() // Refetch all data on sign in
                 }
             }
         )
@@ -61,56 +94,9 @@ function ContributePageLocalized() {
         }
     }, [supabase, supabase.auth])
 
-    useEffect(() => {
-        if (!user) return
-
-        const fetchProfile = async (user_id: string) => {
-            const { data } = await supabase
-                .from("profiles")
-                .select("*")
-                .eq("id", user_id)
-
-            setProfile(data ? data[0] : undefined)
-        }
-
-        const fetchUserContributions = async () => {
-            if (!user) return
-
-            const { count, error } = await supabase
-                .from('votes')
-                .select('*', { count: 'exact', head: true })
-                .match({ user_id: user?.id })
-
-            setUserContributions(count ? count : 0)
-
-            if (error) console.error(error)
-        }
-
-        const fetchAllContributions = async () => {
-            const { count, error } = await supabase
-                .from('votes')
-                .select('*', { count: 'exact', head: true })
-
-            setAllContributions(count ? count : 0)
-
-            if (error) console.error(error)
-        }
-
-        const fetchLeaderboard = async () => {
-            const { data, error } = await supabase.rpc('get_contributors_leaderboard')
-
-            if (error) {
-                console.error('Error fetching leaderboard:', error)
-            } else {
-                setLeaderboard(data)
-            }
-        }
-
-        fetchProfile(user.id)
-        fetchUserContributions()
-        fetchAllContributions()
-        fetchLeaderboard()
-    }, [supabase, user])
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-screen">Loading...</div>
+    }
 
     const Stats = () => {
         return (

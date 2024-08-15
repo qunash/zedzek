@@ -240,40 +240,40 @@ export default function SentenceTranslator({
                         <LoadingSpinner />
                     ) : (
                         <>
-                            <Textarea
-                                ref={textareaRef}
-                                value={userTranslation}
-                                onChange={(e) =>
-                                    setUserTranslation(e.target.value)
-                                }
-                                className="w-full text-base focus:border-0"
-                                placeholder={t("contribute.enter_translation")}
-                            />
-
+                            <div className="relative">
+                                <Textarea
+                                    ref={textareaRef}
+                                    value={userTranslation}
+                                    onChange={(e) =>
+                                        setUserTranslation(e.target.value)
+                                    }
+                                    className="w-full text-base focus:border-0 pr-14"
+                                    placeholder={t("contribute.enter_translation")}
+                                />
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <div
+                                                className={buttonVariants({
+                                                    size: "sm",
+                                                    variant: "ghost",
+                                                    className:
+                                                        "absolute right-2 top-2 p-2 text-slate-700 dark:text-slate-400 cursor-pointer",
+                                                })}
+                                                onClick={handleAutoTranslate}
+                                            >
+                                                <Icons.logo className="h-5 w-5 fill-current" />
+                                            </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="left">
+                                            <p>{t("contribute.auto_translate")}</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            </div>
                             <p className="p-2 text-start text-sm text-gray-500">
                                 {t("contribute.report_bad_sentences")}
                             </p>
-
-                            <TooltipProvider>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <div
-                                            className={buttonVariants({
-                                                size: "sm",
-                                                variant: "ghost",
-                                                className:
-                                                    "absolute right-0 top-0 m-1 items-center justify-end self-start text-slate-700 dark:text-slate-400 cursor-pointer",
-                                            })}
-                                            onClick={handleAutoTranslate}
-                                        >
-                                            {<Icons.logo className="h-6 w-6" />}
-                                        </div>
-                                    </TooltipTrigger>
-                                    <TooltipContent side="bottom">
-                                        <p>{t("contribute.auto_translate")}</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
                         </>
                     )}
                 </div>

@@ -105,7 +105,8 @@ export default function SentenceTranslator({
 
         setAutotranslationLoading(true)
         try {
-            const response = await fetch("/api/translate", {
+            // const response = await fetch("/api/translate", {
+            const response = await fetch("/api/claude-translate", {
                 method: "POST",
                 body: JSON.stringify({ text: sentences[currentIndex].text }),
                 headers: {
@@ -114,7 +115,8 @@ export default function SentenceTranslator({
             })
             const data = await response.json()
             if (response.ok) {
-                setUserTranslation(data.translations[0])
+                // setUserTranslation(data.translations[0])
+                setUserTranslation(data.translation)
             } else {
                 throw new Error(data.error)
             }

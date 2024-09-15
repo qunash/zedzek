@@ -487,7 +487,7 @@ export type Database = {
       }
     }
     Enums: {
-      roles: "regular_user" | "proofreader" | "admin"
+      roles: "regular_user" | "proofreader" | "admin" | "trusted_translator"
       status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {

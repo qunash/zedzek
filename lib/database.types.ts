@@ -407,6 +407,22 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_10_random_translations_new: {
+        Args: {
+          p_user_id: string
+          p_lang: string
+          p_user_role?: string
+        }
+        Returns: {
+          created_at: string
+          id: string
+          is_user_translation: boolean
+          lang: string | null
+          text: string
+          translation: string
+          user_id: string
+        }[]
+      }
       get_10_random_untranslated_sentences: {
         Args: {
           p_user_id: string

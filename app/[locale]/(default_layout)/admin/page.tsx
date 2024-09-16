@@ -49,7 +49,7 @@ export default function AdminPage() {
                     setProfile(profileData)
                 } else {
                     // No session, redirect to login
-                    router.push("/login")
+                    router.push("/")
                 }
             } catch (error) {
                 console.error("Error fetching user or profile:", error)
@@ -66,7 +66,7 @@ export default function AdminPage() {
                 if (event === "SIGNED_OUT") {
                     setUser(null)
                     setProfile(null)
-                    router.push("/login")
+                    router.push("/")
                 } else if (event === "SIGNED_IN" && newSession) {
                     setUser(newSession.user)
                     fetchUserAndProfile() // Refetch profile on sign in

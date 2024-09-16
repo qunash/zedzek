@@ -64,7 +64,7 @@ export function RequestRoleAccessButton({ className, user, role }: RequestRoleAc
         if (error) {
             console.error(`Error requesting ${role} access:`, error)
         } else {
-            console.log(`${role} access request submitted successfully`)
+            // console.log(`${role} access request submitted successfully`)
             setIsPending(true) 
         }
     }

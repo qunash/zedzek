@@ -9,6 +9,7 @@ export default {
         "header": "مترجم تجريبي للغة الشركسية",
         "info": "هذا عرض توضيحي لمترجم في اللغة الشركسية. يمكن أن تكون الترجمات غير صحيحة. <a href=\"#faq\" style=\"text-decoration: underline؛ color: inherit؛\"> مزيد من المعلومات </a>",
         "profile": "ملف تعريف",
+        "admin": "المشرف",
         "contribute": "مساهمة",
         "language": "لغة",
         "english": "English",

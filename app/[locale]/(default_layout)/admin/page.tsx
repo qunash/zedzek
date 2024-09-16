@@ -12,11 +12,13 @@ import { Profile } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
 import { UserAvatar } from "@/components/user-avatar"
 
+type Roles = Database['public']['Enums']['roles']
+
 export default function AdminPage() {
     const supabase = createClientComponentClient<Database>()
-    const [user, setUser] = useState<User | null | undefined>()
-    const [profile, setProfile] = useState<Profile>()
-    const [profileLoaded, setProfileLoaded] = useState(false)
+    const [user, setUser] = useState<User | null>(null)
+    const [profile, setProfile] = useState<Profile | null>(null)
+    const [loading, setLoading] = useState(true)
     const router = useRouter()
 
     type RoleRequestWithProfile = Database["public"]["Tables"]["role_access_requests"]["Row"] & {
@@ -26,22 +28,48 @@ export default function AdminPage() {
     const [roleRequests, setRoleRequests] = useState<RoleRequestWithProfile[]>([])
 
     useEffect(() => {
-        const fetchUser = async () => {
-            const supaSession = await supabase.auth.getSession()
-            if (supaSession?.data) {
-                setUser(supaSession.data.session?.user)
+        const fetchUserAndProfile = async () => {
+            try {
+                setLoading(true)
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+                
+                if (sessionError) throw sessionError
+
+                if (session?.user) {
+                    setUser(session.user)
+                    
+                    const { data: profileData, error: profileError } = await supabase
+                        .from("profiles")
+                        .select("*")
+                        .eq("id", session.user.id)
+                        .single()
+
+                    if (profileError) throw profileError
+
+                    setProfile(profileData)
+                } else {
+                    // No session, redirect to login
+                    router.push("/login")
+                }
+            } catch (error) {
+                console.error("Error fetching user or profile:", error)
+                // Optionally, redirect to an error page or show an error message
+            } finally {
+                setLoading(false)
             }
         }
 
-        console.log("fetching user")
-        fetchUser()
+        fetchUserAndProfile()
 
         const { data: listener } = supabase.auth.onAuthStateChange(
             async (event, newSession) => {
                 if (event === "SIGNED_OUT") {
                     setUser(null)
+                    setProfile(null)
+                    router.push("/login")
                 } else if (event === "SIGNED_IN" && newSession) {
                     setUser(newSession.user)
+                    fetchUserAndProfile() // Refetch profile on sign in
                 }
             }
         )
@@ -49,33 +77,12 @@ export default function AdminPage() {
         return () => {
             listener?.subscription.unsubscribe()
         }
-    }, [supabase, supabase.auth])
-
-    useEffect(() => {
-        console.log("user changed", user)
-        const fetchProfile = async (user_id: string) => {
-            const { data } = await supabase
-                .from("profiles")
-                .select("*")
-                .eq("id", user_id)
-
-            setProfile(data ? data[0] : undefined)
-            setProfileLoaded(true)
-        }
-
-        fetchProfile(user?.id || "")
-    }, [supabase, user])
-
-    useEffect(() => {
-        console.log("profile changed", profile)
-        if (profileLoaded && profile?.role !== "admin") {
-            console.log("role", profile?.role)
-            router.push("/")
-        }
-    }, [profile, router])
+    }, [supabase, router])
 
     useEffect(() => {
         const fetchRoleRequestsAndProfiles = async () => {
+            if (profile?.role !== "admin") return
+
             const { data, error } = await supabase
                 .from("role_access_requests")
                 .select(
@@ -93,7 +100,7 @@ export default function AdminPage() {
                 .eq("status", "pending")
 
             if (error) {
-                console.error("error", error)
+                console.error("Error fetching role requests:", error)
             } else {
                 const requestsWithProfiles = data.map((item) => ({
                     ...item,
@@ -101,21 +108,20 @@ export default function AdminPage() {
                 }))
 
                 setRoleRequests(requestsWithProfiles)
-
-                console.log("requestsWithProfiles", requestsWithProfiles)
             }
         }
 
         fetchRoleRequestsAndProfiles()
-    }, [supabase])
+    }, [supabase, profile])
 
-    const handleApprove = async (userId: string) => {
-        const { data, error } = await supabase.rpc("grant_proofreader_role", {
+    const handleApprove = async (userId: string, requestedRole: Roles) => {
+        const { data, error } = await supabase.rpc("grant_role", {
             p_user_id: userId,
+            p_role: requestedRole
         })
 
         if (error) {
-            console.error("Error granting proofreader role:", error)
+            console.error("Error granting role:", error)
         } else {
             setRoleRequests((currentRequests) =>
                 currentRequests.filter((request) => request.user_id !== userId)
@@ -138,49 +144,58 @@ export default function AdminPage() {
         }
     }
 
+    if (loading) {
+        return <div>Loading...</div>
+    }
+
+    if (!user || !profile || profile.role !== "admin") {
+        return <div>Access denied. You must be an admin to view this page.</div>
+    }
+
     return (
-        profile?.role === "admin" && (
-            <div className="w-1/3">
-                <div className="space-y-0.5">
-                    <h2 className="text-2xl font-bold tracking-tight">
-                        Role Access Requests
-                    </h2>
-                </div>
-                <Separator className="my-6" />
-                <div className="flex flex-col gap-4">
-                    {roleRequests.map((request) => (
-                        <div className="flex items-center justify-between space-x-4">
-                            <div className="flex w-fit gap-4">
-                                <UserAvatar profile={request.profiles!} />
-                                <div className="flex-col">
-                                    <p className="text-sm font-medium leading-none">
-                                        {request.profiles?.username}
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        {request.profiles?.role}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="flex w-fit gap-4">
-                                <Button
-                                    variant="secondary"
-                                    className="shrink-0"
-                                    onClick={() => handleDeny(request.user_id)}
-                                >
-                                    Deny
-                                </Button>
-                                <Button
-                                    onClick={() =>
-                                        handleApprove(request.user_id)
-                                    }
-                                >
-                                    Approve
-                                </Button>
+        <div className="w-1/3">
+            <div className="space-y-0.5">
+                <h2 className="text-2xl font-bold tracking-tight">
+                    Role Access Requests
+                </h2>
+            </div>
+            <Separator className="my-6" />
+            <div className="flex flex-col gap-4">
+                {roleRequests.map((request) => (
+                    <div key={request.id} className="flex items-center justify-between space-x-4">
+                        <div className="flex w-fit gap-4">
+                            <UserAvatar profile={request.profiles!} />
+                            <div className="flex-col">
+                                <p className="text-sm font-medium leading-none">
+                                    {request.profiles?.username}
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                    Current role: {request.profiles?.role}
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                    Requested role: {request.role}
+                                </p>
                             </div>
                         </div>
-                    ))}
-                </div>
+                        <div className="flex w-fit gap-4">
+                            <Button
+                                variant="secondary"
+                                className="shrink-0"
+                                onClick={() => handleDeny(request.user_id)}
+                            >
+                                Deny
+                            </Button>
+                            <Button
+                                onClick={() =>
+                                    handleApprove(request.user_id, request.role)
+                                }
+                            >
+                                Approve
+                            </Button>
+                        </div>
+                    </div>
+                ))}
             </div>
-        )
+        </div>
     )
 }

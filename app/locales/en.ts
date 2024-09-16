@@ -34,6 +34,10 @@ export default {
         "alternatives": "Alternatives:",
         "examples": "Examples",
     },
+    validate: {
+        "provide_correction": "Improve translation",
+        "enter_correction": "Enter a correct translation…",
+    },
     buttons: {
         "submit": "Submit",
         "sign_in": "Sign in",

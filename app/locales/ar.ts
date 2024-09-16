@@ -34,6 +34,10 @@ export default {
         "alternatives": ":ترجمات بديلة",
         "examples": "أمثلة",
     },
+    validate: {
+        "provide_correction": "تحسين الترجمة",
+        "enter_correction": "أدخل ترجمة صحيحة…",
+    },
     buttons: {
         "submit": "إرسال",
         "sign_in": "تسجيل الدخول",

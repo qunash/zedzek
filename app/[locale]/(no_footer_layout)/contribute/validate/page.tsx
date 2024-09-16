@@ -36,22 +36,29 @@ export default async function ValidatePage({
         )
     }
 
-    const profile = await supabase.from("profiles").select().eq("id", user.id)
-
+    const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single()
+        
     const userLanguage =
         LANG_MAP[_cookies.get("Next-Locale")?.value || "en"] || "eng"
+
+    const isTrustedTranslator = profile?.role === "trusted_translator"
+
 
     const { data, error } = await supabase.rpc("get_10_random_translations_new", {
         p_user_id: user?.id,
         p_lang: userLanguage,
-        p_user_role: profile.data?.[0]?.role,
+        p_user_role: profile?.role,
     })
 
     if (error) console.error(error)
 
     return (
         <I18nProviderClientWrapper params={params}>
-            <TranslationValidator translations={data} user={user} />
+            <TranslationValidator translations={data} user={user} isTrustedTranslator={isTrustedTranslator} />
         </I18nProviderClientWrapper>
     )
 }

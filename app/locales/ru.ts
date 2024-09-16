@@ -35,6 +35,10 @@ export default {
         "alternatives": "Варианты перевода:",
         "examples": "Примеры",
     },
+    validate: {
+        "provide_correction": "Исправить перевод",
+        "enter_correction": "Введите корректный перевод…",
+    },
     buttons: {
         "submit": "Отправить",
         "sign_in": "Войти",

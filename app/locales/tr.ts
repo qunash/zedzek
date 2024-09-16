@@ -34,6 +34,10 @@ export default {
         "alternatives": "Çeviri seçenekleri:",
         "examples": "Örnekler",
     },
+    validate: {
+        "provide_correction": "Çeviriyi düzeltin",
+        "enter_correction": "Doğru bir çeviri girin…",
+    },
     buttons: {
         "submit": "Gönder",
         "sign_in": "Giriş yap",

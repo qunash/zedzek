@@ -485,6 +485,14 @@ export type Database = {
         }
         Returns: undefined
       }
+      undo_translation_upvote: {
+        Args: {
+          p_user_id: string
+          p_text: string
+          p_translation: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       roles: "regular_user" | "proofreader" | "admin" | "trusted_translator"

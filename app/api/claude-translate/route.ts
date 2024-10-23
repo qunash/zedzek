@@ -10,10 +10,10 @@ export async function POST(req: NextRequest) {
 
   try {
     const response = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20240620',
+      model: 'claude-3-5-sonnet-20241022',
       max_tokens: 100,
-      temperature: 0.7,
-      system: "You are a translator. Translate the given text to Kabardian (Circassian). Provide only the translation, without any additional explanations or notes.",
+      temperature: 0.3,
+      system: "Ты профессиональный переводчик с кабардинского на русский язык. Твоя задача – при получении предложения на кабардинском возвращать его перевод на русский и ничего более, без каких бы то ни было пояснений или дополнений.",
       messages: [
         {
           role: 'user',

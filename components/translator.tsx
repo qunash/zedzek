@@ -76,7 +76,23 @@ export default function Translator() {
             
             // Build new URL with text and target language
             const params = new URLSearchParams()
-            if (newText.trim()) params.set("text", newText)
+            
+            // Include only first 2048 characters in URL to prevent 431 errors
+            const MAX_URL_TEXT_LENGTH = 2048
+            if (newText.trim()) {
+                if (newText.length <= MAX_URL_TEXT_LENGTH) {
+                    // Use full text if it's under the limit
+                    params.set("text", newText)
+                } else {
+                    // For longer texts, include only the first 2048 chars in URL
+                    // The full text will still be used for translation
+                    params.set("text", newText.substring(0, MAX_URL_TEXT_LENGTH))
+                    
+                    // Add a flag to indicate truncation
+                    params.set("truncated", "true")
+                }
+            }
+            
             params.set("lang", newTargetLang)
             const query = params.toString() ? `?${params.toString()}` : ""
             

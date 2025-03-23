@@ -120,12 +120,28 @@ export default function Translator() {
         updateUrl(text, newTargetLang);
     }, [text, updateUrl])
     
+    const lastRequestIdRef = useRef<number>(0);
+    const abortControllerRef = useRef<AbortController | null>(null);
+    
     // Fetch translation with streaming
     const fetchTranslation = useCallback(async () => {
         if (!debouncedText.trim()) {
             setTranslationResponse(null)
             return
         }
+        
+        // Reference to track the latest request
+        const requestId = Date.now();
+        lastRequestIdRef.current = requestId;
+        
+        // Cancel any ongoing request
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
+        }
+        
+        // Create new controller for this request
+        abortControllerRef.current = new AbortController();
+        const signal = abortControllerRef.current.signal;
         
         setLoading(true)
         try {
@@ -136,17 +152,25 @@ export default function Translator() {
                 duration: 0
             })
             
-            // Create response stream
+            // Create response stream with abort signal
             const response = await fetch("/api/translate", {
                 method: "POST",
                 body: JSON.stringify({ 
                     text: debouncedText,
-                    targetLanguage: targetLanguage
+                    targetLanguage: targetLanguage,
+                    requestId // Include requestId in payload
                 }),
                 headers: {
                     "Content-Type": "application/json",
                 },
+                signal // Attach abort signal
             })
+            
+            // Check if this request was superseded while waiting for response
+            if (lastRequestIdRef.current !== requestId) {
+                console.log(`Request ${requestId} was superseded, ignoring response`);
+                return;
+            }
             
             if (!response.ok) {
                 const errorData = await response.json()
@@ -166,6 +190,13 @@ export default function Translator() {
             
             // Process the stream
             while (true) {
+                // Check again if we've been superseded by a newer request
+                if (lastRequestIdRef.current !== requestId) {
+                    console.log(`Request ${requestId} was superseded during streaming, aborting`);
+                    reader.cancel();
+                    break;
+                }
+                
                 const { done, value } = await reader.read()
                 
                 if (done) {
@@ -186,7 +217,10 @@ export default function Translator() {
                             throw new Error(data.error)
                         }
                         
-                        setTranslationResponse(data)
+                        // Only update state if this is still the most recent request
+                        if (lastRequestIdRef.current === requestId) {
+                            setTranslationResponse(data)
+                        }
                         
                         // If the server indicates we're done, we can exit
                         if (data.done === true) {
@@ -198,9 +232,12 @@ export default function Translator() {
                 }
             }
         } catch (error: any) {
-            console.error('Translation streaming error:', error)
-            setTranslationResponse(error)
-            setLoading(false)
+            // Only update error state if this is still the latest request
+            if (lastRequestIdRef.current === requestId && error.name !== 'AbortError') {
+                console.error('Translation streaming error:', error)
+                setTranslationResponse(error)
+                setLoading(false)
+            }
         }
     }, [debouncedText, targetLanguage])
     

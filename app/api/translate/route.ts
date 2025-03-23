@@ -58,6 +58,20 @@ export async function POST(req: Request): Promise<Response> {
         const stream = new TransformStream();
         const writer = stream.writable.getWriter();
         
+        // Check if the request has a signal for cancellation
+        const { signal } = req;
+        let isCancelled = false;
+        
+        if (signal) {
+            signal.addEventListener('abort', () => {
+                isCancelled = true;
+                writer.close().catch(() => {
+                    // Ignore errors when closing an already closed writer
+                    console.debug('Writer already closed due to client disconnect');
+                });
+            });
+        }
+        
         // Start the timer for performance tracking
         const streamStartTime = performance.now();
         
@@ -71,6 +85,12 @@ export async function POST(req: Request): Promise<Response> {
                 
                 // Process each chunk as it arrives
                 for await (const chunk of streamingResponse.stream) {
+                    // Check if request was cancelled
+                    if (isCancelled) {
+                        console.debug('Request cancelled, stopping stream processing');
+                        break;
+                    }
+                    
                     if (chunk.candidates && chunk.candidates.length > 0 && 
                         chunk.candidates[0].content.parts && 
                         chunk.candidates[0].content.parts.length > 0) {
@@ -90,35 +110,75 @@ export async function POST(req: Request): Promise<Response> {
                             done: false
                         });
                         
-                        await writer.write(encoder.encode(payload + '\n'));
+                        try {
+                            // Check if request was cancelled before writing
+                            if (isCancelled) {
+                                console.debug('Request cancelled before writing chunk');
+                                break;
+                            }
+                            await writer.write(encoder.encode(payload + '\n'));
+                        } catch (writeError) {
+                            console.debug('Error writing to stream, client likely disconnected');
+                            break;
+                        }
                     }
                 }
                 
-                // Get the final duration
-                const endTime = performance.now();
-                const finalDuration = (endTime - streamStartTime) / 1000;
+                // Check if request was cancelled before writing final payload
+                if (!isCancelled) {
+                    // Get the final duration
+                    const endTime = performance.now();
+                    const finalDuration = (endTime - streamStartTime) / 1000;
+                    
+                    // Send a final message with the done flag
+                    const finalPayload = JSON.stringify({
+                        text: processedText,
+                        translations: [accumulatedText],
+                        duration: Number(finalDuration.toFixed(2)),
+                        done: true
+                    });
+                    
+                    try {
+                        await writer.write(encoder.encode(finalPayload));
+                    } catch (writeError) {
+                        console.debug('Error writing final payload, client likely disconnected');
+                    }
+                }
                 
-                // Send a final message with the done flag
-                const finalPayload = JSON.stringify({
-                    text: processedText,
-                    translations: [accumulatedText],
-                    duration: Number(finalDuration.toFixed(2)),
-                    done: true
-                });
-                
-                await writer.write(encoder.encode(finalPayload));
-                await writer.close();
+                // Close the writer safely
+                try {
+                    await writer.close();
+                } catch (closeError) {
+                    console.debug('Error closing writer, may already be closed');
+                }
                 
             } catch (error: any) {
                 console.error('Streaming translation error:', error);
-                const errorPayload = JSON.stringify({ 
-                    error: error.message || 'Unknown error',
-                    done: true
-                });
-                await writer.write(encoder.encode(errorPayload));
-                await writer.close();
+                
+                // Only try to write error if not cancelled
+                if (!isCancelled) {
+                    const errorPayload = JSON.stringify({ 
+                        error: error && error.message ? error.message : 'Request cancelled or failed',
+                        done: true
+                    });
+                    
+                    try {
+                        await writer.write(encoder.encode(errorPayload));
+                    } catch (writeError) {
+                        console.debug('Error writing error payload, client likely disconnected');
+                    }
+                }
+                
+                // Always try to close the writer
+                try {
+                    await writer.close();
+                } catch (closeError) {
+                    console.debug('Error closing writer after error, may already be closed');
+                }
             }
-        })();
+        })().catch(error => {
+            console.error('Unhandled error in stream processing:', error);
+        });
         
         return new Response(stream.readable, {
             headers: {
@@ -130,8 +190,10 @@ export async function POST(req: Request): Promise<Response> {
         
     } catch (error: any) {
         console.error('Translation error:', error);
-        return new Response(JSON.stringify({ error: error.message || 'Unknown error' }), {
-            status: error.status || 500,
+        return new Response(JSON.stringify({ 
+            error: error && error.message ? error.message : 'Request cancelled or failed' 
+        }), {
+            status: error && error.status ? error.status : 500,
             headers: { "Content-Type": "application/json" }
         });
     }

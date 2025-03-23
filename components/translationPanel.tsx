@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Icons } from "./icons"
 import { Button, buttonVariants } from "./ui/button"
 import { TranslationResponse } from "@/types/translation-response"
@@ -13,16 +13,75 @@ const TranslationPanel = ({ translationResponse, loading, onRetry }: {
   onRetry: () => void
 }) => {
   const t = getI18nCLient()
-
   const [isCopyClicked, setIsCopyClicked] = useState(false)
+  // State for the animated displayed text
+  const [displayedText, setDisplayedText] = useState("")
+  // Track if animation is in progress
+  const [isAnimating, setIsAnimating] = useState(false)
+  // Store the full translation from the response
+  const [fullTranslation, setFullTranslation] = useState("")
 
+  // Handle copy button
   const handleCopy = async () => {
     if (translationResponse && !(translationResponse instanceof Error)) {
+      // Copy the full translation, not just the animated text
       await navigator.clipboard.writeText(translationResponse.translations[0])
       setIsCopyClicked(true)
       setTimeout(() => setIsCopyClicked(false), 1500)
     }
   }
+
+  // Update the full translation when response changes
+  useEffect(() => {
+    if (translationResponse && !(translationResponse instanceof Error)) {
+      setFullTranslation(translationResponse.translations[0])
+    } else {
+      setFullTranslation("")
+      setDisplayedText("")
+    }
+  }, [translationResponse])
+
+  // Handle smooth typing animation
+  useEffect(() => {
+    if (!fullTranslation || fullTranslation === displayedText) {
+      setIsAnimating(false)
+      return
+    }
+
+    setIsAnimating(true)
+
+    // If displayed text is longer than the full translation (rare edge case),
+    // reset it to match the full translation
+    if (displayedText.length > fullTranslation.length) {
+      setDisplayedText(fullTranslation)
+      setIsAnimating(false)
+      return
+    }
+
+    // Word-level animation
+    // Split both texts into words
+    const fullWords = fullTranslation.split(/\s+/)
+    const displayedWords = displayedText.trim() ? displayedText.split(/\s+/) : []
+    
+    // If we've shown all words already
+    if (displayedWords.length >= fullWords.length) {
+      setDisplayedText(fullTranslation) // Ensure perfect match at the end
+      setIsAnimating(false)
+      return
+    }
+    
+    // Add 1-2 new words at a time (adjust as needed)
+    const newWordsCount = Math.min(2, fullWords.length - displayedWords.length)
+    const nextWordIndex = displayedWords.length
+    const nextWords = fullWords.slice(0, nextWordIndex + newWordsCount)
+    
+    // Schedule next word animation
+    const timer = setTimeout(() => {
+      setDisplayedText(nextWords.join(' '))
+    }, 30)
+
+    return () => clearTimeout(timer)
+  }, [fullTranslation, displayedText])
 
   if (loading) {
     return (
@@ -50,7 +109,10 @@ const TranslationPanel = ({ translationResponse, loading, onRetry }: {
       <div className="flex h-full flex-col items-center justify-center pt-4">
         <div className="h-full w-full overflow-y-auto">
           <div className="flex items-start justify-between gap-2">
-            <div className="text-xl">{translationResponse.translations[0]}</div>
+            <div className="text-xl">
+              {displayedText}
+              {/* {isAnimating && <span className="animate-pulse">▕</span>} */}
+            </div>
             <PlayTTS text={translationResponse.translations[0]} />
           </div>
           <div className="my-4 h-px w-full bg-gray-500" />

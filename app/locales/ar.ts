@@ -1,13 +1,13 @@
 export default {
     metadata: {
         "name": "Zədzək",
-        "description": "مترجم تجريبي إلى الشركسية."
+        "description": "مترجم اللغة الشركسية. مترجم روسي-شركسي. مترجم كباردي. مترجم أديغي. مترجم روسي-كباردي. مترجم روسي-أديغي."
     },
     index: {
         "title": "الصفحة الرئيسية",
-        "description": "Zədzək - مترجم تجريبي إلى الشركسية.",
-        "header": "مترجم تجريبي للغة الشركسية",
-        "info": "هذا عرض توضيحي لمترجم في اللغة الشركسية. يمكن أن تكون الترجمات غير صحيحة. <a href=\"#faq\" style=\"text-decoration: underline؛ color: inherit؛\"> مزيد من المعلومات </a>",
+        "description": "Zədzək - مترجم للغة الشركسية.",
+        "header": "مترجم الشركسية",
+        "info": "قد تكون الترجمات غير دقيقة. <a href=\"#faq\" style=\"text-decoration: underline؛ color: inherit؛\"> مزيد من المعلومات </a>",
         "profile": "ملف تعريف",
         "admin": "المشرف",
         "contribute": "مساهمة",

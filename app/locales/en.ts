@@ -1,12 +1,12 @@
 export default {
     metadata: {
         "name": "Zədzək",
-        "description": "Zədzək is a demo translator into Circassian language."
+        "description": "Circassian language translator. Russian-Circassian translator. Kabardian translator. Adyghe translator. Russian-Kabardian translator. Russian-Adyghe translator."
     },
     index: {
         "title": "Home",
-        "header": "Circassian translator demo",
-        "info": "This is a demo of a translator to the Circassian language. Translations can be incorrect. <a href=\"#faq\" style=\"text-decoration: underline; color: inherit;\">Learn more</a>",
+        "header": "Circassian translator",
+        "info": "Translations may be inaccurate. <a href=\"#faq\" style=\"text-decoration: underline; color: inherit;\">Learn more</a>",
         "profile": "Profile",
         "admin": "Admin",
         "contribute": "Contribute",

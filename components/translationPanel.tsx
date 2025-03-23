@@ -7,10 +7,11 @@ import { getI18nCLient } from "@/app/locales/client"
 import PlayTTS from "./play-tts"
 import { LoadingSpinner } from "./loading-spinner"
 
-const TranslationPanel = ({ translationResponse, loading, onRetry }: {
+const TranslationPanel = ({ translationResponse, loading, onRetry, fontSize = 'text-3xl' }: {
   translationResponse?: TranslationResponse | Error | null,
   loading: boolean,
-  onRetry: () => void
+  onRetry: () => void,
+  fontSize?: 'text-3xl' | 'text-2xl' | 'text-xl'
 }) => {
   const t = getI18nCLient()
   const [isCopyClicked, setIsCopyClicked] = useState(false)
@@ -85,13 +86,13 @@ const TranslationPanel = ({ translationResponse, loading, onRetry }: {
 
   if (loading) {
     return (
-      <LoadingSpinner className="flex h-80 w-full flex-col items-center justify-center rounded-r-lg p-4 md:h-96" />
+      <LoadingSpinner className="flex h-auto min-h-[150px] w-full flex-col items-center justify-center rounded-r-lg p-3 transition-all duration-300 md:h-96" />
     )
   }
 
   if (translationResponse instanceof Error) {
     return (
-      <div className="flex h-80 w-full flex-col items-center justify-center rounded-r-lg p-4 md:h-96">
+      <div className="flex h-auto min-h-[150px] w-full flex-col items-center justify-center rounded-r-lg p-3 transition-all duration-300 md:h-96">
         <div className="text-center text-xl">{translationResponse.message}</div>
         <Button size="lg" className="mt-4" onClick={onRetry}>
           {t("buttons.retry")}
@@ -101,39 +102,20 @@ const TranslationPanel = ({ translationResponse, loading, onRetry }: {
   }
 
   if (!translationResponse || translationResponse.translations.length === 0) {
-    return <div className="h-80 w-full rounded-r-lg p-4 md:h-96" />
+    return <div className="h-auto min-h-[150px] w-full rounded-r-lg p-3 transition-all duration-300 md:h-96" />
   }
 
   return (
-    <div className="min-h-80 md:min-h-96 h-fit w-full rounded-r-lg p-4">
-      <div className="flex h-full flex-col items-center justify-center pt-4">
-        <div className="h-full w-full overflow-y-auto">
+    <div className="h-auto min-h-[150px] w-full rounded-r-lg p-3 transition-all duration-300 md:h-96 md:overflow-y-auto">
+      <div className="flex h-full flex-col">
+        <div className="h-full w-full md:overflow-y-auto">
           <div className="flex items-start justify-between gap-2">
-            <div className="text-xl">
+            <div className={`p-2 ${fontSize}`}>
               {displayedText}
               {/* {isAnimating && <span className="animate-pulse">▕</span>} */}
             </div>
             <PlayTTS text={translationResponse.translations[0]} />
           </div>
-          <div className="my-4 h-px w-full bg-gray-500" />
-          <div className="flex w-full items-center justify-between gap-4">
-            <UpvoteDownvoteEditButtons
-              translation={translationResponse}
-            />
-            <div
-              className={buttonVariants({
-                size: "lg",
-                variant: "ghost",
-                className: "items-center justify-end self-start text-slate-700 dark:text-slate-400 cursor-pointer",
-              })}
-              onClick={handleCopy}
-            >
-              {isCopyClicked ? <Icons.check className="h-4 w-4" /> : <Icons.copy className="h-4 w-4" />}
-            </div>
-          </div>
-          {/* <div className="pb-2 pt-4 text-xl text-gray-500">
-            {t("translator.alternatives")}
-          </div> */}
           <div className="flex flex-col gap-2">
             {translationResponse.translations.slice(1).map((translation, index) => (
               <div key={index}>{translation}</div>
@@ -143,6 +125,21 @@ const TranslationPanel = ({ translationResponse, loading, onRetry }: {
         <div className="flex w-full items-center justify-between p-4">
           <div className="text-xs text-gray-500">
             {Math.round(translationResponse.duration * 100) / 100}s
+          </div>
+          <div className="flex items-center gap-2">
+            <UpvoteDownvoteEditButtons
+              translation={translationResponse}
+            />
+            <div
+              className={buttonVariants({
+                size: "lg",
+                variant: "ghost",
+                className: "items-center justify-center min-w-10 min-h-10 text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-gray-200 dark:hover:bg-zinc-600 transition-all duration-200",
+              })}
+              onClick={handleCopy}
+            >
+              {isCopyClicked ? <Icons.check className="h-5 w-5" /> : <Icons.copy className="h-5 w-5" />}
+            </div>
           </div>
         </div>
       </div>

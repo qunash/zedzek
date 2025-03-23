@@ -12,13 +12,9 @@ export default async function Home({ params }: { params: { locale: string } }) {
 
   return (
     <section className="container grid justify-items-center gap-4">
-      <h1 className="text-center text-xl font-bold lg:text-2xl">
+      <h1 className="items-center py-2 text-center text-2xl font-medium lg:py-4 lg:text-3xl">
         {t("index.header")}
       </h1>
-      <h2
-        className="text-center text-base"
-        dangerouslySetInnerHTML={{ __html: t("index.info") }}
-      />
       <I18nProviderClientWrapper params={params} >
         <Translator />
       </I18nProviderClientWrapper>

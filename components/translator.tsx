@@ -23,7 +23,19 @@ export default function Translator() {
     const [translationResponse, setTranslationResponse] = useState<TranslationResponse | Error | null>(null)
     const [loading, setLoading] = useState(false)
     const [text, setText] = useState('')
+    const [fontSize, setFontSize] = useState<'text-3xl' | 'text-2xl' | 'text-xl'>('text-3xl')
     const debouncedText = useDebounce(text, 500)
+    
+    // Function to determine font size based on text length
+    const updateFontSizeForText = useCallback((text: string) => {
+        if (text.length > 40) {
+            setFontSize('text-xl')
+        } else if (text.length > 20) {
+            setFontSize('text-2xl')
+        } else {
+            setFontSize('text-3xl')
+        }
+    }, [])
     
     // Initialize from URL on first load only
     useEffect(() => {
@@ -33,6 +45,8 @@ export default function Translator() {
         
         const textarea = textareaRef.current
         textarea?.focus()
+        
+        updateFontSizeForText(initialText)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     
@@ -66,7 +80,10 @@ export default function Translator() {
         const newText = event.currentTarget.value
         setText(newText)
         updateUrl(newText)
-    }, [updateUrl])
+        
+        // Update font size based on text length
+        updateFontSizeForText(newText)
+    }, [updateUrl, updateFontSizeForText])
     
     // Fetch translation with streaming
     const fetchTranslation = useCallback(async () => {
@@ -158,28 +175,46 @@ export default function Translator() {
         }
     }, [debouncedText, fetchTranslation])
     
+    // Handle example click
     const onExampleClick = useCallback((example: string) => {
         setText(example)
         updateUrl(example)
+        updateFontSizeForText(example)
         window.scrollTo({ top: 0, behavior: "smooth" })
-    }, [updateUrl])
+    }, [updateUrl, updateFontSizeForText])
 
     return (
-        <div className="max-w-full">
-            <div className="flex max-w-4xl flex-col items-start rounded-lg border border-gray-800 shadow-lg md:flex-row">
-                <TextAreaWithClearButton
-                    ref={textareaRef}
-                    value={text}
-                    placeholder={t("translator.type_to_translate")}
-                    onChange={handleInputChange}
-                    onClear={() => { setText(''); updateUrl(''); }}
-                />
-                <div className="h-px w-full bg-gray-800 md:h-96 md:w-px" />
-                <TranslationPanel
-                    translationResponse={translationResponse}
-                    loading={loading}
-                    onRetry={fetchTranslation}
-                />
+        <div className="mx-auto w-full max-w-4xl md:max-w-5xl lg:max-w-6xl">
+            <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+                <div className="w-full rounded-lg bg-white shadow-md dark:bg-zinc-800">
+                    <TextAreaWithClearButton
+                        ref={textareaRef}
+                        value={text}
+                        placeholder={t("translator.type_to_translate")}
+                        onChange={handleInputChange}
+                        onClear={() => { 
+                            setText(''); 
+                            updateUrl(''); 
+                            setFontSize('text-3xl'); 
+                        }}
+                        fontSize={fontSize}
+                    />
+                </div>
+                {/* Use a container with fixed height for mobile to prevent layout shifts */}
+                <div className={`w-full transition-all duration-300 ease-in-out ${text.trim() === '' ? 'h-0 overflow-hidden opacity-0 md:h-auto md:overflow-visible md:opacity-100' : 'opacity-100'}`}>
+                    <div className="w-full rounded-lg bg-white shadow-md dark:bg-zinc-800">
+                        <TranslationPanel
+                            translationResponse={translationResponse}
+                            loading={loading}
+                            onRetry={fetchTranslation}
+                            fontSize={fontSize}
+                        />
+                    </div>
+                </div>
+            </div>
+            {/* Use transition for disclaimer text */}
+            <div className={`mb-1 mt-2 pr-2 text-right text-sm text-gray-500 transition-all duration-300 ease-in-out ${text.trim() === '' ? 'h-0 overflow-hidden opacity-0 md:h-auto md:overflow-visible md:opacity-100' : 'opacity-100'}`}>
+                <span dangerouslySetInnerHTML={{ __html: t("index.info") }} />
             </div>
             <Examples onExampleClick={onExampleClick} />
         </div>

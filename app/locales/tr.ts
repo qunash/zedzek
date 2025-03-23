@@ -1,13 +1,13 @@
 export default {
     metadata: {
         "name": "Zədzək",
-        "description": "Zədzək - Çerkes diline demo çevirmen."
+        "description": "Çerkes dili çevirmeni. Rusça-Çerkesçe çevirmen. Kabardey çevirmeni. Adige çevirmeni. Rusça-Kabardey çevirmeni. Rusça-Adige çevirmeni."
     },
     index: {
         "title": "Ana Sayfa",
-        "description": "Zədzək - Çerkes diline demo çevirmen.",
-        "header": "Çerkesçe çevirmen demosu",
-        "info": "Bu, Çerkesçe çevirmen demosudur. Çeviriler yanlış olabilir. <a href=\"#faq\" style=\"text-decoration: underline; color: inherit;\">Daha fazla bilgi edinin</a>",
+        "description": "Zədzək - Çerkes dili çevirmeni.",
+        "header": "Çerkesçe çevirmen",
+        "info": "Çeviriler hatalı olabilir. <a href=\"#faq\" style=\"text-decoration: underline; color: inherit;\">Daha fazla bilgi edinin</a>",
         "profile": "Profil",
         "admin": "Yönetici",
         "contribute": "Katkıda bulun",

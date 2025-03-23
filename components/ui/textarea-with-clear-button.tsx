@@ -2,12 +2,18 @@ import { forwardRef } from "react"
 import { Icons } from "../icons"
 import { buttonVariants } from "./button"
 
-const TextAreaWithClearButton = forwardRef<HTMLTextAreaElement, { value: string, placeholder: string, onChange: any, onClear: any }>(({ value, placeholder, onChange, onClear }, ref) => {
+const TextAreaWithClearButton = forwardRef<HTMLTextAreaElement, { 
+    value: string, 
+    placeholder: string, 
+    onChange: any, 
+    onClear: any,
+    fontSize?: 'text-3xl' | 'text-2xl' | 'text-xl' 
+}>(({ value, placeholder, onChange, onClear, fontSize = 'text-3xl' }, ref) => {
     return (
         <div className="flex w-full rounded-l-lg border-gray-800 p-4 md:h-96">
             <textarea
                 ref={ref}
-                className="h-full min-h-[150px] w-full resize-none bg-transparent p-2 text-xl focus:outline-none focus:ring-0"
+                className={`h-full min-h-[150px] w-full resize-none bg-transparent p-2 ${fontSize} focus:outline-none focus:ring-0`}
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}

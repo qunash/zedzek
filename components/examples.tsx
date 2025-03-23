@@ -31,15 +31,15 @@ export default function Examples(
 
 
     return (
-        <div className="mt-4 max-w-4xl rounded-lg p-4">
+        <div className="mt-4 max-w-4xl rounded-lg p-4 md:max-w-5xl lg:max-w-6xl xl:max-w-7xl">
             <h2 className="mb-2 text-xl font-semibold">
                 {t("translator.examples")}
             </h2>
-            <ul className="flex flex-wrap gap-2 text-slate-700 dark:text-slate-400">
+            <ul className="flex flex-wrap gap-2 text-slate-700 dark:text-slate-300">
                 {examples.map((example, index) => (
                     <li
                         key={index}
-                        className="cursor-pointer rounded-lg bg-gray-100 p-3 text-base transition-colors duration-200 ease-in-out hover:bg-gray-200 hover:text-slate-900 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-slate-100"
+                        className="cursor-pointer rounded-lg bg-white p-3 text-base shadow-sm transition-colors duration-200 ease-in-out hover:bg-gray-200 hover:text-slate-900 dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:hover:text-slate-100"
                         onClick={() => onExampleClick(example[0])}
                     >
                         {example[0]}

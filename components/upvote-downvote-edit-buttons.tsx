@@ -135,7 +135,7 @@ export default function UpvoteDownvoteEditButtons({
         )
 
     return (
-        <div className="flex w-full flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-end gap-1">
             <IconButton
                 icon={<Icons.thumbsUp />}
                 isFilled={isUpvoted}

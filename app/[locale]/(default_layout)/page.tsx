@@ -12,11 +12,11 @@ export default async function Home({ params }: { params: { locale: string } }) {
 
   return (
     <section className="container grid justify-items-center gap-4">
-      <h1 className="text-xl font-bold lg:text-2xl text-center">
+      <h1 className="text-center text-xl font-bold lg:text-2xl">
         {t("index.header")}
       </h1>
       <h2
-        className="text-base text-center"
+        className="text-center text-base"
         dangerouslySetInnerHTML={{ __html: t("index.info") }}
       />
       <I18nProviderClientWrapper params={params} >

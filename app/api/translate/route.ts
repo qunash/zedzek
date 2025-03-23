@@ -6,8 +6,8 @@ export async function POST(req: Request): Promise<Response> {
         const processedText = text.trim();
         
         // Extract default language settings from the input or use defaults
-        const source_lang = sourceLanguage || 'Circassian (Adyghe)';
-        const target_lang = targetLanguage || 'Russian';
+        const source_lang = sourceLanguage || 'Russian';
+        const target_lang = targetLanguage || 'Circassian (Kabardian)';
         
         const startTime = performance.now();
         

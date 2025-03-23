@@ -131,9 +131,9 @@ const TranslationPanel = ({ translationResponse, loading, onRetry }: {
               {isCopyClicked ? <Icons.check className="h-4 w-4" /> : <Icons.copy className="h-4 w-4" />}
             </div>
           </div>
-          <div className="pb-2 pt-4 text-xl text-gray-500">
+          {/* <div className="pb-2 pt-4 text-xl text-gray-500">
             {t("translator.alternatives")}
-          </div>
+          </div> */}
           <div className="flex flex-col gap-2">
             {translationResponse.translations.slice(1).map((translation, index) => (
               <div key={index}>{translation}</div>

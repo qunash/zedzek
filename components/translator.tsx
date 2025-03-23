@@ -201,6 +201,14 @@ export default function Translator() {
     const onExampleClick = useCallback((example: string) => {
         isUserInput.current = true
         setText(example)
+        // Set loading state immediately to provide visual feedback
+        setLoading(true)
+        // Clear previous translation while waiting for the new one
+        setTranslationResponse({
+            text: example,
+            translations: [""],
+            duration: 0
+        })
         updateUrl(example, targetLanguage)
         updateFontSizeForText(example)
         window.scrollTo({ top: 0, behavior: "smooth" })
@@ -227,6 +235,7 @@ export default function Translator() {
                                 onClear={() => { 
                                     isUserInput.current = true;
                                     setText(''); 
+                                    setTranslationResponse(null); 
                                     updateUrl('', targetLanguage); 
                                     setFontSize('text-3xl'); 
                                 }}

@@ -86,13 +86,13 @@ const TranslationPanel = ({ translationResponse, loading, onRetry, fontSize = 't
 
   if (loading) {
     return (
-      <LoadingSpinner className="flex h-auto min-h-[150px] w-full flex-col items-center justify-center rounded-r-lg p-3 transition-all duration-300 md:h-96" />
+      <LoadingSpinner className="flex h-auto min-h-[150px] w-full flex-col items-center justify-center rounded-r-lg p-3 transition-all duration-300 md:h-[28rem]" />
     )
   }
 
   if (translationResponse instanceof Error) {
     return (
-      <div className="flex h-auto min-h-[150px] w-full flex-col items-center justify-center rounded-r-lg p-3 transition-all duration-300 md:h-96">
+      <div className="flex h-auto min-h-[150px] w-full flex-col items-center justify-center rounded-r-lg p-3 transition-all duration-300 md:h-[28rem]">
         <div className="text-center text-xl">{translationResponse.message}</div>
         <Button size="lg" className="mt-4" onClick={onRetry}>
           {t("buttons.retry")}
@@ -102,11 +102,11 @@ const TranslationPanel = ({ translationResponse, loading, onRetry, fontSize = 't
   }
 
   if (!translationResponse || translationResponse.translations.length === 0) {
-    return <div className="h-auto min-h-[150px] w-full rounded-r-lg p-3 transition-all duration-300 md:h-96" />
+    return <div className="h-auto min-h-[150px] w-full rounded-r-lg p-3 transition-all duration-300 md:h-[28rem]" />
   }
 
   return (
-    <div className="h-auto min-h-[150px] w-full rounded-r-lg p-3 transition-all duration-300 md:h-96 md:overflow-y-auto">
+    <div className="h-auto min-h-[150px] w-full rounded-r-lg p-3 transition-all duration-300 md:h-[28rem] md:overflow-y-auto">
       <div className="flex h-full flex-col">
         <div className="h-full w-full md:overflow-y-auto">
           <div className="flex items-start justify-between gap-2">

@@ -34,6 +34,10 @@ export default {
         "type_to_translate": "Çevirmek için yazın…",
         "alternatives": "Çeviri seçenekleri:",
         "examples": "Örnekler",
+        "translate_to": "Şuna çevir:",
+        "circassian_east": "Çerkesçe (Doğu)",
+        "circassian_west": "Çerkesçe (Batı)",
+        "russian": "Rusça",
     },
     validate: {
         "provide_correction": "Çeviriyi düzeltin",

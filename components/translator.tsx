@@ -7,6 +7,7 @@ import { useDebounce } from "@uidotdev/usehooks"
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from "react"
 import Examples from './examples'
+import LanguageSelector, { TargetLanguage } from './languageSelector'
 import TranslationPanel from './translationPanel'
 import TextAreaWithClearButton from './ui/textarea-with-clear-button'
 
@@ -19,11 +20,13 @@ export default function Translator() {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null)
     const lastUrlText = useRef<string>("")
     const urlUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+    const isUserInput = useRef<boolean>(false)
     
     const [translationResponse, setTranslationResponse] = useState<TranslationResponse | Error | null>(null)
     const [loading, setLoading] = useState(false)
     const [text, setText] = useState('')
     const [fontSize, setFontSize] = useState<'text-3xl' | 'text-2xl' | 'text-xl'>('text-3xl')
+    const [targetLanguage, setTargetLanguage] = useState<TargetLanguage>('kbd')
     const debouncedText = useDebounce(text, 500)
     
     // Function to determine font size based on text length
@@ -40,7 +43,9 @@ export default function Translator() {
     // Initialize from URL on first load only
     useEffect(() => {
         const initialText = searchParams.get("text") || ""
+        const initialTargetLang = searchParams.get("lang") as TargetLanguage || "kbd"
         setText(initialText)
+        setTargetLanguage(initialTargetLang)
         lastUrlText.current = initialText
         
         const textarea = textareaRef.current
@@ -51,7 +56,10 @@ export default function Translator() {
     }, [])
     
     // Safe URL update function with throttling
-    const updateUrl = useCallback((newText: string) => {
+    const updateUrl = useCallback((newText: string, newTargetLang: TargetLanguage) => {
+        // Skip URL updates if not from user input
+        if (!isUserInput.current) return
+        
         // Only update if text has changed from last URL update
         if (newText === lastUrlText.current) {
             return
@@ -66,8 +74,11 @@ export default function Translator() {
         urlUpdateTimeoutRef.current = setTimeout(() => {
             lastUrlText.current = newText
             
-            // Build new URL
-            const query = newText.trim() ? `?text=${encodeURIComponent(newText)}` : ""
+            // Build new URL with text and target language
+            const params = new URLSearchParams()
+            if (newText.trim()) params.set("text", newText)
+            params.set("lang", newTargetLang)
+            const query = params.toString() ? `?${params.toString()}` : ""
             
             // Use push to update URL without full page reload
             router.push(`${pathname}${query}`, { scroll: false })
@@ -78,12 +89,20 @@ export default function Translator() {
     // Handle input text change
     const handleInputChange = useCallback((event: React.FormEvent<HTMLTextAreaElement>) => {
         const newText = event.currentTarget.value
+        isUserInput.current = true
         setText(newText)
-        updateUrl(newText)
+        updateUrl(newText, targetLanguage)
         
         // Update font size based on text length
         updateFontSizeForText(newText)
-    }, [updateUrl, updateFontSizeForText])
+    }, [updateUrl, updateFontSizeForText, targetLanguage])
+    
+    // Handle target language change
+    const handleTargetLanguageChange = useCallback((newTargetLang: TargetLanguage) => {
+        isUserInput.current = true;
+        setTargetLanguage(newTargetLang);
+        updateUrl(text, newTargetLang);
+    }, [text, updateUrl])
     
     // Fetch translation with streaming
     const fetchTranslation = useCallback(async () => {
@@ -104,7 +123,10 @@ export default function Translator() {
             // Create response stream
             const response = await fetch("/api/translate", {
                 method: "POST",
-                body: JSON.stringify({ text: debouncedText }),
+                body: JSON.stringify({ 
+                    text: debouncedText,
+                    targetLanguage: targetLanguage
+                }),
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -164,7 +186,7 @@ export default function Translator() {
             setTranslationResponse(error)
             setLoading(false)
         }
-    }, [debouncedText])
+    }, [debouncedText, targetLanguage])
     
     // Handle translation using debounced text
     useEffect(() => {
@@ -177,38 +199,54 @@ export default function Translator() {
     
     // Handle example click
     const onExampleClick = useCallback((example: string) => {
+        isUserInput.current = true
         setText(example)
-        updateUrl(example)
+        updateUrl(example, targetLanguage)
         updateFontSizeForText(example)
         window.scrollTo({ top: 0, behavior: "smooth" })
-    }, [updateUrl, updateFontSizeForText])
+    }, [updateUrl, updateFontSizeForText, targetLanguage])
 
     return (
         <div className="mx-auto w-full max-w-4xl md:max-w-5xl lg:max-w-6xl">
-            <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
-                <div className="w-full rounded-lg bg-white shadow-md dark:bg-zinc-800">
-                    <TextAreaWithClearButton
-                        ref={textareaRef}
-                        value={text}
-                        placeholder={t("translator.type_to_translate")}
-                        onChange={handleInputChange}
-                        onClear={() => { 
-                            setText(''); 
-                            updateUrl(''); 
-                            setFontSize('text-3xl'); 
-                        }}
-                        fontSize={fontSize}
-                    />
-                </div>
-                {/* Use a container with fixed height for mobile to prevent layout shifts */}
-                <div className={`w-full transition-all duration-300 ease-in-out ${text.trim() === '' ? 'h-0 overflow-hidden opacity-0 md:h-auto md:overflow-visible md:opacity-100' : 'opacity-100'}`}>
-                    <div className="w-full rounded-lg bg-white shadow-md dark:bg-zinc-800">
-                        <TranslationPanel
-                            translationResponse={translationResponse}
-                            loading={loading}
-                            onRetry={fetchTranslation}
-                            fontSize={fontSize}
+            {/* Translation panels */}
+            <div className="flex flex-col space-y-2 md:flex-row md:items-end md:space-x-4 md:space-y-0">
+                <div className="flex w-full flex-col space-y-2 md:space-y-3">
+                    <div className="w-full overflow-hidden rounded-lg shadow-md">
+                        <LanguageSelector 
+                            targetLanguage={targetLanguage}
+                            onLanguageChange={handleTargetLanguageChange}
                         />
+                        
+                        {/* Input field */}
+                        <div className="w-full bg-white dark:bg-zinc-800">
+                            <TextAreaWithClearButton
+                                ref={textareaRef}
+                                value={text}
+                                placeholder={t("translator.type_to_translate")}
+                                onChange={handleInputChange}
+                                onClear={() => { 
+                                    isUserInput.current = true;
+                                    setText(''); 
+                                    updateUrl('', targetLanguage); 
+                                    setFontSize('text-3xl'); 
+                                }}
+                                fontSize={fontSize}
+                            />
+                        </div>
+                    </div>
+                </div>
+                
+                {/* Translation panel container */}
+                <div className={`w-full transition-all duration-300 ease-in-out ${text.trim() === '' ? 'h-0 overflow-hidden opacity-0 md:h-auto md:overflow-visible md:opacity-100' : 'opacity-100'}`}>
+                    <div className="w-full overflow-hidden rounded-lg shadow-md">
+                        <div className="w-full bg-white dark:bg-zinc-800">
+                            <TranslationPanel
+                                translationResponse={translationResponse}
+                                loading={loading}
+                                onRetry={fetchTranslation}
+                                fontSize={fontSize}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

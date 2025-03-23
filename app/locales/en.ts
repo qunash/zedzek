@@ -33,6 +33,10 @@ export default {
         "type_to_translate": "Type to translate…",
         "alternatives": "Alternatives:",
         "examples": "Examples",
+        "translate_to": "Translate to:",
+        "circassian_east": "Circassian (East)",
+        "circassian_west": "Circassian (West)",
+        "russian": "Russian",
     },
     validate: {
         "provide_correction": "Improve translation",

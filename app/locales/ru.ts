@@ -32,8 +32,12 @@ export default {
     },
     translator: {
         "type_to_translate": "Введите текст для перевода…",
-        "alternatives": "Варианты перевода:",
+        "alternatives": "Альтернативы:",
         "examples": "Примеры",
+        "translate_to": "Перевести на:",
+        "circassian_east": "Черкесский (Восточный)",
+        "circassian_west": "Черкесский (Западный)",
+        "russian": "Русский",
     },
     validate: {
         "provide_correction": "Исправить перевод",

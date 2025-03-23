@@ -2,12 +2,19 @@ import { VertexAI } from '@google-cloud/vertexai';
 
 export async function POST(req: Request): Promise<Response> {
     try {
-        const { text, sourceLanguage, targetLanguage } = await req.json();
+        const { text, targetLanguage } = await req.json();
         const processedText = text.trim();
         
-        // Extract default language settings from the input or use defaults
-        const source_lang = sourceLanguage || 'Russian';
-        const target_lang = targetLanguage || 'Circassian (Kabardian)';
+        // Map the targetLanguage from the frontend to the appropriate Vertex AI model parameter
+        let target_lang = "Circassian (Kabardian)";
+        
+        if (targetLanguage === "kbd") {
+            target_lang = "Circassian (Kabardian)";
+        } else if (targetLanguage === "ady") {
+            target_lang = "Circassian (Adyghe)";
+        } else if (targetLanguage === "ru") {
+            target_lang = "Russian";
+        }
         
         const startTime = performance.now();
         
@@ -38,7 +45,7 @@ export async function POST(req: Request): Promise<Response> {
                     role: 'user',
                     parts: [
                         {
-                            text: `Translate this text from ${source_lang} to ${target_lang}:\n\`\`\`\n${processedText}\n\`\`\``,
+                            text: `Translate this text to ${target_lang}:\n\`\`\`\n${processedText}\n\`\`\``,
                         },
                     ],
                 },

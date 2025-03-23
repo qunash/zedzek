@@ -34,6 +34,10 @@ export default {
         "type_to_translate": "اكتب للترجمة…",
         "alternatives": ":ترجمات بديلة",
         "examples": "أمثلة",
+        "translate_to": "الترجمة إلى:",
+        "circassian_east": "الشركسية (الشرقية)",
+        "circassian_west": "الشركسية (الغربية)",
+        "russian": "الروسية",
     },
     validate: {
         "provide_correction": "تحسين الترجمة",

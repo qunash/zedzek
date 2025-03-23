@@ -36,6 +36,7 @@ export async function POST(req: Request): Promise<Response> {
             model: process.env.VERTEX_AI_MODEL_ID || '',
             generationConfig: {
                 temperature: 0.1,
+                maxOutputTokens: 512,
             }
         });
         

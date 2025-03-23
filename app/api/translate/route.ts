@@ -1,7 +1,39 @@
 import { VertexAI } from '@google-cloud/vertexai';
+import { RateLimiterMemory, RateLimiterRes } from 'rate-limiter-flexible';
+
+// Create a rate limiter instance - adjust these values based on your needs
+const apiLimiter = new RateLimiterMemory({
+    points: 60,         // Number of requests allowed
+    duration: 60,       // Per minute (60 seconds)
+    blockDuration: 60,  // Block for 1 minute if exceeded
+});
 
 export async function POST(req: Request): Promise<Response> {
     try {
+        // Get client IP for rate limiting
+        const ip = req.headers.get('x-forwarded-for') || 
+                  req.headers.get('x-real-ip') || 
+                  'unknown';
+        
+        // Try to consume a point from the rate limiter
+        try {
+            await apiLimiter.consume(ip);
+        } catch (error) {
+            // Rate limit exceeded
+            const rateLimitError = error as RateLimiterRes;
+            console.warn(`Rate limit exceeded for IP: ${ip}`);
+            return new Response(JSON.stringify({ 
+                error: 'Too many requests. Please try again later.',
+                retryAfter: Math.floor(rateLimitError.msBeforeNext / 1000) || 60
+            }), {
+                status: 429,
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Retry-After': String(Math.floor(rateLimitError.msBeforeNext / 1000) || 60)
+                }
+            });
+        }
+        
         const { text, targetLanguage } = await req.json();
         const processedText = text.trim();
         

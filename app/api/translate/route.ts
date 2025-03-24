@@ -8,6 +8,11 @@ const apiLimiter = new RateLimiterMemory({
     blockDuration: 60,  // Block for 1 minute if exceeded
 });
 
+function replacePalochkaLikeChars(text: string): string {
+    // Replace palochka-like chars (I,l,|,і,ӏ) when they're adjacent to Cyrillic
+    return text.replace(/(?<=[а-яА-Я])[1Il|іӏ]|[1Il|іӏ](?=[а-яА-Я])/g, 'Ӏ');
+}
+
 export async function POST(req: Request): Promise<Response> {
     try {
         // Get client IP for rate limiting
@@ -35,7 +40,7 @@ export async function POST(req: Request): Promise<Response> {
         }
         
         const { text, targetLanguage } = await req.json();
-        const processedText = text.trim();
+        const processedText = replacePalochkaLikeChars(text.trim());
         
         // Map the targetLanguage from the frontend to the appropriate Vertex AI model parameter
         let target_lang = "Circassian (Kabardian)";

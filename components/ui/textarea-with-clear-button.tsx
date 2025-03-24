@@ -10,7 +10,7 @@ const TextAreaWithClearButton = forwardRef<HTMLTextAreaElement, {
     fontSize?: 'text-3xl' | 'text-2xl' | 'text-xl' 
 }>(({ value, placeholder, onChange, onClear, fontSize = 'text-3xl' }, ref) => {
     return (
-        <div className="flex w-full rounded-l-lg border-gray-800 p-4 md:h-96">
+        <div className="flex w-full rounded-l-lg border-gray-800 p-4 md:h-[28rem]">
             <textarea
                 ref={ref}
                 className={`h-full min-h-[150px] w-full resize-none bg-transparent p-2 ${fontSize} focus:outline-none focus:ring-0`}

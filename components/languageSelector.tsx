@@ -32,7 +32,7 @@ export default function LanguageSelector({
   }
 
   return (
-    <div className="w-full rounded-t-lg border-b bg-gray-50 dark:border-zinc-700 dark:bg-zinc-800">
+    <div className="w-full rounded-t-lg border-b bg-white dark:border-zinc-700 dark:bg-zinc-800">
       <div className="flex items-center">
         <div className="flex w-[40%] items-center justify-center md:w-1/2">
           <span className="text-base text-gray-700 dark:text-gray-300 md:font-medium">
@@ -51,19 +51,19 @@ export default function LanguageSelector({
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-full">
               <DropdownMenuItem 
-                className="cursor-pointer rounded-sm p-4 focus:bg-indigo-50 dark:focus:bg-indigo-900"
+                className="cursor-pointer rounded-sm p-4 focus:bg-gray-100 dark:focus:bg-slate-900"
                 onClick={() => onLanguageChange('kbd')}
               >
                 {t("translator.circassian_east")}
               </DropdownMenuItem>
               <DropdownMenuItem 
-                className="cursor-pointer rounded-sm p-4 focus:bg-indigo-50 dark:focus:bg-indigo-900"
+                className="cursor-pointer rounded-sm p-4 focus:bg-gray-100 dark:focus:bg-slate-900"
                 onClick={() => onLanguageChange('ady')}
               >
                 {t("translator.circassian_west")}
               </DropdownMenuItem>
               <DropdownMenuItem 
-                className="cursor-pointer rounded-sm p-4 focus:bg-indigo-50 dark:focus:bg-indigo-900"
+                className="cursor-pointer rounded-sm p-4 focus:bg-gray-100 dark:focus:bg-slate-900"
                 onClick={() => onLanguageChange('ru')}
               >
                 {t("translator.russian")}

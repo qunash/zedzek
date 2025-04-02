@@ -8,7 +8,6 @@ import type { Metadata } from 'next'
 import { Inter as FontSans } from "next/font/google"
 import { SiteFooter } from '@/components/site-footer'
 import { getI18nServer } from '@/app/locales/server'
-import { Separator } from '@radix-ui/react-separator'
 
 
 const fontSans = FontSans({

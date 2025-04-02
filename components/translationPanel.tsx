@@ -6,6 +6,7 @@ import UpvoteDownvoteEditButtons from "./upvote-downvote-edit-buttons"
 import { getI18nCLient } from "@/app/locales/client"
 import PlayTTS from "./play-tts"
 import { LoadingSpinner } from "./loading-spinner"
+import { cn } from "@/lib/utils"
 
 const TranslationPanel = ({ translationResponse, loading, onRetry, fontSize = 'text-3xl' }: {
   translationResponse?: TranslationResponse | Error | null,
@@ -131,11 +132,14 @@ const TranslationPanel = ({ translationResponse, loading, onRetry, fontSize = 't
               translation={translationResponse}
             />
             <div
-              className={buttonVariants({
-                size: "lg",
-                variant: "ghost",
-                className: "items-center justify-center min-w-10 min-h-10 text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-gray-200 dark:hover:bg-zinc-600 transition-all duration-200",
-              })}
+              className={cn(
+                buttonVariants({
+                  size: "default",
+                  variant: "ghost",
+                  className: "items-center justify-center min-w-10 min-h-10 text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-gray-200 dark:hover:bg-zinc-600 transition-all duration-200",
+                }),
+                "md:h-11 md:px-8 md:rounded-md" // Apply 'lg' size styles on medium screens and up
+              )}
               onClick={handleCopy}
             >
               {isCopyClicked ? <Icons.check className="h-5 w-5" /> : <Icons.copy className="h-5 w-5" />}

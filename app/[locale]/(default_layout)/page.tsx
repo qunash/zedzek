@@ -11,7 +11,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
   const t = await getI18nServer()
 
   return (
-    <section className="container grid justify-items-center gap-4">
+    <section className="grid justify-items-center gap-4 px-2 md:container">
       <h1 className="items-center py-2 text-center text-2xl font-medium lg:py-4 lg:text-3xl">
         {t("index.header")}
       </h1>

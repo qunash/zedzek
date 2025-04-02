@@ -48,7 +48,7 @@ export default function Translator() {
         setTargetLanguage(initialTargetLang)
         lastUrlText.current = initialText
         
-        const textarea = textareaRef.current
+        // const textarea = textareaRef.current
         // textarea?.focus()
         
         updateFontSizeForText(initialText)

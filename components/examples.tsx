@@ -11,7 +11,6 @@ export default function Examples(
         // Foreign language to Circassian examples
         ["Мы живем на родине", "kbd"],
         ["Дети играют во дворе", "ady"],
-        ["Луна вращается вокруг Земли", "kbd"],
         ["What is your name?", "ady"],
         ["Yarın okula gidiyoruz", "kbd"],
         ["Tu es une bonne personne.", "ady"],

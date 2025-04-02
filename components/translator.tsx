@@ -288,9 +288,14 @@ export default function Translator() {
                                 placeholder={t("translator.type_to_translate")}
                                 onChange={handleInputChange}
                                 onClear={() => { 
+                                    // Abort any ongoing fetch request
+                                    if (abortControllerRef.current) {
+                                        abortControllerRef.current.abort();
+                                    }
                                     isUserInput.current = true;
                                     setText(''); 
                                     setTranslationResponse(null); 
+                                    setLoading(false);
                                     updateUrl('', targetLanguage); 
                                     setFontSize('text-3xl'); 
                                 }}

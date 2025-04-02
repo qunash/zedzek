@@ -43,7 +43,7 @@ export default function RootLayout({ children, params, }: {
 }) {
 
   return (
-    <html lang={params.locale}>
+    <html lang={params.locale} suppressHydrationWarning>
       <body
         className={cn(
           "flex h-screen flex-col items-center gap-2 bg-background",

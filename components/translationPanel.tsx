@@ -115,7 +115,7 @@ const TranslationPanel = ({ translationResponse, loading, onRetry, fontSize = 't
               {displayedText}
               {/* {isAnimating && <span className="animate-pulse">▕</span>} */}
             </div>
-            <PlayTTS text={translationResponse.translations[0]} />
+            {/* <PlayTTS text={translationResponse.translations[0]} /> */}
           </div>
           <div className="flex flex-col gap-2">
             {translationResponse.translations.slice(1).map((translation, index) => (

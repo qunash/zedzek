@@ -251,21 +251,23 @@ export default function Translator() {
     }, [debouncedText, fetchTranslation])
     
     // Handle example click
-    const onExampleClick = useCallback((example: string) => {
+    const onExampleClick = useCallback((example: string, targetLang: TargetLanguage) => {
         isUserInput.current = true
         setText(example)
         // Set loading state immediately to provide visual feedback
         setLoading(true)
+        // Update target language
+        setTargetLanguage(targetLang)
         // Clear previous translation while waiting for the new one
         setTranslationResponse({
             text: example,
             translations: [""],
             duration: 0
         })
-        updateUrl(example, targetLanguage)
+        updateUrl(example, targetLang)
         updateFontSizeForText(example)
         window.scrollTo({ top: 0, behavior: "smooth" })
-    }, [updateUrl, updateFontSizeForText, targetLanguage])
+    }, [updateUrl, updateFontSizeForText])
 
     return (
         <div className="mx-auto w-full max-w-4xl md:max-w-5xl lg:max-w-6xl">

@@ -19,15 +19,13 @@ export default {
     faq: {
         "title": "<a href=\"#faq\" id=\"faq\" style=\"cursor: default;\">FAQ</a>",
         "q1": "What is this?",
-        "a1": "This is a demo of a machine learning-powered Russian-Circassian translator. It's a proof of concept that aims to invite contributions for development.",
+        "a1": "This is an AI-powered translator for the Circassian language. It translates from Russian to both literary Circassian dialects (West and East Circassian). You can also try experimental translations from Turkish, Arabic, English and other languages into Circassian.",
         "q2": "Translations are wrong!",
-        "a2": "This is the first version of the model trained on only ~44 thousand sentence pairs. As the amount of training data increases, the accuracy of translations will only increase. To improve it, you can help by <a href=\"#how-can-i-help\" style=\"text-decoration: underline; color: inherit;\">contributing data</a>.",
-        "q3": "Why is it only for Kabardian dialect?",
-        "a3": "We started with Russian-Kabardian pairs due to data availability. With more data, we can easily extend it to other Circassian dialects. <a href=\"#how-can-i-help\" style=\"text-decoration: underline; color: inherit;\">Learn how to help</a>.",
-        "q4": "Technical details",
-        "a4": "This demo utilizes a version of the <b>facebook/m2m100_418M</b> model that's been fine-tuned on Russian-Kabardian translation pairs. It was trained on the <b>ru-kbd</b> dataset comprising ~44K sentence pairs. It achieved a BLEU score of 22.389 for its translation accuracy. More details are available at the following links: <a href=\"https://huggingface.co/facebook/m2m100_418M\" style=\"text-decoration: underline; color: inherit;\">Base Model</a>, <a href=\"https://huggingface.co/anzorq/m2m100_418M_ft_ru-kbd_44K\" style=\"text-decoration: underline; color: inherit;\">Fine-tuned Model</a>, and <a href=\"https://arxiv.org/abs/2010.11125\" style=\"text-decoration: underline; color: inherit;\">Related Paper</a>.",
-        "q5": "<a href=\"#how-can-i-help\" id=\"how-can-i-help\" style=\"cursor: default;\">How can I help?</a>",
-        "a5": "More (good) data leads to better translations. You can help by contributing text in Circassian, scanning books, or helping with OCR. If you're interested in contributing, join our <a href=\"https://discord.gg/ppmwTNUZQb\" style=\"text-decoration: underline; color: inherit;\">Discord</a> or <a href=\"/contribute\" style=\"text-decoration: underline; color: inherit;\">validate translations</a>."
+        "a2": "Machine translation is a rapidly developing field, but no translator is perfect. Translations may sometimes be inaccurate. The quality of translations improves with more high-quality data. You can help us enhance the accuracy in the future by <a href=\"#how-can-i-help\" style=\"text-decoration: underline; color: inherit;\">contributing data</a>.",
+        "q3": "Technical details",
+        "a3": "The translator currently utilizes a Large Language Model (LLM) specifically trained for Circassian translation tasks on approximately 400,000 parallel text examples.<br>For users interested in running a model locally, an older, open-weight model based on <b>facebook/m2m100_418M</b> is available on Hugging Face (<a href=\"https://huggingface.co/anzorq/m2m100_418M_ft_ru-kbd_44K\" style=\"text-decoration: underline; color: inherit;\">anzorq/m2m100_418M_ft_ru-kbd_44K</a>), which supports <b>Russian-Kabardian translation only</b>. Its performance is significantly lower than the current LLM.",
+        "q4": "<a href=\"#how-can-i-help\" id=\"how-can-i-help\" style=\"cursor: default;\">How can I help?</a>",
+        "a4": "More (good) data leads to better translations. You can help by contributing text in Circassian, scanning books, or helping with OCR. If you're interested in contributing, join our <a href=\"https://discord.gg/ppmwTNUZQb\" style=\"text-decoration: underline; color: inherit;\">Discord</a> or <a href=\"/contribute\" style=\"text-decoration: underline; color: inherit;\">validate translations</a>."
     },
     translator: {
         "type_to_translate": "Type to translate…",

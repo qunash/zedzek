@@ -49,7 +49,7 @@ export default function Translator() {
         lastUrlText.current = initialText
         
         const textarea = textareaRef.current
-        textarea?.focus()
+        // textarea?.focus()
         
         updateFontSizeForText(initialText)
     // eslint-disable-next-line react-hooks/exhaustive-deps

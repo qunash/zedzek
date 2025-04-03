@@ -53,7 +53,7 @@ export default function Translator() {
         
         updateFontSizeForText(initialText)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [searchParams])
     
     // Safe URL update function with throttling
     const updateUrl = useCallback((newText: string, newTargetLang: TargetLanguage) => {

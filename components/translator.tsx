@@ -21,6 +21,7 @@ export default function Translator() {
     const lastUrlText = useRef<string>("")
     const urlUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
     const isUserInput = useRef<boolean>(false)
+    const lastTranslatedText = useRef<string>("")
     
     const [translationResponse, setTranslationResponse] = useState<TranslationResponse | Error | null>(null)
     const [loading, setLoading] = useState(false)
@@ -47,6 +48,7 @@ export default function Translator() {
         setText(initialText)
         setTargetLanguage(initialTargetLang)
         lastUrlText.current = initialText
+        lastTranslatedText.current = ""  // Initialize with empty to ensure first translation happens
         
         // const textarea = textareaRef.current
         // textarea?.focus()
@@ -60,8 +62,10 @@ export default function Translator() {
         // Skip URL updates if not from user input
         if (!isUserInput.current) return
         
-        // Only update if text has changed from last URL update
-        if (newText === lastUrlText.current) {
+        const trimmedText = newText.trim()
+        
+        // Only update if trimmed text has changed from last URL update
+        if (trimmedText === lastUrlText.current.trim()) {
             return
         }
         
@@ -72,21 +76,21 @@ export default function Translator() {
         
         // Schedule new update with small delay to batch rapid changes
         urlUpdateTimeoutRef.current = setTimeout(() => {
-            lastUrlText.current = newText
+            lastUrlText.current = trimmedText
             
             // Build new URL with text and target language
             const params = new URLSearchParams()
             
             // Include only first 2048 characters in URL to prevent 431 errors
             const MAX_URL_TEXT_LENGTH = 2048
-            if (newText.trim()) {
-                if (newText.length <= MAX_URL_TEXT_LENGTH) {
-                    // Use full text if it's under the limit
-                    params.set("text", newText)
+            if (trimmedText) {
+                if (trimmedText.length <= MAX_URL_TEXT_LENGTH) {
+                    // Use trimmed text in URL
+                    params.set("text", trimmedText)
                 } else {
                     // For longer texts, include only the first 2048 chars in URL
                     // The full text will still be used for translation
-                    params.set("text", newText.substring(0, MAX_URL_TEXT_LENGTH))
+                    params.set("text", trimmedText.substring(0, MAX_URL_TEXT_LENGTH))
                     
                     // Add a flag to indicate truncation
                     params.set("truncated", "true")
@@ -117,6 +121,8 @@ export default function Translator() {
     const handleTargetLanguageChange = useCallback((newTargetLang: TargetLanguage) => {
         isUserInput.current = true;
         setTargetLanguage(newTargetLang);
+        // Reset lastTranslatedText when language changes to force a new translation
+        lastTranslatedText.current = "";
         updateUrl(text, newTargetLang);
     }, [text, updateUrl])
     
@@ -125,8 +131,16 @@ export default function Translator() {
     
     // Fetch translation with streaming
     const fetchTranslation = useCallback(async () => {
-        if (!debouncedText.trim()) {
+        const trimmedText = debouncedText.trim()
+        
+        if (!trimmedText) {
             setTranslationResponse(null)
+            return
+        }
+        
+        // Compare with last translated text to avoid duplicate translations for whitespace-only changes
+        // But only if target language hasn't changed
+        if (trimmedText === lastTranslatedText.current) {
             return
         }
         
@@ -165,6 +179,9 @@ export default function Translator() {
                 },
                 signal // Attach abort signal
             })
+            
+            // Save this text as the last translated text
+            lastTranslatedText.current = trimmedText;
             
             // Check if this request was superseded while waiting for response
             if (lastRequestIdRef.current !== requestId) {
@@ -247,6 +264,8 @@ export default function Translator() {
             fetchTranslation()
         } else {
             setTranslationResponse(null)
+            // Reset the lastTranslatedText when clearing input
+            lastTranslatedText.current = ""
         }
     }, [debouncedText, fetchTranslation])
     
@@ -264,10 +283,27 @@ export default function Translator() {
             translations: [""],
             duration: 0
         })
+        // Reset lastTranslatedText to force a new translation
+        lastTranslatedText.current = ""
         updateUrl(example, targetLang)
         updateFontSizeForText(example)
         window.scrollTo({ top: 0, behavior: "smooth" })
     }, [updateUrl, updateFontSizeForText])
+
+    // Clear function
+    const handleClear = useCallback(() => {
+        // Abort any ongoing fetch request
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
+        }
+        isUserInput.current = true;
+        setText(''); 
+        setTranslationResponse(null); 
+        setLoading(false);
+        lastTranslatedText.current = "";
+        updateUrl('', targetLanguage); 
+        setFontSize('text-3xl'); 
+    }, [targetLanguage, updateUrl])
 
     return (
         <div className="mx-auto w-full max-w-4xl md:max-w-5xl lg:max-w-6xl">
@@ -287,18 +323,7 @@ export default function Translator() {
                                 value={text}
                                 placeholder={t("translator.type_to_translate")}
                                 onChange={handleInputChange}
-                                onClear={() => { 
-                                    // Abort any ongoing fetch request
-                                    if (abortControllerRef.current) {
-                                        abortControllerRef.current.abort();
-                                    }
-                                    isUserInput.current = true;
-                                    setText(''); 
-                                    setTranslationResponse(null); 
-                                    setLoading(false);
-                                    updateUrl('', targetLanguage); 
-                                    setFontSize('text-3xl'); 
-                                }}
+                                onClear={handleClear}
                                 fontSize={fontSize}
                             />
                         </div>

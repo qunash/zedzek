@@ -21,7 +21,7 @@ export default function Translator() {
     const lastUrlText = useRef<string>("")
     const urlUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
     const shouldUpdateUrl = useRef<boolean>(false)
-    const lastTranslatedText = useRef<string>("")
+    const lastSubmittedTranslationText = useRef<string>("")
     
     const [translationResponse, setTranslationResponse] = useState<TranslationResponse | Error | null>(null)
     const [loading, setLoading] = useState(false)
@@ -50,7 +50,7 @@ export default function Translator() {
         setText(initialText)
         setTargetLanguage(initialTargetLang)
         lastUrlText.current = initialText
-        lastTranslatedText.current = ""  // Initialize with empty to ensure first translation happens
+        lastSubmittedTranslationText.current = ""  // Initialize with empty to ensure first translation happens
         
         // Prevent URL update while we're loading from URL
         shouldUpdateUrl.current = false
@@ -130,7 +130,7 @@ export default function Translator() {
         shouldUpdateUrl.current = true;
         setTargetLanguage(newTargetLang);
         // Reset lastTranslatedText when language changes to force a new translation
-        lastTranslatedText.current = "";
+        lastSubmittedTranslationText.current = "";
     }, [])
     
     const lastRequestIdRef = useRef<number>(0);
@@ -147,7 +147,7 @@ export default function Translator() {
         
         // Compare with last translated text to avoid duplicate translations for whitespace-only changes
         // But only if target language hasn't changed
-        if (trimmedText === lastTranslatedText.current) {
+        if (trimmedText === lastSubmittedTranslationText.current) {
             return
         }
         
@@ -163,6 +163,9 @@ export default function Translator() {
         // Create new controller for this request
         abortControllerRef.current = new AbortController();
         const signal = abortControllerRef.current.signal;
+        
+        // IMPORTANT: Update lastTranslatedText before making the request to prevent duplicate requests
+        lastSubmittedTranslationText.current = trimmedText;
         
         setLoading(true)
         try {
@@ -186,9 +189,6 @@ export default function Translator() {
                 },
                 signal // Attach abort signal
             })
-            
-            // Save this text as the last translated text
-            lastTranslatedText.current = trimmedText;
             
             // Check if this request was superseded while waiting for response
             if (lastRequestIdRef.current !== requestId) {
@@ -283,7 +283,7 @@ export default function Translator() {
             }
             setLoading(false);
             setTranslationResponse(null);
-            lastTranslatedText.current = "";
+            lastSubmittedTranslationText.current = "";
             
             // Update URL to clear text parameter
             if (shouldUpdateUrl.current) {
@@ -311,7 +311,7 @@ export default function Translator() {
             duration: 0
         })
         // Reset lastTranslatedText to force a new translation
-        lastTranslatedText.current = ""
+        lastSubmittedTranslationText.current = ""
         updateFontSizeForText(example)
         window.scrollTo({ top: 0, behavior: "smooth" })
     }, [updateFontSizeForText])
@@ -326,7 +326,7 @@ export default function Translator() {
         setText(''); 
         setTranslationResponse(null); 
         setLoading(false);
-        lastTranslatedText.current = "";
+        lastSubmittedTranslationText.current = "";
         updateUrl('', targetLanguage); 
         setFontSize('text-3xl'); 
     }, [targetLanguage, updateUrl])

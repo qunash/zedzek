@@ -20,7 +20,7 @@ export default function Translator() {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null)
     const lastUrlText = useRef<string>("")
     const urlUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-    const isUserInput = useRef<boolean>(false)
+    const shouldUpdateUrl = useRef<boolean>(false)
     const lastTranslatedText = useRef<string>("")
     
     const [translationResponse, setTranslationResponse] = useState<TranslationResponse | Error | null>(null)
@@ -45,22 +45,31 @@ export default function Translator() {
     useEffect(() => {
         const initialText = searchParams.get("text") || ""
         const initialTargetLang = searchParams.get("lang") as TargetLanguage || "kbd"
+        
+        // Only update if values have changed
         setText(initialText)
         setTargetLanguage(initialTargetLang)
         lastUrlText.current = initialText
         lastTranslatedText.current = ""  // Initialize with empty to ensure first translation happens
         
+        // Prevent URL update while we're loading from URL
+        shouldUpdateUrl.current = false
+        
         // const textarea = textareaRef.current
         // textarea?.focus()
         
         updateFontSizeForText(initialText)
+        
+        // Re-enable URL updates after a small delay
+        setTimeout(() => {
+            shouldUpdateUrl.current = true
+        }, 100)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchParams])
     
-    // Safe URL update function with throttling
+    // Safe URL update function - only called after successful translation
     const updateUrl = useCallback((newText: string, newTargetLang: TargetLanguage) => {
-        // Skip URL updates if not from user input
-        if (!isUserInput.current) return
+        if (!shouldUpdateUrl.current) return
         
         const trimmedText = newText.trim()
         
@@ -109,22 +118,20 @@ export default function Translator() {
     // Handle input text change
     const handleInputChange = useCallback((event: React.FormEvent<HTMLTextAreaElement>) => {
         const newText = event.currentTarget.value
-        isUserInput.current = true
+        shouldUpdateUrl.current = true
         setText(newText)
-        updateUrl(newText, targetLanguage)
         
         // Update font size based on text length
         updateFontSizeForText(newText)
-    }, [updateUrl, updateFontSizeForText, targetLanguage])
+    }, [updateFontSizeForText])
     
     // Handle target language change
     const handleTargetLanguageChange = useCallback((newTargetLang: TargetLanguage) => {
-        isUserInput.current = true;
+        shouldUpdateUrl.current = true;
         setTargetLanguage(newTargetLang);
         // Reset lastTranslatedText when language changes to force a new translation
         lastTranslatedText.current = "";
-        updateUrl(text, newTargetLang);
-    }, [text, updateUrl])
+    }, [])
     
     const lastRequestIdRef = useRef<number>(0);
     const abortControllerRef = useRef<AbortController | null>(null);
@@ -170,7 +177,7 @@ export default function Translator() {
             const response = await fetch("/api/translate", {
                 method: "POST",
                 body: JSON.stringify({ 
-                    text: debouncedText,
+                    text: trimmedText,
                     targetLanguage: targetLanguage,
                     requestId // Include requestId in payload
                 }),
@@ -204,6 +211,8 @@ export default function Translator() {
             
             // Start streaming
             setLoading(false)
+            
+            let complete = false
             
             // Process the stream
             while (true) {
@@ -239,14 +248,20 @@ export default function Translator() {
                             setTranslationResponse(data)
                         }
                         
-                        // If the server indicates we're done, we can exit
+                        // If the server indicates we're done, we can exit and update URL
                         if (data.done === true) {
+                            complete = true
                             break
                         }
                     } catch (jsonError) {
                         console.error('Error parsing JSON from stream:', jsonError)
                     }
                 }
+            }
+            
+            // Only update URL after translation is complete
+            if (complete && shouldUpdateUrl.current) {
+                updateUrl(debouncedText, targetLanguage)
             }
         } catch (error: any) {
             // Only update error state if this is still the latest request
@@ -256,22 +271,34 @@ export default function Translator() {
                 setLoading(false)
             }
         }
-    }, [debouncedText, targetLanguage])
+    }, [debouncedText, targetLanguage, updateUrl])
     
     // Handle translation using debounced text
     useEffect(() => {
-        if (debouncedText.trim()) {
-            fetchTranslation()
-        } else {
-            setTranslationResponse(null)
-            // Reset the lastTranslatedText when clearing input
-            lastTranslatedText.current = ""
+        // Abort any ongoing request if text becomes empty
+        if (!debouncedText.trim()) {
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+                abortControllerRef.current = null;
+            }
+            setLoading(false);
+            setTranslationResponse(null);
+            lastTranslatedText.current = "";
+            
+            // Update URL to clear text parameter
+            if (shouldUpdateUrl.current) {
+                updateUrl("", targetLanguage);
+            }
+            return;
         }
-    }, [debouncedText, fetchTranslation])
+        
+        // Continue with translation if text is not empty
+        fetchTranslation();
+    }, [debouncedText, fetchTranslation, targetLanguage, updateUrl])
     
     // Handle example click
     const onExampleClick = useCallback((example: string, targetLang: TargetLanguage) => {
-        isUserInput.current = true
+        shouldUpdateUrl.current = true
         setText(example)
         // Set loading state immediately to provide visual feedback
         setLoading(true)
@@ -285,10 +312,9 @@ export default function Translator() {
         })
         // Reset lastTranslatedText to force a new translation
         lastTranslatedText.current = ""
-        updateUrl(example, targetLang)
         updateFontSizeForText(example)
         window.scrollTo({ top: 0, behavior: "smooth" })
-    }, [updateUrl, updateFontSizeForText])
+    }, [updateFontSizeForText])
 
     // Clear function
     const handleClear = useCallback(() => {
@@ -296,7 +322,7 @@ export default function Translator() {
         if (abortControllerRef.current) {
             abortControllerRef.current.abort();
         }
-        isUserInput.current = true;
+        shouldUpdateUrl.current = true;
         setText(''); 
         setTranslationResponse(null); 
         setLoading(false);

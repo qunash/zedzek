@@ -22,6 +22,7 @@ export default function Translator() {
     const urlUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
     const shouldUpdateUrl = useRef<boolean>(false)
     const lastSubmittedTranslationText = useRef<string>("")
+    const internalNavigationRef = useRef(false);
     
     const [translationResponse, setTranslationResponse] = useState<TranslationResponse | Error | null>(null)
     const [loading, setLoading] = useState(false)
@@ -41,8 +42,15 @@ export default function Translator() {
         }
     }, [])
     
-    // Initialize from URL on first load only
+    // Initialize from URL on first load or external navigation only
     useEffect(() => {
+        // If this effect run was triggered by our own router.push, reset flag and skip updating state from URL
+        if (internalNavigationRef.current) {
+            internalNavigationRef.current = false;
+            return;
+        }
+        
+        // Proceed only for initial load or external navigation (back/forward)
         const initialText = searchParams.get("text") || ""
         const initialTargetLang = searchParams.get("lang") as TargetLanguage || "kbd"
         
@@ -109,6 +117,8 @@ export default function Translator() {
             params.set("lang", newTargetLang)
             const query = params.toString() ? `?${params.toString()}` : ""
             
+            // Set flag before internal navigation
+            internalNavigationRef.current = true;
             // Use push to update URL without full page reload
             router.push(`${pathname}${query}`, { scroll: false })
             urlUpdateTimeoutRef.current = null

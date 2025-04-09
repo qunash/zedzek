@@ -10,6 +10,7 @@ import Examples from './examples'
 import LanguageSelector, { TargetLanguage } from './languageSelector'
 import TranslationPanel from './translationPanel'
 import TextAreaWithClearButton from './ui/textarea-with-clear-button'
+import { useTranslation } from '@/hooks/useTranslation'
 
 export default function Translator() {
     const t = getI18nCLient()
@@ -20,326 +21,146 @@ export default function Translator() {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null)
     const lastUrlText = useRef<string>("")
     const urlUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-    const shouldUpdateUrl = useRef<boolean>(false)
-    const lastSubmittedTranslationText = useRef<string>("")
     const internalNavigationRef = useRef(false);
+    const lastUrlLang = useRef<TargetLanguage | null>(null); // Added ref for last URL language
     
-    const [translationResponse, setTranslationResponse] = useState<TranslationResponse | Error | null>(null)
-    const [loading, setLoading] = useState(false)
     const [text, setText] = useState('')
     const [fontSize, setFontSize] = useState<'text-3xl' | 'text-2xl' | 'text-xl'>('text-3xl')
     const [targetLanguage, setTargetLanguage] = useState<TargetLanguage>('kbd')
     const debouncedText = useDebounce(text, 500)
     
     // Function to determine font size based on text length
-    const updateFontSizeForText = useCallback((text: string) => {
-        if (text.length > 40) {
+    const updateFontSizeForText = useCallback((inputText: string) => {
+        if (inputText.length > 40) {
             setFontSize('text-xl')
-        } else if (text.length > 20) {
+        } else if (inputText.length > 20) {
             setFontSize('text-2xl')
         } else {
             setFontSize('text-3xl')
         }
     }, [])
     
-    // Initialize from URL on first load or external navigation only
+    // Initialize state from URL (only on external navigation)
     useEffect(() => {
-        // If this effect run was triggered by our own router.push, reset flag and skip updating state from URL
         if (internalNavigationRef.current) {
             internalNavigationRef.current = false;
-            return;
+            return; // Skip if triggered by internal router.push
         }
         
-        // Proceed only for initial load or external navigation (back/forward)
         const initialText = searchParams.get("text") || ""
         const initialTargetLang = searchParams.get("lang") as TargetLanguage || "kbd"
         
-        // Only update if values have changed
-        setText(initialText)
-        setTargetLanguage(initialTargetLang)
-        lastUrlText.current = initialText
-        lastSubmittedTranslationText.current = ""  // Initialize with empty to ensure first translation happens
+        // Only update if values have actually changed from current state
+        // Prevents resetting text unnecessarily if only lang param changes via history
+        if (initialText !== text) {
+            setText(initialText)
+            updateFontSizeForText(initialText)
+        }
+        if (initialTargetLang !== targetLanguage) {
+            setTargetLanguage(initialTargetLang)
+        }
         
-        // Prevent URL update while we're loading from URL
-        shouldUpdateUrl.current = false
-        
-        // const textarea = textareaRef.current
-        // textarea?.focus()
-        
-        updateFontSizeForText(initialText)
-        
-        // Re-enable URL updates after a small delay
-        setTimeout(() => {
-            shouldUpdateUrl.current = true
-        }, 100)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchParams])
+        lastUrlText.current = initialText // Track last text *loaded* from URL
+        lastUrlLang.current = initialTargetLang // Track last lang *loaded* from URL
+    }, [searchParams]);
     
-    // Safe URL update function - only called after successful translation
+    // URL Update Logic
     const updateUrl = useCallback((newText: string, newTargetLang: TargetLanguage) => {
-        if (!shouldUpdateUrl.current) return
-        
         const trimmedText = newText.trim()
         
-        // Only update if trimmed text has changed from last URL update
-        if (trimmedText === lastUrlText.current.trim()) {
+        // Only update if text OR language has changed from the last URL update
+        if (trimmedText === lastUrlText.current.trim() && newTargetLang === lastUrlLang.current) {
             return
         }
         
-        // Clear any pending update
         if (urlUpdateTimeoutRef.current) {
             clearTimeout(urlUpdateTimeoutRef.current)
         }
         
-        // Schedule new update with small delay to batch rapid changes
         urlUpdateTimeoutRef.current = setTimeout(() => {
             lastUrlText.current = trimmedText
-            
-            // Build new URL with text and target language
+            lastUrlLang.current = newTargetLang
             const params = new URLSearchParams()
-            
-            // Include only first 2048 characters in URL to prevent 431 errors
             const MAX_URL_TEXT_LENGTH = 2048
             if (trimmedText) {
                 if (trimmedText.length <= MAX_URL_TEXT_LENGTH) {
-                    // Use trimmed text in URL
                     params.set("text", trimmedText)
                 } else {
-                    // For longer texts, include only the first 2048 chars in URL
-                    // The full text will still be used for translation
                     params.set("text", trimmedText.substring(0, MAX_URL_TEXT_LENGTH))
-                    
-                    // Add a flag to indicate truncation
                     params.set("truncated", "true")
                 }
             }
-            
             params.set("lang", newTargetLang)
             const query = params.toString() ? `?${params.toString()}` : ""
             
-            // Set flag before internal navigation
-            internalNavigationRef.current = true;
-            // Use push to update URL without full page reload
+            internalNavigationRef.current = true; // Signal internal navigation
             router.push(`${pathname}${query}`, { scroll: false })
+            // Update refs *after* successful push is scheduled
             urlUpdateTimeoutRef.current = null
-        }, 100)
+        }, 100) // Keep small delay to batch potential rapid calls
     }, [pathname, router])
+    
+    // Callback for when translation completes successfully (passed to hook)
+    const handleTranslationComplete = useCallback((response: TranslationResponse) => {
+        // Use the text from the successful response to update the URL
+        // This ensures the URL matches the text that was *actually* translated
+        updateUrl(response.text, targetLanguage)
+    }, [targetLanguage, updateUrl])
+
+    // Use the translation hook
+    const { data: translationResponse, loading, error, retry: fetchTranslation } = useTranslation({
+        text: debouncedText,
+        targetLanguage: targetLanguage,
+        onComplete: handleTranslationComplete,
+    });
     
     // Handle input text change
     const handleInputChange = useCallback((event: React.FormEvent<HTMLTextAreaElement>) => {
         const newText = event.currentTarget.value
-        shouldUpdateUrl.current = true
         setText(newText)
-        
-        // Update font size based on text length
         updateFontSizeForText(newText)
+        // Don't need to manage shouldUpdateUrl here; hook handles triggering
     }, [updateFontSizeForText])
     
     // Handle target language change
     const handleTargetLanguageChange = useCallback((newTargetLang: TargetLanguage) => {
-        shouldUpdateUrl.current = true;
         setTargetLanguage(newTargetLang);
-        // Reset lastTranslatedText when language changes to force a new translation
-        lastSubmittedTranslationText.current = "";
+        // Hook will automatically trigger refetch due to targetLanguage dependency change
     }, [])
-    
-    const lastRequestIdRef = useRef<number>(0);
-    const abortControllerRef = useRef<AbortController | null>(null);
-    
-    // Fetch translation with streaming
-    const fetchTranslation = useCallback(async () => {
-        const trimmedText = debouncedText.trim()
-        
-        if (!trimmedText) {
-            setTranslationResponse(null)
-            return
-        }
-        
-        // Compare with last translated text to avoid duplicate translations for whitespace-only changes
-        // But only if target language hasn't changed
-        if (trimmedText === lastSubmittedTranslationText.current) {
-            return
-        }
-        
-        // Reference to track the latest request
-        const requestId = Date.now();
-        lastRequestIdRef.current = requestId;
-        
-        // Cancel any ongoing request
-        if (abortControllerRef.current) {
-            abortControllerRef.current.abort();
-        }
-        
-        // Create new controller for this request
-        abortControllerRef.current = new AbortController();
-        const signal = abortControllerRef.current.signal;
-        
-        // IMPORTANT: Update lastTranslatedText before making the request to prevent duplicate requests
-        lastSubmittedTranslationText.current = trimmedText;
-        
-        setLoading(true)
-        try {
-            // Reset or initialize translation response
-            setTranslationResponse({
-                text: debouncedText,
-                translations: [""],
-                duration: 0
-            })
-            
-            // Create response stream with abort signal
-            const response = await fetch("/api/translate", {
-                method: "POST",
-                body: JSON.stringify({ 
-                    text: trimmedText,
-                    targetLanguage: targetLanguage,
-                    requestId // Include requestId in payload
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                signal // Attach abort signal
-            })
-            
-            // Check if this request was superseded while waiting for response
-            if (lastRequestIdRef.current !== requestId) {
-                console.log(`Request ${requestId} was superseded, ignoring response`);
-                return;
-            }
-            
-            if (!response.ok) {
-                const errorData = await response.json()
-                throw new Error(errorData.error || 'Server error')
-            }
-            
-            if (!response.body) {
-                throw new Error('No response stream available')
-            }
-            
-            // Get reader from the response body stream
-            const reader = response.body.getReader()
-            const decoder = new TextDecoder()
-            
-            // Start streaming
-            setLoading(false)
-            
-            let complete = false
-            
-            // Process the stream
-            while (true) {
-                // Check again if we've been superseded by a newer request
-                if (lastRequestIdRef.current !== requestId) {
-                    console.log(`Request ${requestId} was superseded during streaming, aborting`);
-                    reader.cancel();
-                    break;
-                }
-                
-                const { done, value } = await reader.read()
-                
-                if (done) {
-                    break
-                }
-                
-                // Decode the received chunk
-                const chunk = decoder.decode(value, { stream: true })
-                
-                // Split by newlines in case multiple JSON objects are in one chunk
-                const jsonStrings = chunk.split('\n').filter(str => str.trim())
-                
-                for (const jsonString of jsonStrings) {
-                    try {
-                        const data = JSON.parse(jsonString)
-                        
-                        if (data.error) {
-                            throw new Error(data.error)
-                        }
-                        
-                        // Only update state if this is still the most recent request
-                        if (lastRequestIdRef.current === requestId) {
-                            setTranslationResponse(data)
-                        }
-                        
-                        // If the server indicates we're done, we can exit and update URL
-                        if (data.done === true) {
-                            complete = true
-                            break
-                        }
-                    } catch (jsonError) {
-                        console.error('Error parsing JSON from stream:', jsonError)
-                    }
-                }
-            }
-            
-            // Only update URL after translation is complete
-            if (complete && shouldUpdateUrl.current) {
-                updateUrl(debouncedText, targetLanguage)
-            }
-        } catch (error: any) {
-            // Only update error state if this is still the latest request
-            if (lastRequestIdRef.current === requestId && error.name !== 'AbortError') {
-                console.error('Translation streaming error:', error)
-                setTranslationResponse(error)
-                setLoading(false)
-            }
-        }
-    }, [debouncedText, targetLanguage, updateUrl])
-    
-    // Handle translation using debounced text
-    useEffect(() => {
-        // Abort any ongoing request if text becomes empty
-        if (!debouncedText.trim()) {
-            if (abortControllerRef.current) {
-                abortControllerRef.current.abort();
-                abortControllerRef.current = null;
-            }
-            setLoading(false);
-            setTranslationResponse(null);
-            lastSubmittedTranslationText.current = "";
-            
-            // Update URL to clear text parameter
-            if (shouldUpdateUrl.current) {
-                updateUrl("", targetLanguage);
-            }
-            return;
-        }
-        
-        // Continue with translation if text is not empty
-        fetchTranslation();
-    }, [debouncedText, fetchTranslation, targetLanguage, updateUrl])
     
     // Handle example click
     const onExampleClick = useCallback((example: string, targetLang: TargetLanguage) => {
-        shouldUpdateUrl.current = true
-        setText(example)
-        // Set loading state immediately to provide visual feedback
-        setLoading(true)
-        // Update target language
+        setText(example) // Update text immediately
         setTargetLanguage(targetLang)
-        // Clear previous translation while waiting for the new one
-        setTranslationResponse({
-            text: example,
-            translations: [""],
-            duration: 0
-        })
-        // Reset lastTranslatedText to force a new translation
-        lastSubmittedTranslationText.current = ""
         updateFontSizeForText(example)
         window.scrollTo({ top: 0, behavior: "smooth" })
+        // No need to manually set loading or clear response; hook handles this
+        // No need to reset lastSubmitted...; hook handles this
+        // Clear any pending URL update from previous state
+        if (urlUpdateTimeoutRef.current) {
+            clearTimeout(urlUpdateTimeoutRef.current)
+            urlUpdateTimeoutRef.current = null;
+        }
     }, [updateFontSizeForText])
 
     // Clear function
     const handleClear = useCallback(() => {
-        // Abort any ongoing fetch request
-        if (abortControllerRef.current) {
-            abortControllerRef.current.abort();
+        setText('');
+        updateFontSizeForText('');
+        // Hook will cancel fetch & clear state when debouncedText becomes empty
+        
+        // Clear any pending URL update
+        if (urlUpdateTimeoutRef.current) {
+            clearTimeout(urlUpdateTimeoutRef.current)
+            urlUpdateTimeoutRef.current = null;
         }
-        shouldUpdateUrl.current = true;
-        setText(''); 
-        setTranslationResponse(null); 
-        setLoading(false);
-        lastSubmittedTranslationText.current = "";
-        updateUrl('', targetLanguage); 
-        setFontSize('text-3xl'); 
-    }, [targetLanguage, updateUrl])
+        // Update URL immediately to clear text parameter
+        updateUrl('', targetLanguage);
+    }, [targetLanguage, updateUrl, updateFontSizeForText])
+
+    // Combine translation data and error for TranslationPanel
+    // Prioritize showing error message if one exists
+    const displayResponse = error ? error : translationResponse;
 
     return (
         <div className="mx-auto w-full max-w-4xl md:max-w-5xl lg:max-w-6xl">
@@ -371,7 +192,7 @@ export default function Translator() {
                     <div className="w-full overflow-hidden rounded-lg shadow-md">
                         <div className="w-full bg-white dark:bg-zinc-800">
                             <TranslationPanel
-                                translationResponse={translationResponse}
+                                translationResponse={displayResponse}
                                 loading={loading}
                                 onRetry={fetchTranslation}
                                 fontSize={fontSize}

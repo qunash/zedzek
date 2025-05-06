@@ -1,6 +1,6 @@
 export default {
     metadata: {
-        "name": "Zədzək",
+        "name": "Zədzək – Circassian translator",
         "description": "Circassian language translator. Russian-Circassian translator. Kabardian translator. Adyghe translator. Russian-Kabardian translator. Russian-Adyghe translator."
     },
     index: {
@@ -19,7 +19,7 @@ export default {
     faq: {
         "title": "<a href=\"#faq\" id=\"faq\" style=\"cursor: default;\">FAQ</a>",
         "q1": "What is this?",
-        "a1": "This is an AI-powered translator for the Circassian language. It translates from Russian to both literary Circassian dialects (West and East Circassian). You can also try experimental translations from Turkish, Arabic, English and other languages into Circassian.",
+        "a1": "This is an AI-powered translator for the Circassian language. It translates between Russian and both literary Circassian dialects (West and East Circassian). You can also try experimental translations from Turkish, Arabic, English and other languages into Circassian. Zədzək is a part of <a href=\"https://adiga.ai\" style=\"text-decoration: underline; color: inherit;\">adiga.ai</a> project.",
         "q2": "Translations are wrong!",
         "a2": "Machine translation is a rapidly developing field, but no translator is perfect. Translations may sometimes be inaccurate. The quality of translations improves with more high-quality data. You can help us enhance the accuracy in the future by <a href=\"#how-can-i-help\" style=\"text-decoration: underline; color: inherit;\">contributing data</a>.",
         "q3": "Technical details",

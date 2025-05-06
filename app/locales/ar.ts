@@ -1,6 +1,6 @@
 export default {
     metadata: {
-        "name": "Zədzək",
+        "name": "Zədzək – مترجم للغة الشركسية",
         "description": "مترجم اللغة الشركسية. مترجم روسي-شركسي. مترجم كباردي. مترجم أديغي. مترجم روسي-كباردي. مترجم روسي-أديغي."
     },
     index: {
@@ -18,14 +18,14 @@ export default {
         "turkish": "Türkçe",
     },
     faq: {
-        "title": "<a href=\\\"#faq\\\" id=\\\"faq\\\" style=\\\"cursor: default; text-align: right; direction: rtl;\\\">الأسئلة الشائعة</a>",
-        "q1": "<span style=\\\"text-align: right; direction: rtl;\\\">ما هذا؟</span>",
-        "a1": "<span style=\\\"text-align: right; direction: rtl;\\\">هذا مترجم للغة الشركسية مدعوم بالذكاء الاصطناعي. يترجم من الروسية إلى كلتا اللهجتين الأدبيتين الشركسيتين (الغربية والشرقية). كما تدعم الترجمة التجريبية من التركية والعربية والإنجليزية ولغات أخرى إلى الشركسية.</span>",
-        "q2": "<span style=\\\"text-align: right; direction: rtl;\\\">الترجمات خاطئة!</span>",
-        "a2": "<span style=\\\"text-align: right; direction: rtl;\\\">الترجمة الآلية مجال يتطور بسرعة، لكن لا يوجد مترجم مثالي. قد تكون الترجمات غير دقيقة في بعض الأحيان. تتحسن جودة الترجمات مع زيادة كمية البيانات عالية الجودة. يمكنك مساعدتنا في تحسين الدقة في المستقبل من خلال <a href=\\\"#how-can-i-help\\\" style=\\\"text-decoration: underline; color: inherit;\\\">المساهمة بالبيانات</a>.</span>",
-        "q3": "<span style=\\\"text-align: right; direction: rtl;\\\">تفاصيل تقنية</span>",
-        "a3": "<span style=\\\"text-align: right; direction: rtl;\\\">يستخدم المترجم حاليًا نموذجًا لغويًا كبيرًا (LLM) مدربًا خصيصًا لمهام الترجمة الشركسية على ما يقرب من 400 ألف مثال نصي متوازي.<br>بالنسبة للمستخدمين المهتمين بتشغيل نموذج محليًا، يتوفر نموذج أقدم مفتوح الأوزان يعتمد على <b>facebook/m2m100_418M</b> على Hugging Face (<a href=\\\"https://huggingface.co/anzorq/m2m100_418M_ft_ru-kbd_44K\\\" style=\\\"text-decoration: underline; color: inherit;\\\">anzorq/m2m100_418M_ft_ru-kbd_44K</a>)، والذي يدعم <b>الترجمة الروسية-القبردينية فقط</b>.",
-        "a4": "<span style=\\\"text-align: right; direction: rtl;\\\">المزيد من البيانات (الجيدة) تؤدي إلى ترجمات أفضل. يمكنك المساعدة من خلال المساهمة بنصوص باللغة الشركسية، أو مسح الكتب ضوئيًا، أو المساعدة في التعرف الضوئي على الحروف (OCR). إذا كنت مهتمًا بالمساهمة، انضم إلى <a href=\\\"https://discord.gg/ppmwTNUZQb\\\" style=\\\"text-decoration: underline; color: inherit;\\\">Discord</a> الخاص بنا أو <a href=\\\"/contribute\\\" style=\\\"text-decoration: underline; color: inherit;\\\">تحقق من صحة الترجمات</a>.</span>"
+        "title": "<a href=\"#faq\" id=\"faq\" style=\"cursor: default; text-align: right; direction: rtl;\">الأسئلة الشائعة</a>",
+        "q1": "<span style=\"text-align: right; direction: rtl;\">ما هذا؟</span>",
+        "a1": "<span style=\"text-align: right; direction: rtl;\">هذا مترجم للغة الشركسية مدعوم بالذكاء الاصطناعي. يترجم من الروسية إلى كلتا اللهجتين الأدبيتين الشركسيتين (الغربية والشرقية). كما تدعم الترجمة التجريبية من التركية والعربية والإنجليزية ولغات أخرى إلى الشركسية. Zədzək هو جزء من مشروع <a href=\"https://adiga.ai\" style=\"text-decoration: underline; color: inherit;\">adiga.ai</a>.</span>",
+        "q2": "<span style=\"text-align: right; direction: rtl;\">الترجمات خاطئة!</span>",
+        "a2": "<span style=\"text-align: right; direction: rtl;\">الترجمة الآلية مجال يتطور بسرعة، لكن لا يوجد مترجم مثالي. قد تكون الترجمات غير دقيقة في بعض الأحيان. تتحسن جودة الترجمات مع زيادة كمية البيانات عالية الجودة. يمكنك مساعدتنا في تحسين الدقة في المستقبل من خلال <a href=\"#how-can-i-help\" style=\"text-decoration: underline; color: inherit;\">المساهمة بالبيانات</a>.</span>",
+        "q3": "<span style=\"text-align: right; direction: rtl;\">تفاصيل تقنية</span>",
+        "a3": "<span style=\"text-align: right; direction: rtl;\">يستخدم المترجم حاليًا نموذجًا لغويًا كبيرًا (LLM) مدربًا خصيصًا لمهام الترجمة الشركسية على ما يقرب من 400 ألف مثال نصي متوازي.<br>بالنسبة للمستخدمين المهتمين بتشغيل نموذج محليًا، يتوفر نموذج أقدم مفتوح الأوزان يعتمد على <b>facebook/m2m100_418M</b> على Hugging Face (<a href=\"https://huggingface.co/anzorq/m2m100_418M_ft_ru-kbd_44K\" style=\"text-decoration: underline; color: inherit;\">anzorq/m2m100_418M_ft_ru-kbd_44K</a>)، والذي يدعم <b>الترجمة الروسية-القبردينية فقط</b>.",
+        "a4": "<span style=\"text-align: right; direction: rtl;\">المزيد من البيانات (الجيدة) تؤدي إلى ترجمات أفضل. يمكنك المساعدة من خلال المساهمة بنصوص باللغة الشركسية، أو مسح الكتب ضوئيًا، أو المساعدة في التعرف الضوئي على الحروف (OCR). إذا كنت مهتمًا بالمساهمة، انضم إلى <a href=\"https://discord.gg/ppmwTNUZQb\" style=\"text-decoration: underline; color: inherit;\">Discord</a> الخاص بنا أو <a href=\"/contribute\" style=\"text-decoration: underline; color: inherit;\">تحقق من صحة الترجمات</a>.</span>"
     },
     translator: {
         "type_to_translate": "اكتب للترجمة…",

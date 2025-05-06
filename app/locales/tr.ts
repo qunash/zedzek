@@ -1,6 +1,6 @@
 export default {
     metadata: {
-        "name": "Zədzək",
+        "name": "Zədzək – Çerkesçe çevirmen",
         "description": "Çerkes dili çevirmeni. Rusça-Çerkesçe çevirmen. Kabardey çevirmeni. Adige çevirmeni. Rusça-Kabardey çevirmeni. Rusça-Adige çevirmeni."
     },
     index: {
@@ -20,7 +20,7 @@ export default {
     faq: {
         "title": "<a href=\"#faq\" id=\"faq\" style=\"cursor: default;\">SSS</a>",
         "q1": "Bu nedir?",
-        "a1": "Bu, Çerkes dili için yapay zeka destekli bir çevirmendir. Rusça'dan her iki edebi Çerkes lehçesine (Batı ve Doğu) çeviri yapar. Ayrıca Türkçe, Arapça, İngilizce ve diğer dillerden Çerkesçeye deneysel çeviri de desteklenmektedir.",
+        "a1": "Bu, Çerkes dili için yapay zeka destekli bir çevirmendir.Rusça ve her iki edebi Çerkes lehçesi (Batı ve Doğu Çerkes) arasında çeviri yapar. Ayrıca Türkçe, Arapça, İngilizce ve diğer dillerden Çerkesçeye deneysel çeviri de desteklenmektedir. Zədzək, <a href=\"https://adiga.ai\" style=\"text-decoration: underline; color: inherit;\">adiga.ai</a> projesinin bir parçasıdır.",
         "q2": "Çeviriler yanlış!",
         "a2": "Makine çevirisi hızla gelişen bir alandır, ancak hiçbir çevirmen mükemmel değildir. Çeviriler bazen yanlış olabilir. Çeviri kalitesi, daha fazla yüksek kaliteli veri ile artar. Gelecekte doğruluğu artırmamıza <a href=\"#how-can-i-help\" style=\"text-decoration: underline; color: inherit;\">veri katkısında bulunarak</a> yardımcı olabilirsiniz.",
         "q3": "Teknik detaylar",

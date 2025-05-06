@@ -22,6 +22,7 @@ import {
   Trophy,
   Volume2,
   Instagram,
+  Keyboard,
   // type Icon as LucideIcon,
 } from "lucide-react"
 
@@ -50,6 +51,7 @@ export const Icons = {
   trophy: Trophy,
   submit: SendHorizonal,
   instagram: Instagram,
+  keyboard: Keyboard,
   logo: (props: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"

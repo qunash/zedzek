@@ -51,19 +51,19 @@ export default function LanguageSelector({
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-full">
               <DropdownMenuItem 
-                className="cursor-pointer rounded-sm p-4 focus:bg-gray-100 dark:focus:bg-slate-900"
+                className="cursor-pointer rounded-sm p-4 focus:bg-gray-100 dark:focus:bg-zinc-700"
                 onClick={() => onLanguageChange('kbd')}
               >
                 {t("translator.circassian_east")}
               </DropdownMenuItem>
               <DropdownMenuItem 
-                className="cursor-pointer rounded-sm p-4 focus:bg-gray-100 dark:focus:bg-slate-900"
+                className="cursor-pointer rounded-sm p-4 focus:bg-gray-100 dark:focus:bg-zinc-700"
                 onClick={() => onLanguageChange('ady')}
               >
                 {t("translator.circassian_west")}
               </DropdownMenuItem>
               <DropdownMenuItem 
-                className="cursor-pointer rounded-sm p-4 focus:bg-gray-100 dark:focus:bg-slate-900"
+                className="cursor-pointer rounded-sm p-4 focus:bg-gray-100 dark:focus:bg-zinc-700"
                 onClick={() => onLanguageChange('ru')}
               >
                 {t("translator.russian")}

@@ -27,24 +27,24 @@ const keyCodeToCyrillic: {
   shift: { [code: string]: string }
 } = {
   default: {
-    'Digit1': '1', 'Digit2': '2', 'Digit3': '3', 'Digit4': '4', 'Digit5': '5', 
+    'Digit1': '1', 'Digit2': '2', 'Digit3': '3', 'Digit4': '4', 'Digit5': '5',
     'Digit6': '6', 'Digit7': '7', 'Digit8': '8', 'Digit9': '9', 'Digit0': '0',
-    'KeyQ': 'й', 'KeyW': 'ц', 'KeyE': 'у', 'KeyR': 'к', 'KeyT': 'е', 
+    'KeyQ': 'й', 'KeyW': 'ц', 'KeyE': 'у', 'KeyR': 'к', 'KeyT': 'е',
     'KeyY': 'н', 'KeyU': 'г', 'KeyI': 'ш', 'KeyO': 'щ', 'KeyP': 'з',
-    'BracketLeft': 'х', 'BracketRight': 'ъ', 'KeyA': 'ф', 'KeyS': 'ы', 'KeyD': 'в', 
+    'BracketLeft': 'х', 'BracketRight': 'ъ', 'KeyA': 'ф', 'KeyS': 'ы', 'KeyD': 'в',
     'KeyF': 'а', 'KeyG': 'п', 'KeyH': 'р', 'KeyJ': 'о', 'KeyK': 'л',
-    'KeyL': 'д', 'Semicolon': 'ж', 'Quote': 'э', 'KeyZ': 'я', 'KeyX': 'ч', 
+    'KeyL': 'д', 'Semicolon': 'ж', 'Quote': 'э', 'KeyZ': 'я', 'KeyX': 'ч',
     'KeyC': 'с', 'KeyV': 'м', 'KeyB': 'и', 'KeyN': 'т', 'KeyM': 'ь',
     'Comma': 'б', 'Period': 'ю', 'Slash': '.', 'Space': ' ', 'Enter': '{enter}', 'Backspace': '{bksp}', 'Backslash': 'Ӏ'
   },
   shift: {
-    'Digit1': '!', 'Digit2': '"', 'Digit3': '№', 'Digit4': ';', 'Digit5': '%', 
+    'Digit1': '!', 'Digit2': '"', 'Digit3': '№', 'Digit4': ';', 'Digit5': '%',
     'Digit6': ':', 'Digit7': '?', 'Digit8': '*', 'Digit9': '(', 'Digit0': ')',
-    'KeyQ': 'Й', 'KeyW': 'Ц', 'KeyE': 'У', 'KeyR': 'К', 'KeyT': 'Е', 
+    'KeyQ': 'Й', 'KeyW': 'Ц', 'KeyE': 'У', 'KeyR': 'К', 'KeyT': 'Е',
     'KeyY': 'Н', 'KeyU': 'Г', 'KeyI': 'Ш', 'KeyO': 'Щ', 'KeyP': 'З',
-    'BracketLeft': 'Х', 'BracketRight': 'Ъ', 'KeyA': 'Ф', 'KeyS': 'Ы', 'KeyD': 'В', 
+    'BracketLeft': 'Х', 'BracketRight': 'Ъ', 'KeyA': 'Ф', 'KeyS': 'Ы', 'KeyD': 'В',
     'KeyF': 'А', 'KeyG': 'П', 'KeyH': 'Р', 'KeyJ': 'О', 'KeyK': 'Л',
-    'KeyL': 'Д', 'Semicolon': 'Ж', 'Quote': 'Э', 'KeyZ': 'Я', 'KeyX': 'Ч', 
+    'KeyL': 'Д', 'Semicolon': 'Ж', 'Quote': 'Э', 'KeyZ': 'Я', 'KeyX': 'Ч',
     'KeyC': 'С', 'KeyV': 'М', 'KeyB': 'И', 'KeyN': 'Т', 'KeyM': 'Ь',
     'Comma': 'Б', 'Period': 'Ю', 'Slash': ',', 'Space': ' ', 'Enter': '{enter}', 'Backspace': '{bksp}', 'Backslash': 'Ӏ'
   }
@@ -63,7 +63,12 @@ const SHIFT_CODES = ["ShiftLeft", "ShiftRight"]
 const KEYBOARD_WIDTH = 600;
 const KEYBOARD_HEIGHT = 250;
 
-const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({ onKeyPress, isVisible, textareaRef, onClose }) => {
+const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({
+  onKeyPress,
+  isVisible,
+  textareaRef,
+  onClose
+}) => {
   const [isShiftPressed, setIsShiftPressed] = useState(false)
   const [isCapsLockOn, setIsCapsLockOn] = useState(false)
   const keyboardRef = useRef<SimpleKeyboard | null>(null)
@@ -72,7 +77,7 @@ const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({ onKeyPress,
     () => keyCodeToCyrillic[isShiftPressed || isCapsLockOn ? "shift" : "default"],
     [isShiftPressed, isCapsLockOn]
   )
-  
+
   const handleVirtualKeyPress = (button: string) => {
     if (button === "{shift}") {
       setIsShiftPressed(prev => !prev)
@@ -82,11 +87,11 @@ const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({ onKeyPress,
       onKeyPress(button)
     }
   }
-  
+
   // Handle physical keyboard input
   useEffect(() => {
-    if (!keyboardRef.current || !isVisible || !textareaRef.current) return
-    
+    if (!isVisible || !textareaRef.current) return
+
     const handleKey = (e: KeyboardEvent) => {
       if (document.activeElement !== textareaRef.current) return
       if (e.metaKey || e.ctrlKey || e.altKey) return
@@ -99,15 +104,15 @@ const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({ onKeyPress,
         }
         return
       }
-      
+
       if (e.type === "keydown") {
         if (e.code === 'CapsLock') {
           setIsCapsLockOn(prev => !prev)
           return
         }
-        
+
         const char = layoutMap[e.code]
-        
+
         if (char) {
           e.preventDefault()
           const buttonElement = keyboardRef.current?.getButtonElement(char)
@@ -121,16 +126,16 @@ const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({ onKeyPress,
         }
       }
     }
-    
+
     window.addEventListener('keydown', handleKey)
     window.addEventListener('keyup', handleKey)
-    
+
     return () => {
       window.removeEventListener('keydown', handleKey)
       window.removeEventListener('keyup', handleKey)
     }
   }, [layoutMap, onKeyPress, isVisible, textareaRef, isShiftPressed, isCapsLockOn])
-  
+
   // Robust default position for Draggable
   const [defaultPos, setDefaultPos] = useState<{ x: number; y: number } | null>(null);
   const [keyboardWidth, setKeyboardWidth] = useState(KEYBOARD_WIDTH);
@@ -176,7 +181,8 @@ const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({ onKeyPress,
             defaultPosition={defaultPos}
           >
             <div
-              className={`bg-white dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-lg absolute pointer-events-auto z-50 w-full max-w-[95vw] md:w-[${keyboardWidth}px]`}
+              style={{ width: keyboardWidth, maxWidth: '95vw' }}
+              className="bg-white dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-lg absolute pointer-events-auto z-50"
             >
               {/* Header with close button */}
               <div className="flex items-center justify-between px-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-zinc-900 select-none">

@@ -294,14 +294,12 @@ export default function Translator() {
         </div>
         {/* Fixed virtual keyboard at bottom of screen, centered on desktop */}
         {keyboardVisible && (
-            <div className="w-full md:w-1/3 fixed bottom-2 left-0 right-0 mx-auto z-50 shadow-lg rounded-lg">
-                <VirtualCircassianKeyboard 
-                    onKeyPress={handleVirtualKeyPress} 
-                    isVisible={keyboardVisible}
-                    textareaRef={textareaRef}
-                    onClose={() => setKeyboardVisible(false)}
-                />
-            </div>
+            <VirtualCircassianKeyboard
+                onKeyPress={handleVirtualKeyPress}
+                isVisible={keyboardVisible}
+                textareaRef={textareaRef}
+                onClose={() => setKeyboardVisible(false)}
+            />
         )}
         </>
     )

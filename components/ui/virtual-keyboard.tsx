@@ -35,7 +35,7 @@ const keyCodeToCyrillic: {
     'KeyF': 'а', 'KeyG': 'п', 'KeyH': 'р', 'KeyJ': 'о', 'KeyK': 'л',
     'KeyL': 'д', 'Semicolon': 'ж', 'Quote': 'э', 'KeyZ': 'я', 'KeyX': 'ч',
     'KeyC': 'с', 'KeyV': 'м', 'KeyB': 'и', 'KeyN': 'т', 'KeyM': 'ь',
-    'Comma': 'б', 'Period': 'ю', 'Slash': '.', 'Space': ' ', 'Enter': '{enter}', 'Backspace': '{bksp}', 'Backslash': 'Ӏ'
+    'Comma': 'б', 'Period': 'ю', 'Slash': '.', 'Space': '{space}', 'Enter': '{enter}', 'Backspace': '{bksp}', 'Backslash': 'Ӏ'
   },
   shift: {
     'Digit1': '!', 'Digit2': '"', 'Digit3': '№', 'Digit4': ';', 'Digit5': '%',
@@ -46,7 +46,7 @@ const keyCodeToCyrillic: {
     'KeyF': 'А', 'KeyG': 'П', 'KeyH': 'Р', 'KeyJ': 'О', 'KeyK': 'Л',
     'KeyL': 'Д', 'Semicolon': 'Ж', 'Quote': 'Э', 'KeyZ': 'Я', 'KeyX': 'Ч',
     'KeyC': 'С', 'KeyV': 'М', 'KeyB': 'И', 'KeyN': 'Т', 'KeyM': 'Ь',
-    'Comma': 'Б', 'Period': 'Ю', 'Slash': ',', 'Space': ' ', 'Enter': '{enter}', 'Backspace': '{bksp}', 'Backslash': 'Ӏ'
+    'Comma': 'Б', 'Period': 'Ю', 'Slash': ',', 'Space': '{space}', 'Enter': '{enter}', 'Backspace': '{bksp}', 'Backslash': 'Ӏ'
   }
 }
 
@@ -58,6 +58,9 @@ interface VirtualKeyboardProps {
 }
 
 const SHIFT_CODES = ["ShiftLeft", "ShiftRight"]
+
+// How long the pressed key stays highlighted (in ms)
+const HIGHLIGHT_DURATION_MS = 100;
 
 // Helper: Keyboard width/height for positioning
 const KEYBOARD_WIDTH = 600;
@@ -120,7 +123,7 @@ const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({
             buttonElement.classList.add('hg-activeButton')
             setTimeout(() => {
               buttonElement.classList.remove('hg-activeButton')
-            }, 200)
+            }, HIGHLIGHT_DURATION_MS)
           }
           onKeyPress(char)
         }

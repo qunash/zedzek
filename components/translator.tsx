@@ -14,6 +14,7 @@ import VirtualCircassianKeyboard from './ui/virtual-keyboard'
 import { useTranslation } from '@/hooks/useTranslation'
 import { buttonVariants } from './ui/button'
 import { Icons } from './icons'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip'
 
 export default function Translator() {
     const t = getI18nCLient()
@@ -106,6 +107,23 @@ export default function Translator() {
             }
         }, 0);
     }, [updateFontSizeForText])
+
+    // Handle keyboard shortcut for toggling the virtual keyboard
+    useEffect(() => {
+        const handleKeyboardShortcut = (e: KeyboardEvent) => {
+            // Check for cmd+K (Mac) or ctrl+K (Windows/Linux)
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault()
+                toggleKeyboard()
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyboardShortcut)
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyboardShortcut)
+        }
+    }, [toggleKeyboard])
 
     // Initialize state from URL (only on external navigation)
     useEffect(() => {
@@ -254,17 +272,26 @@ export default function Translator() {
                             
                             {/* Keyboard toggle button in lower right corner */}
                             <div className="absolute bottom-4 right-4 hidden lg:block">
-                                <div
-                                    className={buttonVariants({
-                                        size: "sm",
-                                        variant: keyboardVisible ? "secondary" : "ghost",
-                                        className: "cursor-pointer text-slate-700 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-700"
-                                    })}
-                                    onClick={toggleKeyboard}
-                                    aria-label="Toggle Virtual Keyboard"
-                                >
-                                    <Icons.keyboard className="h-5 w-5" />
-                                </div>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <div
+                                                className={buttonVariants({
+                                                    size: "sm",
+                                                    variant: keyboardVisible ? "secondary" : "ghost",
+                                                    className: "cursor-pointer text-slate-700 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-700"
+                                                })}
+                                                onClick={toggleKeyboard}
+                                                aria-label="Toggle Virtual Keyboard"
+                                            >
+                                                <Icons.keyboard className="h-5 w-5" />
+                                            </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="left">
+                                            <p>⌘+K</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                             </div>
                         </div>
                     </div>

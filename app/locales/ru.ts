@@ -82,5 +82,8 @@ export default {
     edit_translations: {
         "choose_correct_translations": "Выберите правильные переводы",
         "or_add_your_own": "Или добавьте свой",
+    },
+    ui: {
+        "circassian_keyboard": "Черкесская клавиатура",
     }
 } as const

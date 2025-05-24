@@ -253,7 +253,7 @@ export default function Translator() {
                             />
                             
                             {/* Keyboard toggle button in lower right corner */}
-                            <div className="absolute bottom-4 right-4">
+                            <div className="absolute bottom-4 right-4 hidden lg:block">
                                 <div
                                     className={buttonVariants({
                                         size: "sm",

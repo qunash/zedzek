@@ -81,5 +81,8 @@ export default {
     edit_translations: {
         "choose_correct_translations": "اختر الترجمات الصحيحة",
         "or_add_your_own": "أو أضف ما يخصك",
+    },
+    ui: {
+        "circassian_keyboard": "لوحة المفاتيح الشركسية",
     }
 } as const

@@ -81,5 +81,8 @@ export default {
     edit_translations: {
         "choose_correct_translations": "Choose correct translations",
         "or_add_your_own": "Or add your own",
+    },
+    ui: {
+        "circassian_keyboard": "Circassian Keyboard",
     }
 } as const

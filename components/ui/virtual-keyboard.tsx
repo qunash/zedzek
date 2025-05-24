@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef, useMemo } from "react"
 import Keyboard, { type SimpleKeyboard } from "react-simple-keyboard"
 import "react-simple-keyboard/build/css/index.css"
 import Draggable from "react-draggable"
+import { getI18nCLient } from "@/app/locales/client"
 
 const circassianLayout = {
   default: [
@@ -72,6 +73,7 @@ const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({
   textareaRef,
   onClose
 }) => {
+  const t = getI18nCLient()
   const [isShiftPressed, setIsShiftPressed] = useState(false)
   const [isCapsLockOn, setIsCapsLockOn] = useState(false)
   const keyboardRef = useRef<SimpleKeyboard | null>(null)
@@ -190,7 +192,7 @@ const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({
               {/* Header with close button */}
               <div className="flex items-center justify-between px-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-zinc-900 select-none">
                 <div className="vk-header flex-1 py-2 cursor-move">
-                  {/* You can add a label here if desired */}
+                  {t('ui.circassian_keyboard')}
                 </div>
                 {onClose && (
                   <button

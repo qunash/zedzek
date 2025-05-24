@@ -82,5 +82,8 @@ export default {
     edit_translations: {
         "choose_correct_translations": "Doğru çevirileri seçin",
         "or_add_your_own": "Veya kendi çevirinizi ekleyin",
+    },
+    ui: {
+        "circassian_keyboard": "Çerkesçe Klavye",
     }
 } as const

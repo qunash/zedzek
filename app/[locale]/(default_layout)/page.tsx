@@ -12,7 +12,8 @@ export default async function Home({ params }: { params: { locale: string } }) {
 
   return (
     <section className="grid justify-items-center gap-4 px-2 md:container">
-      <h1 className="items-center py-2 text-center text-2xl font-medium lg:py-4 lg:text-3xl">
+      {/* Mobile title - hidden on desktop since it's now in the header */}
+      <h1 className="items-center py-2 text-center text-2xl font-medium lg:py-4 lg:text-3xl md:hidden">
         {t("index.header")}
       </h1>
       <I18nProviderClientWrapper params={params} >

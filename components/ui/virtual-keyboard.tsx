@@ -158,6 +158,9 @@ const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({
           background-color: hsl(var(--primary));
           color: hsl(var(--primary-foreground));
         }
+        .hg-button {
+          max-height: 35px;
+        }
       `}</style>
       <div className="fixed inset-0 z-50 pointer-events-none flex items-end justify-center">
         <Draggable

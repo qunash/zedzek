@@ -60,12 +60,7 @@ interface VirtualKeyboardProps {
 
 const SHIFT_CODES = ["ShiftLeft", "ShiftRight"]
 
-// How long the pressed key stays highlighted (in ms)
-const HIGHLIGHT_DURATION_MS = 100;
-
-// Helper: Keyboard width/height for positioning
-const KEYBOARD_WIDTH = 600;
-const KEYBOARD_HEIGHT = 250;
+const PRESSED_KEY_HIGHLIGHT_DURATION_MS = 100;
 
 const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({
   onKeyPress,
@@ -125,7 +120,7 @@ const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({
             buttonElement.classList.add('hg-activeButton')
             setTimeout(() => {
               buttonElement.classList.remove('hg-activeButton')
-            }, HIGHLIGHT_DURATION_MS)
+            }, PRESSED_KEY_HIGHLIGHT_DURATION_MS)
           }
           onKeyPress(char)
         }
@@ -140,20 +135,6 @@ const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({
       window.removeEventListener('keyup', handleKey)
     }
   }, [layoutMap, onKeyPress, isVisible, textareaRef, isShiftPressed, isCapsLockOn])
-
-  // Robust default position for Draggable
-  const [defaultPos, setDefaultPos] = useState<{ x: number; y: number } | null>(null);
-  const [keyboardWidth, setKeyboardWidth] = useState(KEYBOARD_WIDTH);
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const width = Math.min(window.innerWidth * 0.95, KEYBOARD_WIDTH);
-      setKeyboardWidth(width);
-      setDefaultPos({
-        x: (window.innerWidth - width) / 2,
-        y: window.innerHeight - KEYBOARD_HEIGHT - 24,
-      });
-    }
-  }, []);
 
   return (
     <>
@@ -178,50 +159,47 @@ const VirtualCircassianKeyboard: React.FC<VirtualKeyboardProps> = ({
           color: hsl(var(--primary-foreground));
         }
       `}</style>
-      {defaultPos && (
-        <div className="fixed inset-0 z-50 pointer-events-none">
-          <Draggable
-            handle=".vk-header"
-            bounds="parent"
-            defaultPosition={defaultPos}
+      <div className="fixed inset-0 z-50 pointer-events-none flex items-end justify-center">
+        <Draggable
+          handle=".vk-header"
+          bounds="parent"
+          defaultPosition={{ x: 0, y: 0 }}
+        >
+          <div
+            className="bg-white dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-lg pointer-events-auto z-50 w-full max-w-2xl mx-4"
           >
-            <div
-              style={{ width: keyboardWidth, maxWidth: '95vw' }}
-              className="bg-white dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-lg absolute pointer-events-auto z-50"
-            >
-              {/* Header with close button */}
-              <div className="flex items-center justify-between px-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-zinc-900 select-none">
-                <div className="vk-header flex-1 py-2 cursor-move">
-                  {t('ui.circassian_keyboard')}
-                </div>
-                {onClose && (
-                  <button
-                    onClick={onClose}
-                    aria-label="Close Keyboard"
-                    className="ml-2 text-gray-400 hover:text-gray-700 dark:hover:text-white text-lg font-bold focus:outline-none select-none cursor-pointer"
-                    type="button"
-                  >
-                    ×
-                  </button>
-                )}
+            {/* Header with close button */}
+            <div className="flex items-center justify-between px-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-zinc-900 select-none">
+              <div className="vk-header flex-1 py-2 cursor-move">
+                {t('ui.circassian_keyboard')}
               </div>
-              <div className="pt-1 pb-2 px-2">
-                <Keyboard
-                  keyboardRef={(r) => (keyboardRef.current = r)}
-                  layout={circassianLayout}
-                  layoutName={(isShiftPressed || isCapsLockOn) ? 'shift' : 'default'}
-                  onKeyPress={handleVirtualKeyPress}
-                  display={{
-                    '{bksp}': '⌫',
-                    '{space}': ' ',
-                  }}
-                  physicalKeyboardHighlight={false}
-                />
-              </div>
+              {onClose && (
+                <button
+                  onClick={onClose}
+                  aria-label="Close Keyboard"
+                  className="ml-2 text-gray-400 hover:text-gray-700 dark:hover:text-white text-lg font-bold focus:outline-none select-none cursor-pointer"
+                  type="button"
+                >
+                  ×
+                </button>
+              )}
             </div>
-          </Draggable>
-        </div>
-      )}
+            <div className="pt-1 pb-2 px-2">
+              <Keyboard
+                keyboardRef={(r) => (keyboardRef.current = r)}
+                layout={circassianLayout}
+                layoutName={(isShiftPressed || isCapsLockOn) ? 'shift' : 'default'}
+                onKeyPress={handleVirtualKeyPress}
+                display={{
+                  '{bksp}': '⌫',
+                  '{space}': ' ',
+                }}
+                physicalKeyboardHighlight={false}
+              />
+            </div>
+          </div>
+        </Draggable>
+      </div>
     </>
   )
 }

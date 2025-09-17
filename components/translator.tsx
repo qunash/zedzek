@@ -15,6 +15,7 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { buttonVariants } from './ui/button'
 import { Icons } from './icons'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip'
+import { CommonVoiceCTA } from './common-voice-cta'
 
 export default function Translator() {
     const t = getI18nCLient()
@@ -316,6 +317,9 @@ export default function Translator() {
             {/* Use transition for disclaimer text */}
             <div className={`mb-1 mt-2 pr-2 text-right text-sm text-gray-500 transition-all duration-300 ease-in-out ${text.trim() === '' ? 'h-0 overflow-hidden opacity-0 md:h-auto md:overflow-visible md:opacity-100' : 'opacity-100'}`}>
                 <span dangerouslySetInnerHTML={{ __html: t("index.info") }} />
+            </div>
+            <div className="max-w-2xl mx-auto">
+                <CommonVoiceCTA />
             </div>
             <Examples onExampleClick={onExampleClick} />
         </div>

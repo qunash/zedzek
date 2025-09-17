@@ -11,6 +11,7 @@ import { Profile } from "@/types/supabase"
 import { Session, User, createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { CommonVoiceCTA } from "@/components/common-voice-cta"
 
 type LeaderboardEntry = {
     name: string;
@@ -232,6 +233,7 @@ function ContributePageLocalized() {
                         </Link>
                     )}
                 </div>
+                <CommonVoiceCTA />
             </div>
             <Stats />
             <Leaderboard />

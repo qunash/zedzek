@@ -2,6 +2,9 @@
   "name": "zedzek",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -25,7 +28,7 @@
     "@radix-ui/react-tooltip": "^1.0.6",
     "@supabase/auth-helpers-nextjs": "^0.7.4",
     "@supabase/supabase-js": "^2.32.0",
-    "@types/node": "20.4.7",
+    "@types/node": "^22.0.0",
     "@types/react": "18.2.18",
     "@types/react-dom": "18.2.7",
     "@uidotdev/usehooks": "^2.1.0",

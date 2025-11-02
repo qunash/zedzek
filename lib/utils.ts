@@ -9,18 +9,19 @@ export const getBaseUrl = () => {
         return window.location.origin
     }
 
-    // Server-side: check environment variables
-    // Netlify: URL or DEPLOY_PRIME_URL, or NEXT_PUBLIC_SITE_URL for production
-    const netlifyUrl = process.env.URL || process.env.DEPLOY_PRIME_URL
-    if (netlifyUrl) {
-        return netlifyUrl
+    // Server-side: use Netlify environment variables
+    const context = process.env.CONTEXT
+    if (context === "production") {
+        return process.env.URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+    } else if (context === "deploy-preview" || context === "branch-deploy") {
+        return process.env.DEPLOY_PRIME_URL || process.env.URL || "http://localhost:3000"
     }
 
-    // Explicit site URL (works on any platform)
+    // Explicit site URL (works on any platform, useful for manual override)
     if (process.env.NEXT_PUBLIC_SITE_URL) {
         return process.env.NEXT_PUBLIC_SITE_URL
     }
 
-    // Default fallback
+    // Default fallback for local development
     return "http://localhost:3000"
 }

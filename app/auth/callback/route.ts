@@ -5,16 +5,14 @@ import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
 export async function GET(request: NextRequest) {
     const requestUrl = new URL(request.url)
     const code = requestUrl.searchParams.get("code")
-    const redirectUrl =
-        requestUrl.searchParams.get("redirect_url") || requestUrl.origin
-
-
-    console.log("redirectUrl", redirectUrl)
+    const redirectUrlParam = requestUrl.searchParams.get("redirect_url") || requestUrl.origin
 
     if (code) {
         const supabase = createRouteHandlerClient<Database>({ cookies })
         await supabase.auth.exchangeCodeForSession(code)
     }
 
-    return NextResponse.redirect(redirectUrl)
+    // Unlike Vercel, Netlify preserves query parameters on GET redirects, so we need to manually strip them
+    const { origin, pathname } = new URL(redirectUrlParam)
+    return NextResponse.redirect(`${origin}${pathname}`)
 }

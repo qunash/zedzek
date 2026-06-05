@@ -17,6 +17,10 @@ export default {
         "arabic": "العربية",
         "turkish": "Türkçe",
     },
+    notice: {
+        "title": "Çevirmen geçici olarak kullanılamıyor",
+        "message": "Bakım çalışması yaptığımız için çeviri şu anda duraklatıldı. Lütfen biraz sonra tekrar uğrayın.",
+    },
     faq: {
         "title": "<a href=\"#faq\" id=\"faq\" style=\"cursor: default;\">SSS</a>",
         "q1": "Bu nedir?",

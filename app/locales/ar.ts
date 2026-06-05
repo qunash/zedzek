@@ -17,6 +17,10 @@ export default {
         "arabic": "العربية",
         "turkish": "Türkçe",
     },
+    notice: {
+        "title": "<span style=\"text-align: right; direction: rtl;\">المترجم غير متاح مؤقتًا</span>",
+        "message": "<span style=\"text-align: right; direction: rtl;\">نُجري حاليًا بعض أعمال الصيانة، لذا تم إيقاف الترجمة مؤقتًا. يُرجى العودة بعد قليل.</span>",
+    },
     faq: {
         "title": "<a href=\"#faq\" id=\"faq\" style=\"cursor: default; text-align: right; direction: rtl;\">الأسئلة الشائعة</a>",
         "q1": "<span style=\"text-align: right; direction: rtl;\">ما هذا؟</span>",

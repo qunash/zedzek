@@ -16,6 +16,10 @@ export default {
         "arabic": "العربية",
         "turkish": "Türkçe",
     },
+    notice: {
+        "title": "The translator is temporarily unavailable",
+        "message": "We're carrying out some maintenance, so translations are paused for now. Please check back a little later.",
+    },
     faq: {
         "title": "<a href=\"#faq\" id=\"faq\" style=\"cursor: default;\">FAQ</a>",
         "q1": "What is this?",

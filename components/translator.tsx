@@ -16,6 +16,7 @@ import { buttonVariants } from './ui/button'
 import { Icons } from './icons'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip'
 import { CommonVoiceCTA } from './common-voice-cta'
+import { ServiceNotice } from './service-notice'
 
 export default function Translator() {
     const t = getI18nCLient()
@@ -251,6 +252,7 @@ export default function Translator() {
     return (
         <>
         <div className="mx-auto w-full max-w-4xl md:max-w-5xl lg:max-w-6xl">
+            <ServiceNotice />
             {/* Translation panels */}
             <div className="flex flex-col space-y-2 md:flex-row md:items-end md:space-x-4 md:space-y-0">
                 <div className="flex w-full flex-col space-y-2 md:space-y-3">

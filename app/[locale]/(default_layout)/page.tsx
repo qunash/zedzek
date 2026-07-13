@@ -8,7 +8,7 @@ import Faq from "@/components/faq"
 
 export default async function Home({ params }: { params: { locale: string } }) {
 
-  const t = await getI18nServer()
+  const t = await getI18nServer(params.locale)
 
   return (
     <section className="grid justify-items-center gap-4 px-2 md:container">
